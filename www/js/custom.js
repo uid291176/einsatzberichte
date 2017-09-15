@@ -162,7 +162,16 @@ $(document).ready(function(){
 		}
 		else
 		{
+			
+			if (!$(this).prop('checked'))
+			{
+				// checkboxgruppe wieder ohne Eintrag = auch der "letzte" Haken kann entfernt werden
+				$(this).prop('checked', false);
+				return;
+			}
+			
 			$('.' + arr_eID[1]).prop('checked', false);
+			
 		}
 		$(this).prop('checked', true);
 
@@ -188,7 +197,6 @@ function initDatePicker()
 	
 } // function initDatePicker()
 
-
 	
 /**
  * function zum entfernen der dynamischen Zeilen bei der Resourcenübersicht
@@ -203,6 +211,7 @@ function remResource(oEL)
 	return false;
 	
 } // function remResource(oEL)
+
 
 /**
  * function zum entfernen der dynamischen Zeilen bei der Personalübersicht
@@ -219,6 +228,7 @@ function remPersonal(oEL)
 	return false;
 	
 } // function remPersonal(oEL)
+
 
 /**
  * berechnet die Gesamteinsatzzeit
@@ -304,6 +314,7 @@ function calcActionTime()
 	
 } // function calcActionTime()
 
+
 /**
  * berechnet die Personalstärke gesamt
  * @returns
@@ -322,6 +333,7 @@ function calcPersonal()
 	
 } // function calcPersonal()
 
+
 /**
  * berechnet die ausgerückte Personalstärke
  */
@@ -338,6 +350,7 @@ function calcAusgerueckt()
 	return false;
 	
 } // function calcAusgerueckt()
+
 
 /**
  * berechnet die Anzahl der geretteten Personen
@@ -356,6 +369,7 @@ function calcRettungAnzahl()
 	
 } // function calcRettungAnzahl()
 
+
 /**
  * berechnet die Anzahl der geretteten Personen
  * @returns
@@ -373,6 +387,7 @@ function calcAnzahlPersonenSchaeden()
 	return false; 
 	
 } // function calcAnzahlPersonenSchaeden()
+
 
 /**
  * berechnet die Anzahl der geretteten Personen

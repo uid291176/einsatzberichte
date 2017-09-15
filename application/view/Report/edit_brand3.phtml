@@ -8,7 +8,7 @@
 			
 			<div class="form-row">
 				<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[bma_reset]" value="0" />
-				<?php $html->drawFormCheckbox('bma_reset', _('Anlage wurde vor Eintreffen der Feuerwehr zurückgesetzt (weiteres Ausfüllen zu Angaben der BMA entfällt)'), 1, strtolower($_REQUEST['k']), array('class' => 'left')) ?>
+				<?php $html->drawFormCheckbox('bma_reset', _('Anlage wurde vor Eintreffen der Feuerwehr zurückgesetzt (weiteres Ausfüllen zu Angaben der BMA entfällt)'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('bma_reset') == '1')? true:false, 'class' => 'left')) ?>
 			</div>
 			<div class="clear"></div>
 			
@@ -18,11 +18,11 @@
 				
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[blitzlampe_ein]" value="0" />
-					<?php $html->drawFormCheckbox('blitzlampe_ein', _('in Funktion'), 1, strtolower($_REQUEST['k']), array('class' => 'left blitzlampe radiocheck')) ?>
+					<?php $html->drawFormCheckbox('blitzlampe_ein', _('in Funktion'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('blitzlampe_ein') == '1')? true:false, 'class' => 'left blitzlampe radiocheck')) ?>
 				</div>
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[blitzlampe_aus]" value="0" />
-					<?php $html->drawFormCheckbox('blitzlampe_aus', _('nicht in Funktion'), 1, strtolower($_REQUEST['k']), array('class' => 'left blitzlampe radiocheck')) ?>
+					<?php $html->drawFormCheckbox('blitzlampe_aus', _('nicht in Funktion'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('blitzlampe_aus') == '1')? true:false, 'class' => 'left blitzlampe radiocheck')) ?>
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -33,19 +33,19 @@
 				
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[schluesselkasten_ohne]" value="0" />
-					<?php $html->drawFormCheckbox('schluesselkasten_ohne', _('am Objekt nicht vorhanden'), 1, strtolower($_REQUEST['k']), array('class' => 'left schluesselkasten radiocheck')) ?>
+					<?php $html->drawFormCheckbox('schluesselkasten_ohne', _('am Objekt nicht vorhanden'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('schluesselkasten_ohne') == '1')? true:false, 'class' => 'left schluesselkasten radiocheck')) ?>
 				</div>
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[schluesselkasten_nicht_zu_oeffnen]" value="0" />
-					<?php $html->drawFormCheckbox('schluesselkasten_nicht_zu_oeffnen', _('ließ sich nicht öffnen'), 1, strtolower($_REQUEST['k']), array('class' => 'left schluesselkasten radiocheck')) ?>
+					<?php $html->drawFormCheckbox('schluesselkasten_nicht_zu_oeffnen', _('ließ sich nicht öffnen'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('schluesselkasten_nicht_zu_oeffnen') == '1')? true:false, 'class' => 'left schluesselkasten radiocheck')) ?>
 				</div>
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[schluesselkasten_geoeffnet]" value="0" />
-					<?php $html->drawFormCheckbox('schluesselkasten_geoeffnet', _('wurde geöffnet, Objektschlüssel entnommen'), 1, strtolower($_REQUEST['k']), array('class' => 'left schluesselkasten radiocheck')) ?>
+					<?php $html->drawFormCheckbox('schluesselkasten_geoeffnet', _('wurde geöffnet, Objektschlüssel entnommen'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('schluesselkasten_geoeffnet') == '1')? true:false, 'class' => 'left schluesselkasten radiocheck')) ?>
 				</div>
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[schluesselkasten_ohne_oeffnen]" value="0" />
-					<?php $html->drawFormCheckbox('schluesselkasten_ohne_oeffnen', _('brauchte nicht geöffnet werden'), 1, strtolower($_REQUEST['k']), array('class' => 'left schluesselkasten radiocheck')) ?>
+					<?php $html->drawFormCheckbox('schluesselkasten_ohne_oeffnen', _('brauchte nicht geöffnet werden'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('schluesselkasten_ohne_oeffnen') == '1')? true:false, 'class' => 'left schluesselkasten radiocheck')) ?>
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -56,15 +56,15 @@
 				
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[freischaltelement_ohne]" value="0" />
-					<?php $html->drawFormCheckbox('freischaltelement_ohne', _('am Objekt nicht vorhanden'), 1, strtolower($_REQUEST['k']), array('class' => 'left freischaltelement radiocheck')) ?>
+					<?php $html->drawFormCheckbox('freischaltelement_ohne', _('am Objekt nicht vorhanden'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('freischaltelement_ohne') == '1')? true:false, 'class' => 'left freischaltelement radiocheck')) ?>
 				</div>
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[freischaltelement_geschlossen]" value="0" />
-					<?php $html->drawFormCheckbox('freischaltelement_geschlossen', _('wurde zur Alarmauslösung geschlossen'), 1, strtolower($_REQUEST['k']), array('class' => 'left freischaltelement radiocheck')) ?>
+					<?php $html->drawFormCheckbox('freischaltelement_geschlossen', _('wurde zur Alarmauslösung geschlossen'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('freischaltelement_geschlossen') == '1')? true:false, 'class' => 'left freischaltelement radiocheck')) ?>
 				</div>
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[freischaltelement_nicht_genutzt]" value="0" />
-					<?php $html->drawFormCheckbox('freischaltelement_nicht_genutzt', _('wurde zur Alarmauslösung nicht benötigt'), 1, strtolower($_REQUEST['k']), array('class' => 'left freischaltelement radiocheck')) ?>
+					<?php $html->drawFormCheckbox('freischaltelement_nicht_genutzt', _('wurde zur Alarmauslösung nicht benötigt'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('freischaltelement_nicht_genutzt') == '1')? true:false, 'class' => 'left freischaltelement radiocheck')) ?>
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -75,15 +75,15 @@
 				
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[objektschluessel_ohne_verwendung]" value="0" />
-					<?php $html->drawFormCheckbox('objektschluessel_ohne_verwendung', _('brauchten nicht zur Anwendung gebracht werden'), 1, strtolower($_REQUEST['k']), array('class' => 'left objektschluessel radiocheck')) ?>
+					<?php $html->drawFormCheckbox('objektschluessel_ohne_verwendung', _('brauchten nicht zur Anwendung gebracht werden'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('objektschluessel_ohne_verwendung') == '1')? true:false, 'class' => 'left objektschluessel radiocheck')) ?>
 				</div>
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[objektschluessel_maengel]" value="0" />
-					<?php $html->drawFormCheckbox('objektschluessel_maengel', _('Mängel im Schließsystem festgestellt'), 1, strtolower($_REQUEST['k']), array('class' => 'left objektschluessel radiocheck')) ?>
+					<?php $html->drawFormCheckbox('objektschluessel_maengel', _('Mängel im Schließsystem festgestellt'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('objektschluessel_maengel') == '1')? true:false, 'class' => 'left objektschluessel radiocheck')) ?>
 				</div>
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[objektschluessel_schliesst]" value="0" />
-					<?php $html->drawFormCheckbox('objektschluessel_schliesst', _('alle benutzten verschlossenen Türen schließbar'), 1, strtolower($_REQUEST['k']), array('class' => 'left objektschluessel radiocheck')) ?>
+					<?php $html->drawFormCheckbox('objektschluessel_schliesst', _('alle benutzten verschlossenen Türen schließbar'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('objektschluessel_schliesst') == '1')? true:false, 'class' => 'left objektschluessel radiocheck')) ?>
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -94,33 +94,33 @@
 				
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[melderausloesung_ausgeloest]" value="0" />
-					<?php $html->drawFormCheckbox('melderausloesung_ausgeloest', _('Melder ausgelöst'), 1, strtolower($_REQUEST['k']), array('class' => 'left melderausloesung radiocheck')) ?>
+					<?php $html->drawFormCheckbox('melderausloesung_ausgeloest', _('Melder ausgelöst'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('melderausloesung_ausgeloest') == '1')? true:false, 'class' => 'left melderausloesung radiocheck')) ?>
 				</div>
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[melderausloesung_stoerung]" value="0" />
-					<?php $html->drawFormCheckbox('melderausloesung_stoerung', _('Mängel im Schließsystem festgestellt'), 1, strtolower($_REQUEST['k']), array('class' => 'left melderausloesung radiocheck')) ?>
+					<?php $html->drawFormCheckbox('melderausloesung_stoerung', _('Mängel im Schließsystem festgestellt'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('melderausloesung_stoerung') == '1')? true:false, 'class' => 'left melderausloesung radiocheck')) ?>
 				</div>
 				<div class="clear"></div>
 				
 				<div class="margin-left20">
 					<div class="left content-grid-col2">
 						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[ausloesegrund_brand]" value="0" />
-						<?php $html->drawFormCheckbox('ausloesegrund_brand', _('infolge eines Brandes'), 1, strtolower($_REQUEST['k']), array('class' => 'left ausloesegrund radiocheck')) ?>
+						<?php $html->drawFormCheckbox('ausloesegrund_brand', _('infolge eines Brandes'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('ausloesegrund_brand') == '1')? true:false, 'class' => 'left ausloesegrund radiocheck')) ?>
 					</div>
 					<div class="clear"></div>
 					<div class="left content-grid-col2">
 						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[ausloesegrund_missbrauch]" value="0" />
-						<?php $html->drawFormCheckbox('ausloesegrund_missbrauch', _('infolge Meldermissbrauch (vorsätzlich oder fahrlässing)'), 1, strtolower($_REQUEST['k']), array('class' => 'left ausloesegrund radiocheck')) ?>
+						<?php $html->drawFormCheckbox('ausloesegrund_missbrauch', _('infolge Meldermissbrauch (vorsätzlich oder fahrlässing)'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('ausloesegrund_missbrauch') == '1')? true:false, 'class' => 'left ausloesegrund radiocheck')) ?>
 					</div>
 					<div class="clear"></div>
 					<div class="left content-grid-col2">
 						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[ausloesegrund_kenngroesse]" value="0" />
-						<?php $html->drawFormCheckbox('ausloesegrund_kenngroesse', _('infolge Brandkenngrößen (Rauch, Wärme, Feuerschein)'), 1, strtolower($_REQUEST['k']), array('class' => 'left ausloesegrund radiocheck')) ?>
+						<?php $html->drawFormCheckbox('ausloesegrund_kenngroesse', _('infolge Brandkenngrößen (Rauch, Wärme, Feuerschein)'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('ausloesegrund_kenngroesse') == '1')? true:false, 'class' => 'left ausloesegrund radiocheck')) ?>
 					</div>
 					<div class="clear"></div>
 					<div class="left content-grid-col2">
 						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[ausloesegrund_ohne]" value="0" />
-						<?php $html->drawFormCheckbox('ausloesegrund_ohne', _('nicht feststellbar'), 1, strtolower($_REQUEST['k']), array('class' => 'left ausloesegrund radiocheck')) ?>
+						<?php $html->drawFormCheckbox('ausloesegrund_ohne', _('nicht feststellbar'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('ausloesegrund_ohne') == '1')? true:false, 'class' => 'left ausloesegrund radiocheck')) ?>
 					</div>
 				</div>	
 				<div class="clear"></div>
@@ -132,14 +132,14 @@
 			<div class="form-row">
 				<div class="left content-grid-col4">
 					<p><?php echo _('Meldergruppe / -nummer') ?></p>
-					<div class="left content-grid-col2"><?php $html->drawFormInput('meldergruppe', '', '',strtolower($_REQUEST['k']), array()) ?></div>
-					<div class="left content-grid-col2"><?php $html->drawFormInput('meldernummer', '', '',strtolower($_REQUEST['k']), array()) ?></div>
+					<div class="left content-grid-col2"><?php $html->drawFormInput('meldergruppe', '', $B->get('meldergruppe'), strtolower($_REQUEST['k']), array()) ?></div>
+					<div class="left content-grid-col2"><?php $html->drawFormInput('meldernummer', '', $B->get('meldernummer'), strtolower($_REQUEST['k']), array()) ?></div>
 					<div class="clear"></div>
 				</div>
 				
 				<div class="left content-grid-col70-30">
 					<p><?php echo _('Gebäudeteil/ Geschoß/ Raumbezeichnung bzw. -nummer') ?></p>
-					<?php $html->drawFormInput('melder_ort_beschreibung', '', '',strtolower($_REQUEST['k']), array()) ?>
+					<?php $html->drawFormInput('melder_ort_beschreibung', '', $B->get('meldernummer'), strtolower($_REQUEST['k']), array()) ?>
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -150,15 +150,15 @@
 				
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[gruppenmeldekartei_angewendet]" value="0" />
-					<?php $html->drawFormCheckbox('gruppenmeldekartei_angewendet', _('problemlose Anwendung'), 1, strtolower($_REQUEST['k']), array('class' => 'left gruppenmeldekartei radiocheck')) ?>
+					<?php $html->drawFormCheckbox('gruppenmeldekartei_angewendet', _('problemlose Anwendung'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('gruppenmeldekartei_angewendet') == '1')? true:false, 'class' => 'left gruppenmeldekartei radiocheck')) ?>
 				</div>
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[gruppenmeldekartei_fehlerhaft]" value="0" />
-					<?php $html->drawFormCheckbox('gruppenmeldekartei_fehlerhaft', _('fehlerhafte Angaben'), 1, strtolower($_REQUEST['k']), array('class' => 'left gruppenmeldekartei radiocheck')) ?>
+					<?php $html->drawFormCheckbox('gruppenmeldekartei_fehlerhaft', _('fehlerhafte Angaben'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('gruppenmeldekartei_fehlerhaft') == '1')? true:false, 'class' => 'left gruppenmeldekartei radiocheck')) ?>
 				</div>
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[gruppenmeldekartei_nicht_angewendet]" value="0" />
-					<?php $html->drawFormCheckbox('gruppenmeldekartei_nicht_angewendet', _('wurde nicht zur Anwendung gebracht'), 1, strtolower($_REQUEST['k']), array('class' => 'left gruppenmeldekartei radiocheck')) ?>
+					<?php $html->drawFormCheckbox('gruppenmeldekartei_nicht_angewendet', _('wurde nicht zur Anwendung gebracht'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('gruppenmeldekartei_nicht_angewendet') == '1')? true:false, 'class' => 'left gruppenmeldekartei radiocheck')) ?>
 				</div>
 				<div class="clear"></div>
 			</div>

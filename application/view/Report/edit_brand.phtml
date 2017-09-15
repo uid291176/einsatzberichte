@@ -53,6 +53,7 @@ $B->init();
 	<div id="content-tabs">
 		<p id="tab_page1" class="switch-tab active"><span class="tab_1"><?php echo _('Seite 1') ?></span></p>
 		<p id="tab_page2" class="switch-tab"><span class="tab_2"><?php echo _('Seite 2') ?></span></p>
+		<p id="tab_page3" class="switch-tab"><span class="tab_3"><?php echo _('Seite 3') ?></span></p>
 		<div class="clear"></div>
 	</div>
 	
@@ -614,6 +615,10 @@ $B->init();
 	<!-- Seite 2 als eigenes Template einbinden -->
 		<?php include VIEW_PATH.'/Report/edit_brand2.phtml' ?>
 	<!-- Seite 2 als eigenes Template einbinden -->
+	
+	<!-- Seite 3 als eigenes Template einbinden -->
+		<?php include VIEW_PATH.'/Report/edit_brand3.phtml' ?>
+	<!-- Seite 3 als eigenes Template einbinden -->
 	
 	<?php echo $html->drawFormEnde() ?>
 	
