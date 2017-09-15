@@ -1,0 +1,184 @@
+<?php
+/**
+ * Template Einsatzübersicht der Berichte die abgeschlossen und archiviert sind
+*/
+//$this->tools->debug($this->view['data']);
+?>
+
+<div id="user-overview" class="overview-wrap">
+
+	<h1><span class="fa fa-file-text-o"></span>&nbsp;<?php echo _('Abgeschlossene Einsatzberichte') ?></h1>
+
+	<?php echo $this->drawMessages() ?>
+	
+	
+	<div id="zeitraum-filter">
+	
+		<div class="table-filter left">
+			<a <?php echo ($_REQUEST['period'] == 'day')? 'class="active"':'' ?> href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('period' => 'day')) ?>"><?php echo _('letzten 24h') ?> <span><?php echo (!empty($this->view['count']['day']))? '('.$this->view['count']['day'].')':'(0)'?></span></a>&nbsp;|&nbsp;
+			<a <?php echo ($_REQUEST['period'] == 'week')? 'class="active"':'' ?> href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('period' => 'week')) ?>"><?php echo _('Wochenübersicht') ?> <span><?php echo (!empty($this->view['count']['week']))? '('.$this->view['count']['week'].')':'(0)'?></span></a>&nbsp;|&nbsp;
+			<a <?php echo ($_REQUEST['period'] == 'month')? 'class="active"':'' ?> href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('period' => 'month')) ?>"><?php echo _('Monatsübersicht') ?> <span><?php echo (!empty($this->view['count']['month']))? '('.$this->view['count']['month'].')':'(0)'?></span></a>
+		</div>
+		
+		<form id="search-form" method="post" action="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'search', array('res' => 'mysql', 'referer' => 'finish')) ?>">
+			<div id="search-form-content" class="right">
+				<label class="left"><?php echo _('Einsatznummer') ?>:</label>
+				<input id="search" class="text" type="text" name="search" value="<?php echo $_REQUEST['search'] ?>" title="<?php echo _('E-Nummer: mind. die ersten 6 Stellen') ?>" />
+				<input id="submit-search-btn" type="submit" name="submit-search" value="" />
+				<span id="submit-search" class="fa fa-search" title="<?php echo _('Suche starten') ?>"></span>
+			</div>
+			<div class="clear"></div>
+		</form>
+		
+	</div>
+	<div class="clear"></div>
+	
+	<p><?php echo _('Für diese Berichte wurde ein Einsatzbericht generiert, eine evtl. Gebührenabrechnung steht noch aus.') ?></p>
+	
+	<br />
+	
+	<form id="einsatz-list-form" method="post" action="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action']) ?>">
+		
+		<div class="table-action-list left">
+			<div class="datpicker-wrap left">
+			
+				<?php if (!empty($_REQUEST['date-select'])) { ?>
+					<?php if (!strpos($_REQUEST['date-select'], '.')) $strDate = date('d.m.Y', intval($_REQUEST['date-select'])) ?>
+					<?php if (strpos($_REQUEST['date-select'], '.') > 0) $strDate = $this->tools->q($_REQUEST['date-select']) ?>
+				<?php } else { ?>
+					<?php $strDate = date('d.m.Y') ?>
+                <?php } ?>
+				
+				<input id="date-select" class="text datepicker left" type="text" name="date-select" value="<?php echo $strDate ?>" />
+				<span class="fa fa-calendar"></span>
+			</div>
+			<input id="submit-table-action" class="submit table-action-button left" type="submit" name="submit_table_action" value="<?php echo _('übernehmen') ?>" />
+		</div>
+		
+		<div class="pager-wrap right">
+			<?php echo $this->view['pager'] ?>
+		</div>
+		<div class="clear"></div>
+		<br />
+		
+		<?php $direction = 'desc' ?>
+		<?php if (isset($_REQUEST['order_direction']) && $_REQUEST['order_direction'] == 'asc') $direction = 'desc' ?>
+		<?php if (isset($_REQUEST['order_direction']) && $_REQUEST['order_direction'] == 'desc') $direction = 'asc' ?>
+		
+		<table id="einsatz-list" class="content-list-table">
+			<thead>
+				<tr>
+					<th class="check-col"><?php echo _('Typ') ?></th>
+					<th>
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('order_by' => 'enr', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>">
+							<span class="sortierung"><?php echo _('Einsatznummer') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'enr')? $_REQUEST['order_direction']:'' ?>"></span>
+						</a>
+					</th>
+					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('order_by' => 'stichwort', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="sortierung"><?php echo _('Stichwort') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'stichwort')? $_REQUEST['order_direction']:'' ?>"></span></a></th>
+					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('order_by' => 'beginn', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="sortierung"><?php echo _('Beginn') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'beginn')? $_REQUEST['order_direction']:'' ?>"></span></a></th>
+					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('order_by' => 'uid', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="sortierung"><?php echo _('Sachbearbeiter') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'uid')? $_REQUEST['order_direction']:'' ?>"></span></a></th>
+					<th><?php echo _('Stadt') ?></th>
+					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('order_by' => 'adresse', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="sortierung"><?php echo _('Straße') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'adresse')? $_REQUEST['order_direction']:'' ?>"></span></a></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php if ($this->tools->isSizedArray($this->view['data'])) { ?>
+				<?php $i = 1; foreach ($this->view['data'] as $einsatz) { $i++; ?>
+				
+				<tr <?php echo (($i % 2) == 0)? 'class="even"':'class="odd"' ?>>
+					<td class="check-col" title="<?php echo $einsatz['typ'] ?>"><span class="fa <?php echo $this->getEventIcon($einsatz['typ']) ?> <?php echo $this->getIconColor($einsatz['typ']) ?>"></span></td>
+					<td>
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('enr' => $einsatz['enr'], 'order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'], 'cmd' => 'pdfreview', 'date-folder' => date('Y-m-d', $einsatz['beginn']))) ?>"><strong><?php echo $einsatz['enr'] ?></strong></a><br />
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('enr' => $einsatz['enr'], 'order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'], 'cmd' => 'pdfreview', 'date-folder' => date('Y-m-d', $einsatz['beginn']))) ?>"><span class="view-details"><?php echo _('PDF Bericht ansehen') ?></span></a>
+					</td>
+					<td><?php echo $einsatz['haupt_stichwort'] ?></td>
+					<td><?php echo date('d.m.Y H:i:s', $einsatz['beginn']) ?></td>
+					<td>
+						<?php $SACHBEARBEITER = new User_Handler($einsatz['uid'], $this->db) ?>
+						<?php $SACHBEARBEITER->init() ?>
+						<?php echo $SACHBEARBEITER->get('name') ?>, <?php echo $SACHBEARBEITER->get('vorname') ?>
+					</td>
+					<td><?php echo $einsatz['ort'] ?></td>
+					<td><?php echo $einsatz['adresse'] ?></td>
+				</tr>
+				<?php } ?>
+				<?php } else { ?>
+					<tr><td colspan="11" class="empty-data"><?php echo _('keine Einträge in dieser Ansicht verhanden') ?></td></tr>
+				<?php } ?>
+			</tbody>
+			
+			<tfoot>
+				<tr>
+					<th class="check-col"><?php echo _('Typ') ?></th>
+					<th>
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('order_by' => 'enr', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>">
+							<span class="sortierung"><?php echo _('Einsatznummer') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'enr')? $_REQUEST['order_direction']:'' ?>"></span>
+						</a>
+					</th>
+					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('order_by' => 'stichwort', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="sortierung"><?php echo _('Stichwort') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'stichwort')? $_REQUEST['order_direction']:'' ?>"></span></a></th>
+					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('order_by' => 'beginn', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="sortierung"><?php echo _('Beginn') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'beginn')? $_REQUEST['order_direction']:'' ?>"></span></a></th>
+					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('order_by' => 'uid', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="sortierung"><?php echo _('Sachbearbeiter') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'uid')? $_REQUEST['order_direction']:'' ?>"></span></a></th>
+					<th><?php echo _('Stadt') ?></th>
+					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('order_by' => 'adresse', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="sortierung"><?php echo _('Straße') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'adresse')? $_REQUEST['order_direction']:'' ?>"></span></a></th>
+				</tr>
+			</tfoot>
+		</table>
+		<br />
+		
+		<!-- Pager bottom -->
+		<div class="pager-wrap right">
+			<?php echo $this->view['pager'] ?>
+		</div><!-- Pager bottom -->
+		<div class="clear"></div>
+		
+	</form>
+	
+	<script type="text/javascript">
+	//<![CDATA[
+	
+		$(document).ready(function(){
+
+			// Datepicker Settings
+			$('.datepicker').datepicker({
+				dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+		        dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+		        firstDay: 1,
+				dateFormat: "dd.mm.yy",
+			});
+
+			// Validierung des Datums (muss in der Vergangeheit liegen)
+			$('.datepicker').on('change', function() {
+				
+				var arrDate = $(this).val().split('.');
+				var objDate = new Date(arrDate[1] + '/' + arrDate[0] + '/'+arrDate[2]);
+				var objToday = new Date();
+
+				// Zeiten des Datums auf null setzen
+				objToday.setHours(0); objToday.setMinutes(0); objToday.setSeconds(0); objToday.setMilliseconds(0);
+
+				if (objDate < objToday)
+				{
+					// nichts tun... Datum wird übernommen
+					return;
+				}
+				else
+				{
+					alert('Datum muss in der Vergangenheit liegen!');
+
+					// Datum auf "heute" stetzen 
+					$(this).datepicker('setDate', new Date());
+					$(this).datepicker().close();
+				}
+
+			});
+
+			$('#submit-search').bind('click', function(){
+				$('#search-form').submit();
+			})
+			
+		})
+	
+	//]]>
+	</script>
+	
+</div>

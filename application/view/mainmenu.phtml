@@ -1,0 +1,76 @@
+<?php 
+/**
+ * template mainmenu
+ * project wmsframework
+ */
+//$this->tools->debug($this->menu);
+?>
+
+<script type="text/javascript">
+//<![CDATA[
+
+	$(document).ready(function(){
+
+		$('.menu > li').mouseenter(function() {
+
+			if ($(this).children('ul').hasClass('submenu') && !$(this).hasClass('active'))
+			{
+				// submenu öffnen
+				$(this).children('ul').css({
+					'position': 'absolute',
+					'left': '240px',
+					'top': '-5px',
+					'display': 'block',
+					'z-index': '99'
+				});
+
+				// submenu schließen
+				$(this).mouseleave(function(){
+					$(this).children('ul').css({
+						'position': 'static ',
+						'left': '0',
+						'top': '0',
+						'display': 'none',
+					})
+				})
+			}
+			
+		})
+		
+	})
+
+//]]>
+</script>
+
+<div id="mainmenu">
+
+	<ul class="menu">
+	
+	<?php foreach ($this->menu as $k => $menu) { ?>
+	
+		<?php if($menu['admin_only'] === true && $this->user->isAdmin() === false) continue ?>
+	
+		<li <?php echo (strtolower($_REQUEST['k']) == $k)? 'class="active"':'' ?>>
+			<a href="<?php echo $this->tools->buildUrl(ucfirst($k), 'index') ?>">
+				<span class="fa <?php echo $menu['class'] ?>"></span><?php echo $menu['title'] ?>
+			</a>
+			
+			<!-- <p style="background:#fff"><?php var_dump($this->user->isAdmin()) ?></p> -->
+				
+			<?php if(isset($menu['submenu'])) { ?>
+				<ul class="submenu">
+				<?php foreach ($menu['submenu'] as $sub ) { ?>				
+					<li <?php echo (strtolower($_REQUEST['action']) == $sub['action'] && strtolower($_REQUEST['k']) == $k)? 'class="active"':'' ?>>
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($k), $sub['action']) ?>"><?php echo $sub['title'] ?></a>
+					</li>
+				<?php } ?>
+				</ul>
+			<?php } ?>
+			
+			<?php echo (strtolower($_REQUEST['k']) == $k)? '<span class="fa fa-caret-left current-menu-item"></span>':'' ?>
+			
+		</li>
+	<?php } ?>
+	</ul>
+
+</div>

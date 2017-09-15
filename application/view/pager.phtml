@@ -1,0 +1,58 @@
+<?php 
+/**
+ * Pager Template für Listenansichten
+ */
+//$this->tools->debug($this->_range);
+?>
+<div class="pager">
+
+<?php if ($this->_actpage > 1) { ?>
+<!-- zurück zur 1. (ersten) Seite -->		
+<a class="first" title="<?php echo _('erste Seite') ?>" href="<?php echo $this->_url ?>&pPage=1">
+	<span class="fa fa-angle-double-left"></span>
+</a><!-- zurück zur 1. (ersten) Seite -->
+
+<!-- eine Seite zurück -->			
+<a class="previous" title="<?php echo _('vorherige Seite') ?>" href="<?php echo $this->_url ?>&pPage=<?php echo $this->_actpage - 1 ?>">
+	<span class="fa fa-angle-left"></span>
+</a><!-- eine Seite zurück -->
+<?php } ?>
+
+<!-- direkt Navi zu den Seiten vor der aktuellen Seite  -->
+<?php $index = $this->_range; while ($index > 0) { ?>
+
+	<?php $prev = $this->_actpage - $index ?>			
+
+	<?php if ($prev > 0) { ?>
+		<a title="<?php echo _('zur Seite') ?> <?php echo $prev ?>" href="<?php echo $this->_url ?>&pPage=<?php echo $prev ?>"><?php echo $prev ?></a>
+	<?php } ?>
+
+<?php $index--; } ?>
+<!-- direkt Navi zu den Seiten vor der aktuellen Seite  -->
+
+<!-- aktuelle Seite -->
+<a class="active" title="<?php echo _('aktuelle Seite') ?>" href="<?php echo $this->_url ?>&pPage=<?php echo $this->_actpage ?>"><?php echo $this->_actpage ?></a><!-- aktuelle Seite -->
+
+<?php $index = $this->_actpage; while ($index < $this->_pages) { ?>
+
+	<?php $next = ++$index; ?>
+	
+	<?php if (($this->_actpage + $this->_range) > $next) { ?>
+		<a title="<?php echo _('zur Seite') ?>" href="<?php echo $this->_url ?>&pPage=<?php echo $next ?>"><?php echo $next ?></a>
+	<?php } ?>
+
+<?php } ?>
+
+<?php if($this->_actpage < $this->_pages) { ?>
+<!-- eine Seite vor -->
+<a class="next"  title="<?php echo _('nächste Seite') ?>" href="<?php echo $this->_url ?>&pPage=<?php echo $this->_actpage + 1 ?>">
+	<span class="fa fa-angle-right"></span>
+</a><!-- eine Seite vor -->
+	
+<!-- zur letzten Seite -->		
+<a class="last" title="<?php echo _('letzte Seite') ?>" href="<?php echo $this->_url ?>&pPage=<?php echo $this->_pages ?>">
+	<span class="fa fa-angle-double-right"></span>
+</a><!-- zur letzten Seite -->	
+<?php } ?>
+
+</div>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<title><?php echo $this->getConf('system_title') ?></title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	
+	<!-- start css dateien einbinden -->
+	<?php foreach ($this->arrCssFiles as $css) { ?>
+	<link rel="stylesheet" type="text/css" href="css<?php echo $css ?>" media="screen" />
+	<?php } ?>
+	<!-- ende css dateien einbinden -->
+	
+	<!-- start javaScript dateien einbinden -->
+	<?php foreach ($this->arrJsFiles as $js) { ?>
+	<script type="text/javascript" src="js<?php echo $js ?>"></script>
+	<?php } ?>
+	<!-- ende javaScript dateien einbinden -->
+
+	<script type="text/javascript">
+	//<![CDATA[
+	
+		$(document).ready(function(){
+
+			// öffnet und schließt der user info Dialog
+			$('#user-info').mouseenter(function(){
+				$('#user-dialog').show(100, function(){
+					$(this).mouseleave(function(){
+						$(this).hide();
+					})
+				})
+			})
+			
+		})
+	
+	//]]>
+	</script>
+	
+</head>
+
+<body>
+	<!-- page-wrapper -->
+   	<div id="page-wrapper">
+   	
+   		<!-- page -->
+   		<div id="page">
+   		
+   			<!-- header -->
+	   		<div id="header-wrap">
+	   			<div id="header-content">
+		   			<p class="left"><a href="<?php echo $this->tools->buildUrl('Index', 'index', array()) ?>" title="<?php echo _('Übersichtsseite') ?>"><span class="fa fa-tachometer"></span></a></p>
+		   			<p class="left"><a href="<?php echo $this->tools->buildUrl('Index', 'listInfo', array()) ?>" title="<?php echo _('Aktuelle Informationen') ?>"><span class="fa fa-info"></span></a></p>
+		   			<p class="left"><a href="<?php echo $this->tools->buildUrl('Index', 'listWiedervorlage', array()) ?>" title="<?php echo _('Wiedervorlagen') ?>"><span class="fa fa-refresh"></span></a></p>
+		   			<p id="user-info" class="right"><a href="#"><?php echo _('Willkommen') ?>, <i><?php echo $this->user->get('username') ?></i>&nbsp;</a></p>
+	   			</div>
+	   			
+	   			<!-- user-dialog -->
+		   		<div id="user-dialog">
+		   			<a href="<?php echo $this->tools->buildUrl('User', 'profil', array('uid' => $this->user->get('id'))) ?>"><?php echo _('Profil bearbeiten') ?></a>&nbsp;|&nbsp;<a href="<?php echo $this->tools->buildUrl('Login', 'logout', array()) ?>"><?php echo _('Abmelden') ?></a>
+		   		</div><!-- user-dialog -->
+		   		
+	   		</div><!-- header -->
+	   		
+	   		<!-- content-wrap -->
+	   		<div id="content-wrap">
+	   		
+	   			<!-- content-col1 -->
+	   			<div id="content-col1">
+	   				<div id="sidebar">
+	   					
+	   					<img id="logo" src="<?php echo $this->getConf('upload_path').'/'.$this->getConf('logo_img') ?>" alt="<?php echo $this->getConf('logo_img') ?>" />
+	   				
+	   					<?php echo $this->renderMenu() ?>
+	   					
+	   				</div>
+	   			</div><!-- content-col1 -->
+	   			
+	   			<!-- content-col2 -->
+	   			<div id="content-col2">
+	   			
+	   				<!-- content -->
+	   				<div id="content">
+	   				
+	   					<?php include $inc; ?>
+	   				
+	   				</div><!-- content -->
+	   				
+	   			</div><!-- content-col2 -->
+	   		
+	   		</div><!-- content-wrap -->
+	   		
+   		</div><!-- page -->
+   		
+   		<!-- footer -->
+   		<div id="footer-wrap">
+   			<div id="footer-content">
+	   			<p class="left"><?php echo $this->getConf('system_title') ?>&nbsp;|&nbsp;<?php echo date('Y') ?></p>
+	   			<p class="right"><?php echo _('Version') ?>: <?php echo $this->getConf('system_version') ?></p>
+	   			<div class="clear"></div>
+   			</div>
+   		</div><!-- footer -->
+   	
+   	</div><!-- page-wrapper -->
+   	
+</body>
+</html>

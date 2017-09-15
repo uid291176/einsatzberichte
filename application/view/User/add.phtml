@@ -1,0 +1,33 @@
+<?php 
+/**
+ * Template neuen Benutzer anlegen
+ */
+//$this->tools->debug($_REQUEST);
+?>
+<div id="user-profil-add" class="content-form">
+
+	<h2><?php echo _('Neuen Benutzer anlegen') ?></h2>
+	
+	<?php echo $this->drawMessages(); ?>
+	
+	<p><?php echo _('Lege einen neuen Benutzer für das System an. Felder mit * sind Pflichtangaben.') ?></p>
+	
+	<?php $html = Html_Factory::getHtml('forms') ?>
+	
+	<?php echo $html->drawFormStart('post', $this->tools->buildUrl('User', 'save', array('cmd' => 'create')), '', array()) ?>
+		<?php $html->drawFormInput('name', _('Name'), $_REQUEST['name'], '', array()) ?>
+		<?php $html->drawFormInput('vorname', _('Vorame'), $_REQUEST['vorname'], '', array()) ?>
+		
+		<?php $html->drawFormInput('email', _('E- Mail * '), $_REQUEST['email'], '', array()) ?>
+		
+		<?php $html->drawFormInput('username', _('Benutzername * '), $_REQUEST['username'], '', array()) ?>
+		<?php $html->drawFormCheckbox('status', _('Administrator'), 1, '', array()) ?>
+		
+		<?php $html->drawFormPasswd('passwd1', _('Passwort * '), '', array()) ?>
+		<?php $html->drawFormPasswd('passwd2', _('wiederholen * '), '', array()) ?>
+		<br />
+		<?php $html->drawFormSubmit('submit_save', _('Neuen Benutzer anlegen'), '', array('class' => 'submit button')) ?>
+	
+	<?php echo $html->drawFormEnde() ?>
+	
+</div>

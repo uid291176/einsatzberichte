@@ -1,0 +1,51 @@
+<?php 
+/**
+ * Template Config Übersicht
+ * author David Grimmer
+ */
+//$this->tools->debug($this->conf);
+?>
+<div id="config-edit" class="content-form">
+	
+	<h1><span class="fa fa-sliders"></span>&nbsp;<?php echo _('Systemeinstellungen') ?></h1>
+	
+	<?php echo $this->drawMessages() ?>
+	
+	<p><?php echo _('Konfigurationseinstellungen des System bearbeiten und speichern.') ?></p>
+	<br />
+	
+	<h3><?php echo _('Allgemein') ?></h3>
+	
+	<?php echo $this->drawMessages() ?>
+	<?php $html = Html_Factory::getHtml('forms') ?>
+	<?php echo $html->drawFormStart('post', $this->tools->buildUrl('Config', 'save'), '', array()) ?>
+	<?php $html->drawFormInput('system_title', _('System Bezeichnung'), $this->getConf('system_title'), '', array()) ?>
+	<?php $html->drawFormInput('logo_img', _('Logo'), $this->getConf('logo_img'), '', array()) ?>
+	<?php $html->drawFormInput('upload_path', _('Upload Pfad'), $this->getConf('upload_path'), '', array()) ?>
+	<?php $html->drawFormInput('page_entrys', _('Einträge pro Seite'), $this->getConf('page_entrys'), '', array()) ?>
+	<?php $html->drawFormInput('page_range', _('Pager Seiten-Links'), $this->getConf('page_range'), '', array()) ?>
+	<br />
+	<br />
+	
+	<h3><?php echo _('Einheiten') ?></h3>
+	
+	<?php $html->drawFormInput('laenge', _('Längen in'), $this->getConf('laenge'), '', array()) ?>
+	<?php $html->drawFormInput('gewicht', _('Gewicht in'), $this->getConf('gewicht'), '', array()) ?>
+	<?php $html->drawFormInput('waehrung', _('Währung'), $this->getConf('waehrung'), '', array()) ?>
+	<br />
+	<br />
+	
+	<h3><?php echo _('Gebietskörperschaft') ?></h3>
+	
+	<?php $html->drawFormInput('landkreis_kreisfreie_stadt', _('Landkreis/ kreisfr. Stadt'), $this->getConf('landkreis_kreisfreie_stadt'), '', array()) ?>
+	<?php $html->drawFormInput('gemeinde', _('Gemeinde'), $this->getConf('gemeinde'), '', array()) ?>
+	<?php $html->drawFormInput('gemeinde_ident_nr', _('Ident.- Nr. Gemeinde'), $this->getConf('gemeinde_ident_nr'), '', array()) ?>
+	<br />
+	<br />
+	
+	<div class="left"><?php $html->drawFormSubmit('save_config', _('Konfiguration Speichern'), '', array('class' => 'submit button')) ?></div>
+	
+	<?php echo $html->drawFormEnde() ?>
+	
+</div>	
+

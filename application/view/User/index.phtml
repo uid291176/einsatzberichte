@@ -1,0 +1,99 @@
+<?php 
+/**
+ * Template Benutzerübersicht
+ */
+//$this->tools->debug($this->view['data']);
+?>
+<script type="text/javascript">
+	//<![CDATA[
+	     $(document).ready(function(){
+
+			/**
+			 * checkbox all select/ deselect
+			 */
+			$('.check-all').click(function(){
+				
+				if ($(this).prop('checked'))
+				{
+					$('.check-all').prop('checked', true);
+					$('.checkbox').prop('checked', true);
+				}
+				else
+				{
+					$('.check-all').prop('checked', false);
+					$('.checkbox').prop('checked', false);
+				}
+			})
+		 }) //checkbox all select/ deselect  
+	//]]>
+</script>
+
+<div id="user-overview" class="overview-wrap">
+
+	<h1><span class="fa fa-user"></span>&nbsp;<?php echo _('Benutzerübersicht') ?></h1>
+
+	<?php echo $this->drawMessages() ?>
+
+	<div class="table-filter">
+		<a <?php echo (!isset($_REQUEST['status']))? 'class="active"':'' ?> href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'index') ?>"><?php echo _('Alle') ?> <span><?php echo (!empty($this->view['count']['all']))? '('.$this->view['count']['all'].')':'(0)'?></span></a>&nbsp;|&nbsp;
+		<a <?php echo ($_REQUEST['status'] == '1')? 'class="active"':'' ?> href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'index', array('status' => '1')) ?>"><?php echo _('Administratoren') ?> <span><?php echo (!empty($this->view['count']['admin']))? '('.$this->view['count']['admin'].')':'(0)'?></span></a>&nbsp;|&nbsp;
+		<a <?php echo ($_REQUEST['status'] == '0')? 'class="active"':'' ?> href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'index', array('status' => '0')) ?>"><?php echo _('Benutzer') ?> <span><?php echo (!empty($this->view['count']['user']))? '('.$this->view['count']['user'].')':'(0)'?></span></a>
+	</div>
+
+	<form id="user-list-form" method="post" action="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'table') ?>">
+
+		<div class="table-action-list left">
+			<select class="table-select left" name="table-action">
+				<option value="-1"><?php echo _('Aktion wählen') ?></option>
+				<option value="del"><?php echo _('löschen') ?></option>
+			</select>
+			<input id="submit-table-action" class="submit table-action-button left" type="submit" name="submit_table_action" value="<?php echo _('übernehmen') ?>" onclick="return confirm('<?php echo _('diese Aktion wirklich ausführen?') ?>');" />
+		</div>
+		
+		<div class="pager-wrap right">
+			<?php echo $this->view['pager'] ?>
+		</div>
+		<div class="clear"></div>
+	
+		<table id="user-list" class="content-list-table">
+			<thead>
+				<tr>
+					<th class="check-col"><input class="check-all" type="checkbox" name="check_all" value="1" /></th>
+					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'index', array('order_by' => 'username')) ?>"><span class="sortierung"><?php echo _('Benutzername') ?></span></a></th>
+					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'index', array('order_by' => 'name')) ?>"><span class="sortierung"><?php echo _('Name') ?></span></a></th>
+					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'index', array('order_by' => 'vorname')) ?>"><span class="sortierung"><?php echo _('Vorname') ?></span></a></th>
+					<th><?php echo _('E - Mail') ?></th>
+					<th><?php echo _('Status') ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php $i = 1; foreach ($this->view['data'] as $user) { $i++; ?>
+				<tr <?php echo (($i % 2) == 0)? 'class="even"':'class="odd"' ?>>
+					<td class="check-col"><input class="checkbox" type="checkbox" name="check[]" value="<?php echo $user->get('id') ?>" /></td>
+					<td>
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'edit', array('uid' => $user->get('id'))) ?>"><strong><?php echo $user->get('username') ?></strong></a><br />
+						<span class="actions">
+							<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'edit', array('uid' => $user->get('id'))) ?>"><?php echo _('bearbeiten') ?></a>&nbsp;|&nbsp;
+							<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'delete', array('uid' => $user->get('id'))) ?>" style="color:red;" onclick="return confirm('<?php echo _('Benutzer wirklich löschen?') ?>');"><?php echo _('löschen') ?></a>
+						</span>
+					</td>
+					<td><?php echo $user->get('name') ?></td>
+					<td><?php echo $user->get('vorname') ?></td>
+					<td><a href="mailto:<?php echo $user->get('email') ?>"><?php echo $user->get('email') ?></a></td>
+					<td><?php echo ($user->get('status') == '1')? _('Administrator'):_('Benutzer') ?></td>
+				</tr>
+			</tbody>
+			<?php } ?>
+			<tfoot>
+				<tr>
+					<th class="check-col"><input class="check-all" type="checkbox" name="check_all" value="1" /></th>
+					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'index', array('order_by' => 'username')) ?>"><span class="sortierung"><?php echo _('Benutzername') ?></span></a></th>
+					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'index', array('order_by' => 'name')) ?>"><span class="sortierung"><?php echo _('Name') ?></span></a></th>
+					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'index', array('order_by' => 'vorname')) ?>"><span class="sortierung"><?php echo _('Vorname') ?></span></a></th>
+					<th><?php echo _('E - Mail') ?></th>
+					<th><?php echo _('Status') ?></th>
+				</tr>
+			</tfoot>
+		</table>
+	</form>
+</div>

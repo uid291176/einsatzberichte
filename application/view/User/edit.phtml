@@ -1,0 +1,33 @@
+<?php 
+/**
+ * Benutzerdaten ändern
+ */
+?>
+<div id="user-profil-edit" class="content-form">
+
+	<h1><span class="fa fa-user"></span>&nbsp;<?php echo _('Benutzer') ?> [<i><?php echo $this->view['data']->get('username') ?></i>]</h1>
+	
+	<?php echo $this->drawMessages(); ?>
+	
+	<p><?php echo _('Profil bearbeiten, Felder mit * sind Pflichtangaben.') ?></p>
+	
+	<?php $html = Html_Factory::getHtml('forms') ?>
+	<?php echo $html->drawFormStart('post', $this->tools->buildUrl('User', 'save', array('uid' => $this->view['data']->get('id'), 'cmd' => 'edit')), '', array()) ?>
+		<?php $html->drawFormInput('name', _('Name'), $this->view['data']->get('name'), '', array()) ?>
+		<?php $html->drawFormInput('vorname', _('Vorame'), $this->view['data']->get('vorname'), '', array()) ?>
+		<?php $html->drawFormInput('email', _('E- Mail'), $this->view['data']->get('email'), '', array('class' => 'required')) ?>
+		<?php $html->drawFormInput('username', _('Benutzername * '), $this->view['data']->get('username'), '', array('class' => 'required', 'disabled' => true)) ?>
+		<?php if ($this->user->get('status') == '1') { ?>
+		<?php $html->drawFormCheckbox('status', _('Administrator'), 1, '', array('checked' => ($this->view['data']->get('status'))? true:false)) ?>
+		<?php } ?>
+		<span class="field-info"><?php echo _('Zum ändern des Passwortes müssen beide Felder richtig ausgefüllt sein') ?></span>
+		<?php $html->drawFormPasswd('passwd1', _('neues Passwort * '), '', array('class' => 'required')) ?>
+		<?php $html->drawFormPasswd('passwd2', _('wiederholen * '), '', array('class' => 'required')) ?>
+		<div class="left"><?php $html->drawFormSubmit('submit_save', _('Speichern'), '', array('class' => 'submit button')) ?></div>
+		<?php if ($this->user->get('status') == '1') { ?>
+		<div class="left" style="margin-left:10px;"><?php $html->drawFormSubmit('submit_save_return', _('Speichern zurück zur Übersicht'), '', array('class' => 'submit button')) ?></div>
+		<?php } ?>
+		<div class="clear"></div>
+	<?php echo $html->drawFormEnde() ?>
+	
+</div>

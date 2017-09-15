@@ -1,0 +1,32 @@
+<?php 
+/**
+ * template: login form
+ * project: wmsframework
+ */
+?>
+<div id="login-wrap">
+
+	<div id="login-banner">
+
+		<img class="left" src="<?php echo $this->getConf('upload_path').'/'.$this->getConf('logo_img') ?>" alt="<?php echo $this->getConf('unternehmen_name'); ?>" title="<?php echo $this->getConf('unternehmen_name'); ?>" />
+
+		<span id="system-title" class="right"><?php echo $this->getConf('system_title'); ?></span>
+		<div class="clear"></div>
+	</div>
+	
+	<div id="login-form">
+	
+		<?php $html = Html_Factory::getHtml('forms') ?>
+		
+		<?php echo $html->drawFormStart('post', $this->tools->buildUrl('Login', 'showLogin'), '', array()) ?>	
+		<?php echo $html->drawFormInput('username', _('Benutzername'), '', false, array('class' => 'text')) ?>
+		<?php echo $html->drawFormPasswd('password', _('Passwort'), '', array('class' => 'text')) ?>	
+		
+		<p class="error" class="left"><?php echo $this->error; ?></p>
+		
+		<?php echo $html->drawFormSubmit('submit', _('Anmelden'), '', array('class' => 'submit-button right')) ?>	
+		<?php echo $html->drawFormEnde() ?>
+		
+	</div>
+	
+</div>

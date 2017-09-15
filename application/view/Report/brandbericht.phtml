@@ -1,0 +1,735 @@
+<!-- 
+/**
+ * template "Brandbericht-Thüringen" erzeugt das PDF Dokument zum ausdrucken
+ */
+-->
+<table cellpadding="5" cellspacing="0" style="width:99%; border:1px solid #333333;">
+	<tr>
+		<td style="text-align:left; font-size:18px; margin-top:5px;"><?php echo _('Brandbericht Thüringen') ?></td>
+		<td style="text-align:center; font-size:18px; margin-top:5px;"><?php echo _('Teil 1') ?></td>
+		<td style="text-align:right;"><img src="gfx/th-logo.gif" alt="Thüringen" /></td>
+	</tr>
+</table>
+<br /><br />
+
+<!-- Allgemeine Daten zum Einsatz -->
+<table cellpadding="0" cellspacing="0" style="width:100%;">
+	<tr>
+		<!-- linker Block -->
+		<td style="margin-right:10px;">
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Landkreis/ kreisfr. Stadt') ?></td>
+					<td colspan="3" style="border:1px solid #666666;"><?php echo $this->getConf('landkreis_kreisfreie_stadt') ?></td>
+				</tr>
+				<tr>
+					<td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Gemeinde') ?></td>
+					<td colspan="3" style="border:1px solid #666666;"><?php echo $this->getConf('gemeinde') ?></td>
+				</tr>
+				<tr>
+					<td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ident.- Nr. Gemeinde') ?></td>
+					<td colspan="3" style="border:1px solid #666666;"><?php echo $this->getConf('gemeinde_ident_nr') ?></td>
+				</tr>
+				<tr>
+					<td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Einsatznummer') ?></td>
+					<td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('enr') ?></td>
+				</tr>
+			</table>
+			<br /><br />
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Hauptbericht') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('report_art') == 'haupt')? 'X':'' ?></td>
+					<td style="width:50%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Nebenbericht') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('report_art') == 'neben')? 'X':'' ?></td>
+				</tr>
+				<tr><td colspan="5" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Alarm durch:') ?></td></tr>
+				<tr>
+					<td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Zentrale Leitstelle') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('alarm_zls') == '1')? 'X':'' ?></td>
+					<td style="width:50%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Sirene handausgelöst') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('alarm_hand') == '1')? 'X':'' ?></td>
+				</tr>
+				<tr>
+					<td style="width:60%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anrufer Name') ?></td>				
+					<td style="width:40%; border:1px solid #666666;"><?php echo $B->get('anrufer_vorname') ?> <?php echo $B->get('anrufer_name') ?></td>
+				</tr>
+				<tr>
+					<td style="width:60%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anrufer Tel.- Nr.') ?></td>				
+					<td style="width:40%; border:1px solid #666666;"><?php echo $B->get('anrufer_telefonnummer') ?></td>
+				</tr>
+			</table>
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Alarmzeit') ?></td>
+					<td style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Datum') ?></td>
+					<td style="border:1px solid #666666;"><?php echo $B->get('alarmzeit_datum') ?></td>
+					<td style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Uhrzeit') ?></td>
+					<td><?php echo $B->get('alarmzeit_uhrzeit') ?></td>
+				</tr>
+			</table>
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td style="width:60%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Eigener Ausrückebereich') ?></td>
+					<td style="width:15%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ja') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('eigener_ausrueckebereich') == 'ja')? 'X':'' ?></td>
+					<td style="width:15%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Nein') ?></td>
+					<td style="width:5%;"><?php echo ($B->get('eigener_ausrueckebereich') == 'nein')? 'X':'' ?></td>
+				</tr>
+			</table>
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td style="width:60%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Eigener Ausrückebereich') ?></td>				
+					<td style="width:40%;"><?php echo $B->get('entfernung_einsatzstelle') ?> <?php echo ($this->tools->isSizedString($B->get('entfernung_einsatzstelle')))? _('km'):'' ?></td>
+				</tr>
+			</table>
+			<br /><br />
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td colspan="2" style="width:45%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Brandumfang') ?></td>
+					<td colspan="2" style="width:55%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Fehlalarmierung') ?></td>
+				</tr>
+				<tr>
+					<td style="width:40%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Kleinbrand a') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('brandumfang_a-klein') == '1')? 'X':'' ?></td>
+					<td style="width:50%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('blinder Alarm') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('fehlalarm_blind') == '1')? 'X':'' ?></td>
+				</tr>
+				<tr>
+					<td style="width:40%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Kleinbrand b') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('brandumfang_b-klein') == '1')? 'X':'' ?></td>
+					<td style="width:50%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('böswilliger Alarm') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('fehlalarm_boeswillig') == '1')? 'X':'' ?></td>
+				</tr>
+				<tr>
+					<td style="width:40%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Mittelbrand') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('brandumfang_mittel') == '1')? 'X':'' ?></td>
+					<td style="width:50%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Fehlalarmierung BMA') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('fehlalarm_fehler_bma') == '1')? 'X':'' ?></td>
+				</tr>
+				<tr>
+					<td style="width:40%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Großbrand') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('brandumfang_gross') == '1')? 'X':'' ?></td>
+					<td style="width:50%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Sonstige') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('fehlalarm_sonstige') == '1')? 'X':'' ?></td>
+				</tr>
+			</table>
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<!--
+				<tr>
+					<td colspan="4" style="width:90%; background-color:#cccccc; border:1px solid #666666;"><?php //echo _('In Bereitstellung (Anzahl)') ?></td>
+					<td style="width:10%; border:1px solid #666666;"><?php //echo $B->get('personal_bereitstellung') ?></td>
+				</tr>
+				-->
+				<tr>
+					<td style="width:40%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Brand u. Kontrolle') ?></td>
+					<td style="width:15%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Datum') ?></td>
+					<td style="width:20%; border:1px solid #666666;"><?php echo $B->get('brand_unter_kontrolle_datum') ?></td>
+					<td style="width:15%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Uhrzeit') ?></td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('brand_unter_kontrolle_uhrzeit') ?></td>
+				</tr>
+				<tr>
+					<td style="width:40%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Brand aus') ?></td>
+					<td style="width:15%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Datum') ?></td>
+					<td style="width:20%; border:1px solid #666666;"><?php echo $B->get('brand_aus_datum') ?></td>
+					<td style="width:15%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Uhrzeit') ?></td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('brand_aus_uhrzeit') ?></td>
+				</tr>
+			</table>
+			<br /><br />
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td colspan="4" style="width:95%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Gefährd. durch Freisetzung von gefährlichen Stoffen') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('gefahr_freisetzung_gef_stoffe') == '1')? 'X':''?></td>
+				</tr>
+			</table>
+			<br /><br />	
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">	
+				<tr>
+					<td colspan="4" style="width:95%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Brandwache') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('brandwache') == '1')? 'X':''?></td>
+				</tr>
+				<tr>
+					<td style="width:40%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ende d. Brandwache') ?></td>
+					<td style="width:15%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Datum') ?></td>
+					<td style="width:20%; border:1px solid #666666;"><?php echo $B->get('brandwache_ende_datum') ?></td>
+					<td style="width:15%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Uhrzeit') ?></td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('brandwache_ende_uhrzeit') ?></td>
+				</tr>
+				<tr>
+					<td colspan="4" style="width:90%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anzahl zur BW eingesetzten Personen') ?></td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('brandwache_anzahl_personen') ?></td>
+				</tr>
+				<tr>
+					<td colspan="4" style="width:90%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anzahl zur BW eingesetzten Fahrzeuge') ?></td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('brandwache_anzahl_fahrzeuge') ?></td>
+				</tr>
+				
+			</table>
+		</td><!-- linker Block -->
+		
+		<!-- rechter Block -->
+		<td>
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Brandobjekt') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('haupt_stichwort') ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Einsatzstelle') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_e-stelle') ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Adresse') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_adresse') ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ort') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_ort') ?></td></tr>
+			</table>
+			<br /><br />
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Eigentümer') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_eigentuemer') ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Name') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_eigentuemer_name') ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anschrift') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_eigentuemer_adresse') ?></td></tr>
+			</table>
+			<br /><br />
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Geschädigter') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_geschaedigter') ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Name') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_geschaedigter_name') ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anschrift') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_geschaedigter_adresse') ?></td></tr>
+			</table>
+			<br /><br />
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td colspan="4" style="width:90%; text-align:center; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anzahl geretteter Personen') ?>:</td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('personen_rettung_anzahl_gesamt') ?></td>
+				</tr>
+				<tr>
+					<td colspan="4" style="width:90%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('davon über bauliche Rettungswege') ?></td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('personen_rettung_anzahl_baulich') ?></td>
+				</tr>
+				<tr>
+					<td colspan="4" style="width:90%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('davon über Hubrettungsfahrzeuge') ?></td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('personen_rettung_anzahl_hubrettung') ?></td>
+				</tr>
+				<tr>
+					<td colspan="4" style="width:90%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('davon über tragbare Leitern') ?></td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('personen_rettung_anzahl_tragbar') ?></td>
+				</tr>
+				<tr>
+					<td colspan="4" style="width:90%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('davon über Sonstiges') ?></td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('personen_rettung_anzahl_sonstiges') ?></td>
+				</tr>
+			</table>
+			<br /><br />
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td style="width:90%; text-align:center; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anzahl geretteter Tiere') ?>:</td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('tiere_rettung_anzahl_gesamt') ?></td>
+				</tr>
+			</table>
+			<br /><br />
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td colspan="2" style="text-align:center; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anzahl geschädigter Feuerwehrangehöriger') ?>:</td>
+				</tr>
+				<tr>
+					<td style="width:90%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('tödlich verunglückte') ?></td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('personal_schaeden_anzahl_tod') ?></td>
+				</tr>
+				<tr>
+					<td style="width:90%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('verletzte/ verunglückte') ?></td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('personal_schaeden_anzahl_verletzt') ?></td>
+				</tr>
+			</table>
+			<br /><br />
+			<table cellpadding="2" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td colspan="2" style="text-align:center; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anzahl geschädigter anderer Personen') ?>:</td>
+				</tr>
+				<tr>
+					<td style="width:90%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('tödlich verunglückte') ?></td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('personen_schaeden_anzahl_tod') ?></td>
+				</tr>
+				<tr>
+					<td style="width:90%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('verletzte/ verunglückte') ?></td>
+					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('personen_schaeden_anzahl_verletzt') ?></td>
+				</tr>
+				<tr>
+					<td style="width:100%; height:18px; background-color:#cccccc; border:1px solid #666666;"></td>
+				</tr>
+			</table>
+		</td><!-- rechter Block -->
+	</tr>
+</table><!-- Allgemeine Daten zum Einsatz -->
+<br /><br />
+<!-- Angaben zum Brandobjekt -->
+<table cellpadding="3" style="width:99%; border:1px solid #333333; border-collapse:collapse;">
+	<tr><td colspan="6" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Angaben zum Brandobjekt') ?></td></tr>
+	<tr>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('kritischer Wohnungsbrand') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_wohnung_kritisch') == '1')? 'X':''?></td>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Heime') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_heime') == '1')? 'X':''?></td>
+		<td style="width:31%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Müllbehälter/ Container') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_muellcontainer') == '1')? 'X':''?></td>
+	</tr>
+	<tr>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Wohngebäude (sonstige)') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_wohngebaeude') == '1')? 'X':''?></td>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Kindertageseinrichtungen') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_kindertageseinrichtung') == '1')? 'X':''?></td>
+		<td style="width:31%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Krankenhaus') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_krankenhaus') == '1')? 'X':''?></td>
+	</tr>
+	<tr>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Versammlungsstätte') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_versammlungsraum') == '1')? 'X':''?></td>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Schulen/ Hochschulen') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_schule') == '1')? 'X':''?></td>
+		<td style="width:31%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Gras/ Heide/ Busch/ Moor/ Acker') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_freiland') == '1')? 'X':''?></td>
+	</tr>
+	<tr>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Beherbungsstätte') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_herberge') == '1')? 'X':''?></td>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Lager/ Logistik') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_lager') == '1')? 'X':''?></td>
+		<td style="width:31%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Wald/ Baum') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_wald') == '1')? 'X':''?></td>
+	</tr>
+	<tr>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Verkaufsstätte') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_verkaufstelle') == '1')? 'X':''?></td>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Verkehrsanlage/ Tunnel') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_verkehr') == '1')? 'X':''?></td>
+		<td style="width:31%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Fahrzeug nicht in Betrieb') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_fahrzeug_nicht_in_betrieb') == '1')? 'X':''?></td>
+	</tr>
+	<tr>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Büro und Verwaltung') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_buero') == '1')? 'X':''?></td>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Gebäude mit landw. Nutzung') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_landw_benutzung') == '1')? 'X':''?></td>
+		<td style="width:31%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Fahrzeug in betrieb') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_fahrzeug_in_betrieb') == '1')? 'X':''?></td>
+	</tr>
+	<tr>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Industrie') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_industrie') == '1')? 'X':''?></td>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Deponie/ Recyclinganlage') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_deponie') == '1')? 'X':''?></td>
+		<td style="width:31%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('keine Nutzung') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_keine_nutzung') == '1')? 'X':''?></td>
+	</tr>
+	<tr>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Gewerbe und Handwerk') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_gewerbe') == '1')? 'X':''?></td>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Sonstige Nutzung') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_sonstige') == '1')? 'X':''?></td>
+		<td colspan="2" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_sonstige_name') ?></td>
+	</tr>
+</table><!-- Angaben zum Brandobjekt -->
+<br /><br />
+<table cellpadding="3" style="width:99%; border:1px solid #333333; border-collapse:collapse;">
+	<tr>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Zugang Vorhanden') ?></td>
+		<td style="width:5%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Ja') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_zugang_vorhanden') == 'ja')? 'X':''?></td>
+		<td style="width:5%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Nein') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_zugang_vorhanden') == 'nein')? 'X':''?></td>
+		<td style="width:20%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Bemerkung') ?></td>
+		<td colspan="3" style="width:34%; border:1px solid #666666;"><?php echo $B->get('brandobjekt_zugang_bemerkungen') ?></td>
+	</tr>
+	<tr>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('BMA vorhanden') ?></td>
+		<td style="width:5%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Ja') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_bma_vorhanden') == 'ja')? 'X':''?></td>
+		<td style="width:5%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Nein') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_bma_vorhanden') == 'nein')? 'X':''?></td>
+		<td style="width:24%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('BMA ausgelöst') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_bma_ausgeloest') == 'ja')? 'X':''?></td>
+		<td style="width:24%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('BMA nicht ausgelöst') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_bma_ausgeloest') == 'nein')? 'X':''?></td>
+	</tr>
+	<tr>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('ortsf. Löschanlage vorhanden') ?></td>
+		<td style="width:5%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Ja') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_loeschanlage_vorhanden') == 'ja')? 'X':''?></td>
+		<td style="width:5%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Nein') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_loeschanlage_vorhanden') == 'nein')? 'X':''?></td>
+		<td style="width:24%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Wirkung positiv') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_loeschanlage_wirkung') == 'positiv')? 'X':''?></td>
+		<td style="width:24%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Wirkung negativ') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_loeschanlage_wirkung') == 'negativ')? 'X':''?></td>
+	</tr>
+	<tr>
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Rauchabzug vorhanden') ?></td>
+		<td style="width:5%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Ja') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_rauchabzug_vorhanden') == 'ja')? 'X':''?></td>
+		<td style="width:5%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Nein') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_rauchabzug_vorhanden') == 'nein')? 'X':''?></td>
+		<td style="width:24%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Wirkung positiv') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_rauchabzug_wirkung') == 'positiv')? 'X':''?></td>
+		<td style="width:24%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Wirkung negativ') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('brandobjekt_rauchabzug_wirkung') == 'negativ')? 'X':''?></td>
+	</tr>
+</table>
+<br /><br />
+<table cellpadding="0" cellspacing="0" style="width:100%;">
+	<tr>
+		<!-- linker Block -->
+		<td style="margin-right:10px;">
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td colspan="4" style="background-color:#cccccc; text-align:center; border:1px solid #666666;"><?php echo _('Brandausmaß') ?></td>
+				</tr>
+				<tr>
+					<td style="width:40%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('vor Ankunft gelöscht') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('brandausmass_geloescht') == '1')? 'X':'' ?></td>
+					<td style="width:50%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Gesamtobjekt') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('brandausmass_vollbrand') == '1')? 'X':'' ?></td>
+				</tr>
+				<tr>
+					<td style="width:40%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('auf Objektteil begrenzt') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('brandausmass_teilobjekt') == '1')? 'X':'' ?></td>
+					<td style="width:50%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Übergriff auf andere') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('brandausmass_uebergriff') == '1')? 'X':'' ?></td>
+				</tr>
+			</table>
+		</td><!-- linker Block -->
+		
+		<!-- rechter Block -->
+		<td style="margin-right:10px;">
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td colspan="4" style="background-color:#cccccc; text-align:center; border:1px solid #666666;"><?php echo _('Löschwasserversorgung') ?></td>
+				</tr>
+				<tr>
+					<td style="width:40%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Kfz- Löschwasserbehälter') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('loeschwasser_kfz') == '1')? 'X':'' ?></td>
+					<td style="width:50%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('offenes Gewässer') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('loeschwasser_offen') == '1')? 'X':'' ?></td>
+				</tr>
+				<tr>
+					<td style="width:40%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Hydrant') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('loeschwasser_hydrant') == '1')? 'X':'' ?></td>
+					<td style="width:50%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Sonstige') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('loeschwasser_sonstige') == '1')? 'X':'' ?></td>
+				</tr>
+
+			</table>
+		</td><!-- rechter Block -->
+	</tr>
+</table>
+<br /><br />
+<table cellpadding="3" cellspacing="0" style="width:99%;">
+	<tr>
+		<td style="width:20%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Eingesetzte Geräte') ?></td>
+		<td style="width:80%; height:80px; border:1px solid #666666;"><?php echo $B->get('eingesetzte_geraete') ?></td>
+	</tr>
+</table>
+
+<br /><br /><br /><br />
+<table cellpadding="3" cellspacing="0" style="width:99%;">
+	<tr>
+		<td style="width:20%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Verbrauchsmaterial') ?></td>
+		<td style="width:80%; height:80px; border:1px solid #666666;"><?php echo $B->get('verbrauchsmaterial') ?></td>
+	</tr>
+</table>
+<!--  
+<?php //$this->tools->debug($B->getRessources()) ?>
+-->
+<br /><br />
+<table cellpadding="3" style="width:99%; border:1px solid #333333; border-collapse:collapse;">
+	<tr><td colspan="5" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ausgerückte Fahrzeuge und Einsatzzeiten') ?></td></tr>
+	<?php if($this->tools->isSizedArray($B->getRessources())) { ?>
+	<tr>
+		<td>
+			<table style="border:1px solid #333333; border-collapse:collapse;">
+				<tr><td colspan="3" style="background-color:#cccccc;"><?php echo _('Funkrufname') ?></td></tr>
+				<tr><td colspan="3" style="background-color:#cccccc;">&nbsp;</td></tr>
+				<?php foreach ($B->getRessources() as $arrRes) { ?>
+					<?php if (strpos($arrRes['f_kenner'], '/')) $arrFkenner = explode('/', $arrRes['f_kenner']) ?>
+					<?php if (strpos($arrRes['f_kenner'], ' ')) $arrFkenner = explode(' ', $arrRes['f_kenner']) ?>
+					<tr><td style="border:1px solid #666666;"><?php echo $arrFkenner[0] ?></td><td style="border:1px solid #666666;"><?php echo $arrFkenner[1] ?></td><td style="border:1px solid #666666;"><?php echo $arrFkenner[2] ?></td></tr>
+				<?php } ?>
+			</table>
+		</td>
+		<td>
+			<table style="border:1px solid #333333; border-collapse:collapse;">
+				<tr><td colspan="2" style="background-color:#cccccc;"><?php echo _('Ausrücken') ?></td></tr>
+				<tr><td style="background-color:#cccccc;"><?php echo _('Datum') ?></td><td style="background-color:#cccccc;"><?php echo _('Uhrzeit') ?></td></tr>
+				<?php foreach ($B->getRessources() as $arrRes) { ?>
+					<tr>
+						<td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f3']))? date('d.m.Y', $arrRes['f3']):'' ?></td><td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f3']))? date('H:i:s', $arrRes['f3']):'' ?></td>
+					</tr>
+				<?php } ?>
+			</table>
+		</td>
+		<td>
+			<table style="border:1px solid #333333; border-collapse:collapse;">
+				<tr><td colspan="2" style="background-color:#cccccc;"><?php echo _('Eintreffen') ?></td></tr>
+				<tr><td style="background-color:#cccccc;"><?php echo _('Datum') ?></td><td style="background-color:#cccccc;"><?php echo _('Uhrzeit') ?></td></tr>
+				<?php foreach ($B->getRessources() as $arrRes) { ?>
+					<tr>
+						<td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f4']))? date('d.m.Y', $arrRes['f4']):'' ?></td><td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f4']))? date('H:i:s', $arrRes['f4']):'' ?></td>
+					</tr>
+				<?php } ?>
+			</table>
+		</td>
+		<td>
+			<table style="border:1px solid #333333; border-collapse:collapse;">
+				<tr><td colspan="2" style="background-color:#cccccc;"><?php echo _('Einsatzbereit') ?></td></tr>
+				<tr><td style="background-color:#cccccc;"><?php echo _('Datum') ?></td><td style="background-color:#cccccc;"><?php echo _('Uhrzeit') ?></td></tr>
+				<?php foreach ($B->getRessources() as $arrRes) { ?>
+					<tr>
+						<td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f1']))? date('d.m.Y', $arrRes['f1']):'' ?></td><td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f1']))? date('H:i:s', $arrRes['f1']):'' ?></td>
+					</tr>
+				<?php } ?>
+			</table>
+		</td>
+		<td>
+			<table style="border:1px solid #333333; border-collapse:collapse;">
+				<tr><td colspan="2" style="background-color:#cccccc;"><?php echo _('Rückkehr') ?></td></tr>
+				<tr><td style="background-color:#cccccc;"><?php echo _('Datum') ?></td><td style="background-color:#cccccc;"><?php echo _('Uhrzeit') ?></td></tr>
+				<?php foreach ($B->getRessources() as $arrRes) { ?>
+					<tr>
+						<td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f2']))? date('d.m.Y', $arrRes['f2']):'' ?></td><td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f2']))? date('H:i:s', $arrRes['f2']):'' ?></td>
+					</tr>
+				<?php } ?>
+			</table>
+		</td>
+		
+		<?php $index = 0; foreach ($B->getRessources() as $arrRes) { ?>
+			<?php $arrEinsatzzeit[$index] = $B->getEinsatzZeit($arrRes['f3'], $arrRes['f2']) // hier werden die Einsatzzeiten ermittelt ?>
+		<?php $index++; } ?>
+			
+	</tr>
+	<?php } else { ?>
+	<tr><td colspan="5" style="border:1px solid #666666;"><?php echo _('Für diesen Einsatz wurden keine Ressourcen erfasst') ?></td></tr>
+	<?php } ?>
+</table>
+<!-- 
+<?php //$this->tools->debug($B->getPersonal()) ?>
+-->
+<br /><br />
+<table cellpadding="3" style="width:99%; border:1px solid #333333; border-collapse:collapse;">
+	<tr><td colspan="5" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ausgerücktes und eingesetztes Personal') ?></td></tr>
+	<?php if($this->tools->isSizedArray($B->getPersonal())) { ?>
+	<tr>
+		<td>
+			<table style="border:1px solid #333333; border-collapse:collapse;">
+				<tr><td colspan="3" style="background-color:#cccccc;"><?php echo _('Funkrufname') ?></td></tr>
+				<tr><td colspan="3" style="background-color:#cccccc;">&nbsp;</td></tr>
+				<?php $i = 0; foreach ($B->getPersonal() as $arrPer) { ?>
+					<?php if (strpos($arrPer['f_kenner'], '/')) $arrFkenner = explode('/', $arrPer['f_kenner']) ?>
+					<?php if (strpos($arrPer['f_kenner'], ' ')) $arrFkenner = explode(' ', $arrPer['f_kenner']) ?>
+					<tr><td style="border:1px solid #666666;"><?php echo $arrFkenner[0] ?></td><td style="border:1px solid #666666;"><?php echo $arrFkenner[1] ?></td><td style="border:1px solid #666666;"><?php echo $arrFkenner[2] ?></td></tr>
+				<?php $i++; } ?>
+				
+				<?php while ($i < 11) { ?>
+					<tr><td style="border:1px solid #666666;">&nbsp;</td><td style="border:1px solid #666666;">&nbsp;</td><td style="border:1px solid #666666;">&nbsp;</td></tr>
+				<?php $i++; } ?>
+				
+			</table>
+		</td>
+		<td>
+			<table style="border:1px solid #333333; border-collapse:collapse;">
+				<tr><td colspan="3" style="background-color:#cccccc;"><?php echo _('Einsatzzeit') ?></td></tr>
+				<tr><td style="background-color:#cccccc;"><?php echo _('Tag') ?></td><td style="background-color:#cccccc;"><?php echo _('Std') ?></td><td style="background-color:#cccccc;"><?php echo _('Min') ?></td></tr>
+				<?php $i = 0; foreach ($B->getPersonal() as $arrPer) { ?>
+					<tr>
+						<td style="border:1px solid #666666;"><?php echo $arrEinsatzzeit[$i]['tag'] ?></td><td style="border:1px solid #666666;"><?php echo $arrEinsatzzeit[$i]['std'] ?></td><td style="border:1px solid #666666;"><?php echo $arrEinsatzzeit[$i]['min'] ?></td>
+					</tr>
+				<?php $i++; } ?>
+				
+				<?php while ($i < 11) { ?>
+					<tr><td style="border:1px solid #666666;">&nbsp;</td><td style="border:1px solid #666666;">&nbsp;</td><td style="border:1px solid #666666;">&nbsp;</td></tr>
+				<?php $i++; } ?>
+			</table>
+		</td>
+		<td>
+			<table style="border:1px solid #333333; border-collapse:collapse;">
+				<tr><td colspan="4" style="background-color:#cccccc;"><?php echo _('Ausgerücktes Personal') ?></td></tr>
+				<tr><td style="background-color:#cccccc;"><?php echo _('hD') ?></td><td style="background-color:#cccccc;"><?php echo _('gD') ?></td><td style="background-color:#cccccc;"><?php echo _('mD') ?></td><td style="background-color:#cccccc;"><?php echo _('FF') ?></td></tr>
+				<?php $i = 0; foreach ($B->getPersonal() as $arrPer) { ?>
+					<tr>
+						<td style="border:1px solid #666666;"><?php echo $arrPer['aus_h'] ?></td>
+						<td style="border:1px solid #666666;"><?php echo $arrPer['aus_g'] ?></td>
+						<td style="border:1px solid #666666;"><?php echo $arrPer['aus_m'] ?></td>
+						<td style="border:1px solid #666666;"><?php echo $arrPer['aus_ff'] ?></td>
+					</tr>
+				<?php $i++; } ?>
+				
+				<?php while ($i < 11) { ?>
+					<tr><td style="border:1px solid #666666;">&nbsp;</td><td style="border:1px solid #666666;">&nbsp;</td><td style="border:1px solid #666666;">&nbsp;</td><td style="border:1px solid #666666;">&nbsp;</td></tr>
+				<?php $i++; } ?>
+				
+			</table>
+		</td>
+		<td>
+			<table style="border:1px solid #333333; border-collapse:collapse;">
+				<tr><td colspan="4" style="background-color:#cccccc;"><?php echo _('Eingesetztes Personal') ?></td></tr>
+				<tr><td style="background-color:#cccccc;"><?php echo _('hD') ?></td><td style="background-color:#cccccc;"><?php echo _('gD') ?></td><td style="background-color:#cccccc;"><?php echo _('mD') ?></td><td style="background-color:#cccccc;"><?php echo _('FF') ?></td></tr>
+				<?php $i = 0; foreach ($B->getPersonal() as $arrPer) { ?>
+					<tr>
+						<td style="border:1px solid #666666;"><?php echo $arrPer['eingesetzt_h'] ?></td>
+						<td style="border:1px solid #666666;"><?php echo $arrPer['eingesetzt_g'] ?></td>
+						<td style="border:1px solid #666666;"><?php echo $arrPer['eingesetzt_m'] ?></td>
+						<td style="border:1px solid #666666;"><?php echo $arrPer['eingesetzt_ff'] ?></td>
+					</tr>
+				<?php $i++; } ?>
+				
+				<?php while ($i < 11) { ?>
+					<tr><td style="border:1px solid #666666;">&nbsp;</td><td style="border:1px solid #666666;">&nbsp;</td><td style="border:1px solid #666666;">&nbsp;</td><td style="border:1px solid #666666;">&nbsp;</td></tr>
+				<?php $i++; } ?>
+				
+			</table>
+		</td>
+		<td>
+			<table cellpadding="2" style="border-collapse:separate;">
+				<tr><td colspan="2" style="border:1px solid #666666; background-color:#cccccc;"><?php echo _('Anzahl Feuerwehren') ?></td></tr>
+				<tr><td colspan="2" style="border:1px solid #666666;"><?php echo $B->get('anzahl_fw') ?></td></tr>
+				
+				<tr><td colspan="2" style="border:1px solid #666666; background-color:#cccccc;"><?php echo _('davon Berufsfeuerwehr') ?></td></tr>
+				<tr><td colspan="2" style="border:1px solid #666666;"><?php echo $B->get('anzahl_fw_bf') ?></td></tr>
+				
+				<tr><td colspan="2" style="border:1px solid #666666; background-color:#cccccc;"><?php echo _('Anzahl ausg. Kräfte') ?></td></tr>
+				<tr><td colspan="2" style="border:1px solid #666666;"><?php echo $B->get('anzahl_ausgerueckt') ?></td></tr>
+				
+				<tr><td colspan="2" style="border:1px solid #666666; background-color:#cccccc;"><?php echo _('Anzahl einges. Kräfte') ?></td></tr>
+				<tr><td colspan="2" style="border:1px solid #666666;"><?php echo $B->get('anzahl_eingesetzt') ?></td></tr>
+				
+				<tr><td colspan="2" style="border:1px solid #666666; background-color:#cccccc;"><?php echo _('Gesamtstunden einges. Kräfte (einschl. FEZ)') ?></td></tr>
+				<tr><td colspan="2" style="border:1px solid #666666;"><?php echo $this->tools->dot2komma($B->get('zeit_eingesetzt')) ?> <?php echo ($this->tools->isSizedString($B->get('zeit_gesamt')))? 'Stunden':'' ?></td></tr>
+				<!--
+				<tr><td style="width:88%; border:1px solid #666666; background-color:#cccccc;"><?php //echo _('Bezetzung FEZ') ?></td><td style="width:12%; border:1px solid #666666;"><?php //echo ($B->get('fez_besetzt') == '1')? 'X':'' ?></td></tr>
+				
+				<tr><td colspan="2" style="border:1px solid #666666; background-color:#cccccc;"><?php //echo _('Anzahl Kräfte FEZ ges.') ?></td></tr>
+				<tr><td colspan="2" style="border:1px solid #666666;"><?php //echo $B->get('anzahl_fez_gesamt') ?></td></tr>
+				-->
+			</table>
+		</td>	
+	</tr>
+	<?php } else { ?>
+	<tr><td colspan="5" style="border:1px solid #666666;"><?php echo _('Für diesen Einsatz wurde kein Personal erfasst') ?></td></tr>
+	<?php } ?>
+</table>
+
+<br /><br />
+<table cellpadding="3" cellspacing="0" style="width:99%;">
+	<tr>
+		<td style="width:20%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Einsatzbericht<br /><br />(Anfahrt, Lage, Taktik, Wirkung, Probleme usw.)') ?></td>
+		<td style="width:80%; height:250px; border:1px solid #666666;"><?php echo nl2br($B->get('long_description')) ?></td>
+	</tr>
+</table>
+
+<table cellpadding="0" cellspacing="0" style="width:99%;">
+	<tr>
+		<!-- linker Block -->
+		<td style="width:50%">&nbsp;</td><!-- linker Block -->
+		
+		<!-- rechter Block -->
+		<td style="width:50%">
+			<table cellpadding="3" style="border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td style="width:45%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anlagen beigefügt') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('anlage_beigefuegt') == '1')? 'X':'' ?></td>
+					<td style="width:45%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anzahl der Seiten') ?></td>
+					<td style="width:5%; border:1px solid #666666;"><?php echo $B->get('anlage_seiten') ?></td>
+				</tr>
+			</table>
+		</td><!-- rechter Block -->
+	</tr>
+</table>
+
+<?php if ($i > 11) { ?>
+<br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br /> 
+<?php } else { ?> 
+<br /><br /> 
+<?php } ?>
+
+<table cellpadding="3" style="width:99%; border:1px solid #333333; border-collapse:collapse;">
+	<tr><td colspan="9" style="background-color:#cccccc;"><?php echo _('Verständigung/ Anwesenheit') ?></td></tr>
+	<tr>
+		<td style="width:26%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Bürgermeister') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_buergermeister') == 'verstaendigt')? 'X':'' ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_buergermeister') == 'anwesend')? 'X':'' ?></td>
+		
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Straßenbaulastträger') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_strassenbaulasttraeger') == 'verstaendigt')? 'X':'' ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_strassenbaulasttraeger') == 'anwesend')? 'X':'' ?></td>
+		
+		<td style="width:26%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Gasversorgung') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_gasversorger') == 'verstaendigt')? 'X':'' ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_gasversorger') == 'anwesend')? 'X':'' ?></td>
+	</tr>
+	<tr>
+		<td style="width:26%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('KBI') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_kbi') == 'verstaendigt')? 'X':'' ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_kbi') == 'anwesend')? 'X':'' ?></td>
+		
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Untere Wasserbehörde') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_wasserbehoerde') == 'verstaendigt')? 'X':'' ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_wasserbehoerde') == 'anwesend')? 'X':'' ?></td>
+		
+		<td style="width:26%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Wasserversorgung') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_wasserversorger') == 'verstaendigt')? 'X':'' ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_wasserversorger') == 'anwesend')? 'X':'' ?></td>
+	</tr>
+	<tr>
+		<td style="width:26%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Rettungsdienst') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_rettungsdienst') == 'verstaendigt')? 'X':'' ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_rettungsdienst') == 'anwesend')? 'X':'' ?></td>
+		
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Bauaufsicht') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_bauaufsicht') == 'verstaendigt')? 'X':'' ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_bauaufsicht') == 'anwesend')? 'X':'' ?></td>
+		
+		<td style="width:26%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Stromversorgung') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_stromversorger') == 'verstaendigt')? 'X':'' ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_stromversorger') == 'anwesend')? 'X':'' ?></td>
+	</tr>
+	<tr>
+		<td style="width:26%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Polizei') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_polizei') == 'verstaendigt')? 'X':'' ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_polizei') == 'anwesend')? 'X':'' ?></td>
+		
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Abwasserbetrieb') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_abwasserbetrieb') == 'verstaendigt')? 'X':'' ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_abwasserbetrieb') == 'anwesend')? 'X':'' ?></td>
+		
+		<td style="width:26%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Medienvertreter') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_medienvertreter') == 'verstaendigt')? 'X':'' ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_medienvertreter') == 'anwesend')? 'X':'' ?></td>
+	</tr>
+	<tr>
+		<td style="width:26%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Arbeitsschutzbehörde') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_arbeitsschutz') == 'verstaendigt')? 'X':'' ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_arbeitsschutz') == 'anwesend')? 'X':'' ?></td>
+		
+		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Sonstige') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_sonstige') == 'verstaendigt')? 'X':'' ?></td>
+		<td colspan="4" style="border:1px solid #666666;"><?php echo $B->get('info_sonstige_name') ?></td>
+	</tr>
+</table>
+
+<br /><br />
+<table cellpadding="0" cellspacing="0" style="width:100%;">
+	<tr>
+		<!-- linker Block -->
+		<td style="margin-right:10px;">
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Datum, Name, Unterschrift Einsatzleiter') ?></td>
+				</tr>
+				<tr>
+					<td style="border:1px solid #666666;"><?php echo date('d.m.Y') ?>&nbsp;|&nbsp;<?php echo $this->user->get('name') ?>, <?php echo $this->user->get('vorname') ?>&nbsp;|&nbsp;................................................</td>
+				</tr>
+			</table>
+		</td><!-- linker Block -->
+		
+		<!-- rechter Block -->
+		<td style="margin-right:10px;">
+			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+				<tr>
+					<td style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Datum, Name, Unterschrift ELD') ?></td>
+				</tr>
+				<tr>
+					<td style="border:1px solid #666666;"><?php echo date('d.m.Y') ?>&nbsp;|&nbsp;...........................................&nbsp;|&nbsp;...........................................</td>
+				</tr>
+			</table>
+		</td><!-- rechter Block -->
+	</tr>
+</table>

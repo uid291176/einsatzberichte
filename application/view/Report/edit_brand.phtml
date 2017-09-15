@@ -1,0 +1,628 @@
+<?php 
+/**
+ * template Seite 1 zum editieren des E- Berichtes
+ */
+$B = $this->view['data'];
+$B->init();
+//$this->tools->debug(var_dump($B));
+?>
+<div id="einsatz-details-<?php echo _('id') ?>" class="single-view">
+
+	<h1><span class="fa fa-file-text-o"></span>&nbsp;<?php echo _('Details zur Einsatz- ') ?>&nbsp;<?php echo _('Nr.-') ?>&nbsp;<span class="bold"><?php echo $B->get('enr') ?></span>&nbsp;-&nbsp;<?php echo $B->get('haupt_stichwort') ?></h1>
+
+	<?php echo $this->drawMessages() ?>
+	
+	<div class="left">
+		<a class="button" style="margin-left:0;" href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="fa fa-angle-double-left"></span>&nbsp;<?php echo _('Zurück zur Auswahl') ?></a>
+	</div>
+	
+	<div class="left">
+		<a id="report-submit-save" class="button" style="margin-left:20px;" href="#"><span class="fa fa-floppy-o"></span>&nbsp;<?php echo _('Bericht Speichern') ?></a>
+	</div>
+	
+	<div class="left">
+		<a class="button" style="margin-left:20px;" href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('cmd' => 'to-pdf', 'eid' => $B->get('eid'), 'typ' => strtolower($this->getReportType($B->get('typ'))))) ?>"><span class="fa fa-print"></span>&nbsp;<?php echo _('Drucken (PDF)') ?></a>
+	</div>
+	
+	<div class="right">
+		<a class="button" href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('cmd' => 'to-pdf', 'status' => 'finish', 'eid' => $B->get('eid'), 'typ' => strtolower($this->getReportType($B->get('typ'))))) ?>"><span class="fa fa-file-pdf-o"></span>&nbsp;<?php echo _('Bericht abschließen (PDF)') ?></a>
+	</div>
+	<div class="clear"></div>
+	<br />
+	
+	<div id="report-view-title-brand" class="report-view-title">
+		<h3 class="left"><?php echo $this->getReportType($B->get('typ')) ?> <?php echo _('Thüringen') ?></h3><p class="right"><img src="gfx/thueringen_logo.png" alt="Thüringen" /></p>
+		<div class="clear"></div>
+	</div>
+	
+	<?php $html = Html_Factory::getHtml('forms') ?>
+	<?php echo $html->drawFormStart('post', $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'save', array('tmpl' => 'brand')), '', array('class' => 'report-save-form')) ?>
+	
+	<!-- uebergeben der Benutzer ID (Bearbeiter)  -->
+		<input type="hidden" name="user-id" value="<?php echo $this->user->get('id') ?>" />
+	<!-- uebergeben der Benutzer ID (Bearbeiter)  -->
+	
+	<!-- uebergeben der Einsatz ID (Oracle DB)  -->
+		<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[eid]" value="<?php echo $_REQUEST['eid'] ?>" />
+	<!-- uebergeben der Einsatz ID (Oracle DB)  -->
+	
+	<!-- uebergeben der Einsatz Bericht Typ Brand/ TH  -->
+		<input type="hidden" name="bericht-type" value="<?php echo strtolower($this->getReportType($B->get('typ'))) ?>" />
+	<!-- uebergeben der Einsatz Bericht Typ Brand/ TH  -->
+	
+	<div id="content-tabs">
+		<p id="tab_page1" class="switch-tab active"><span class="tab_1"><?php echo _('Seite 1') ?></span></p>
+		<p id="tab_page2" class="switch-tab"><span class="tab_2"><?php echo _('Seite 2') ?></span></p>
+		<div class="clear"></div>
+	</div>
+	
+	<div class="report-content-wrap" id="tab_1">
+	
+		<div class="content-grid-col2 report-content left">
+			
+			<div class="form-row">
+				<?php $html->drawFormInput('landkreis', _('Landkreis/ kreisfr. Stadt'), $this->getConf('landkreis_kreisfreie_stadt'), '', array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('gemeinde', _('Gemeinde'), $this->getConf('gemeinde'), '', array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('ident_nr', _('Ident.- Nr. Gemeinde'), $this->getConf('gemeinde_ident_nr'), '', array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('einsatz_nr', _('Einsatznummer'), $B->get('enr'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
+				<br />
+				<p class="left content-grid-col3">&nbsp;</p>
+				
+				<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[report_art]" value="0" />
+				
+				<div class="form_field left content-grid-col4">
+					<label for="report_art_haupt"><?php echo _('Hauptbericht') ?>:
+					<input class="right" id="report_art_haupt" name="<?php echo strtolower($_REQUEST['k']) ?>[report_art]" value="haupt" type="radio" <?php echo ($B->get('report_art') == 'haupt')? 'checked="checked"':'' ?> /></label>
+				</div>
+				<div class="form_field right content-grid-col4">
+					<label for="report_art_neben"><?php echo _('Nebenbericht') ?>:
+					<input class="right" id="report_art_neben" name="<?php echo strtolower($_REQUEST['k']) ?>[report_art]" value="neben" type="radio" <?php echo ($B->get('report_art') == 'neben')? 'checked="checked"':'' ?> /></label>
+				</div>
+				<div class="clear"></div>
+			</div>
+			
+			<div class="form-row">
+				<?php $html->drawFormInput('anrufer_name', _('Anrufer Name'), $B->get('anrufer_name'), '', array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('anrufer_vorname', _('Anrufer Vorname'), $B->get('anrufer_vorname'), '', array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('anrufer_telefonnummer', _('Anrufer Tel.- Nr.'), $B->get('anrufer_telefonnummer'), '', array('class' => 'right')) ?><div class="clear"></div>
+			</div>
+			
+			<div class="form-row">
+				<p style="margin-top:5px;" class="left bold content-grid-col3"><?php echo _('Alarm durch') ?>:</p>
+				<div class="left content-grid-col4">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[alarm_zls]" value="0" />
+					<?php $html->drawFormCheckbox('alarm_zls', _('zentrale LTS'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('alarm_zls') == '1')? true:false, 'class' => 'right')) ?>
+				</div>				
+				<div class="right content-grid-col4">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[alarm_hand]" value="0" />
+					<?php $html->drawFormCheckbox('alarm_hand', _('Sirene hand.'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('alarm_hand') == '1')? true:false,'class' => 'right')) ?>
+				</div>
+				<div class="clear"></div>
+
+				<p style="margin-top:7px;" class="left bold label content-grid-col3"><?php echo _('Alarmzeit') ?>:</p>
+				<div class="left content-grid-col4">
+					<?php $html->drawFormInput('alarmzeit_datum', _('Datum'), date('d.m.Y', strtotime($B->get('alarmzeit_datum'))), strtolower($_REQUEST['k']), array('class' => 'form-date-time right datepicker', 'font-ico' => 'fa-calendar')) ?>
+				</div>
+				<div class="right content-grid-col3">
+					<?php $html->drawFormInput('alarmzeit_uhrzeit', _('Uhrzeit'), date('H:i:s', strtotime($B->get('alarmzeit_uhrzeit'))), strtolower($_REQUEST['k']), array('class' => 'form-date-time right', 'type' => 'time', 'placeholder' => 'hh:mm')) ?>
+				</div>
+				<div class="clear"></div>
+				<!-- uebergeben des Einsatzbeginns -->
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[einsatz_beginn]" value="<?php echo $B->get('einsatz_beginn') ?>" />
+				<!-- uebergeben des Einsatzbeginns  -->
+			</div>
+			
+			<div class="form-row">
+				<p class="left bold label content-grid-col3"><?php echo _('eigener') ?><br /><?php echo _('Ausrückebereich') ?>:</p>
+				
+				<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[eigener_ausrueckebereich]" value="0" />
+				
+				<div class="form_field radio_field left content-grid-col4">
+					<label for="report_eigener_ausrueckebereich_ja"><?php echo _('Ja') ?>:</label>
+					<input class="right" id="report_eigener_ausrueckebereich_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[eigener_ausrueckebereich]" value="ja" type="radio" <?php echo ($B->get('eigener_ausrueckebereich') == 'ja')? 'checked="checked"':'' ?> />
+				</div>
+				<div class="form_field radio_field right content-grid-col4">
+					<label for="report_eigener_ausrueckebereich_nein"><?php echo _('Nein') ?>:</label>
+					<input class="right" id="report_eigener_ausrueckebereich_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[eigener_ausrueckebereich]" value="nein" type="radio" <?php echo ($B->get('eigener_ausrueckebereich') == 'nein')? 'checked="checked"':'' ?> />
+				</div>
+				<div class="clear"></div>
+				
+				<?php $html->drawFormInput('entfernung_einsatzstelle', _('Entfernung zur E- Stelle (km)'), $B->get('entfernung_einsatzstelle'), strtolower($_REQUEST['k']), array('class' => 'right small-text', 'bold-label' => true)) ?>
+				<div class="clear"></div>
+			</div>
+			
+			<div class="form-row">
+				<p class="left content-grid-col3">&nbsp;</p>
+			 	<p class="left bold content-grid-col3"><?php echo _('Brandumfang') ?> <a id="tooltip_brandumfang" href="#" class="tooltip" title="tooltip"><?php echo _('(?)') ?></a></p>
+			 	<p class="right bold content-grid-col3"><?php echo _('Fehlalarmierung') ?></p>
+				<br />
+				
+				<p class="left content-grid-col3">&nbsp;</p>
+				<div class="left content-grid-col4">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandumfang_a-klein]" value="0" />
+					<?php $html->drawFormCheckbox('brandumfang_a-klein', _('Kleinbrand a'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandumfang_a-klein') == '1')? true:false, 'class' => 'right radiocheck brandumfang')) ?>
+				</div>				
+				<div class="right content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[fehlalarm_blind]" value="0" />
+					<?php $html->drawFormCheckbox('fehlalarm_blind', _('blinder Alarm'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('fehlalarm_blind') == '1')? true:false, 'class' => 'right radiocheck fehlalarm')) ?>
+				</div>
+				<div class="clear"></div>
+			
+				<p class="left content-grid-col3">&nbsp;</p>
+				<div class="left content-grid-col4">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandumfang_b-klein]" value="0" />
+					<?php $html->drawFormCheckbox('brandumfang_b-klein', _('Kleinbrand b'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandumfang_b-klein') == '1')? true:false, 'class' => 'right radiocheck brandumfang')) ?>
+				</div>				
+				<div class="right content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[fehlalarm_boeswillig]" value="0" />
+					<?php $html->drawFormCheckbox('fehlalarm_boeswillig', _('böswilliger Alarm'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('fehlalarm_boeswillig') == '1')? true:false, 'class' => 'right radiocheck fehlalarm')) ?>
+				</div>
+				<div class="clear"></div>
+			
+				<p class="left content-grid-col3">&nbsp;</p>
+				<div class="left content-grid-col4">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandumfang_mittel]" value="0" />
+					<?php $html->drawFormCheckbox('brandumfang_mittel', _('Mittelbrand'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandumfang_mittel') == '1')? true:false, 'class' => 'right radiocheck brandumfang')) ?>
+				</div>				
+				<div class="right content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[fehlalarm_fehler_bma]" value="0" />
+					<?php $html->drawFormCheckbox('fehlalarm_fehler_bma', _('Fehlalarm BMA'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('fehlalarm_fehler_bma') == '1')? true:false, 'class' => 'right radiocheck fehlalarm')) ?>
+				</div>
+				<div class="clear"></div>
+			
+				<p class="left content-grid-col3">&nbsp;</p>
+				<div class="left content-grid-col4">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandumfang_gross]" value="0" />
+					<?php $html->drawFormCheckbox('brandumfang_gross', _('Großbrand'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandumfang_gross') == '1')? true:false, 'class' => 'right radiocheck brandumfang')) ?>
+				</div>				
+				<div class="right content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[fehlalarm_sonstige]" value="0" />
+					<?php $html->drawFormCheckbox('fehlalarm_sonstige', _('Sonstige'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('fehlalarm_sonstige') == '1')? true:false, 'class' => 'right radiocheck fehlalarm')) ?>
+				</div>
+				<div class="clear"></div>
+			</div>
+			
+			<!--
+			<div class="form-row">
+				<?php //$html->drawFormInput('personal_bereitstellung', _('In Bereitstellung (Anzahl)'), $B->get('personal_bereitstellung'), strtolower($_REQUEST['k']), array('class' => 'right small-text', 'bold-label' => true)) ?><div class="clear"></div>
+			</div>
+			-->
+			
+			<div class="form-row">
+				
+				<p style="margin-top:7px;" class="left bold label content-grid-col3"><?php echo _('Brand u. Kontrolle') ?>:</p>
+				<div class="left content-grid-col4">
+					<?php $html->drawFormInput('brand_unter_kontrolle_datum', _('Datum'), $B->get('brand_unter_kontrolle_datum'), strtolower($_REQUEST['k']), array('class' => 'form-date-time right datepicker', 'font-ico' => 'fa-calendar')) ?>
+				</div>
+				<div class="right content-grid-col3">
+					<?php $html->drawFormInput('brand_unter_kontrolle_uhrzeit', _('Uhrzeit'), $B->get('brand_unter_kontrolle_uhrzeit'), strtolower($_REQUEST['k']), array('class' => 'form-date-time right', 'type' => 'time', 'placeholder' => 'hh:mm')) ?>
+				</div>
+				<div class="clear"></div>
+			
+				<p style="margin-top:7px;" class="left bold label content-grid-col3"><?php echo _('Brand aus') ?>:</p>
+				<div class="left content-grid-col4">
+					<?php $html->drawFormInput('brand_aus_datum', _('Datum'), $B->get('brand_aus_datum'), strtolower($_REQUEST['k']), array('class' => 'form-date-time right datepicker', 'font-ico' => 'fa-calendar')) ?>
+				</div>
+				<div class="right content-grid-col3">
+					<?php $html->drawFormInput('brand_aus_uhrzeit', _('Uhrzeit'), $B->get('brand_aus_uhrzeit'), strtolower($_REQUEST['k']), array('class' => 'form-date-time right', 'type' => 'time', 'placeholder' => 'hh:mm')) ?>
+				</div>
+				<div class="clear"></div>
+				
+			</div>
+			
+			<div class="form-row">
+				<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandwache]" value="0" />
+				<?php $html->drawFormCheckbox('brandwache', _('Brandwache (BW)'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandwache') == '1')? true:false, 'class' => 'right', 'bold-label' => true)) ?><div class="clear"></div>
+				
+				<p style="margin-top:7px;" class="left label content-grid-col3"><?php echo _('Ende d. Brandwache') ?>:</p>
+				<div class="left content-grid-col4">
+					<?php $html->drawFormInput('brandwache_ende_datum', _('Datum'), $B->get('brandwache_ende_datum'), strtolower($_REQUEST['k']), array('class' => 'form-date-time right datepicker', 'font-ico' => 'fa-calendar')) ?>
+				</div>
+				<div class="right content-grid-col3">
+					<?php $html->drawFormInput('brandwache_ende_uhrzeit', _('Uhrzeit'), $B->get('brandwache_ende_uhrzeit'), strtolower($_REQUEST['k']), array('class' => 'form-date-time right', 'type' => 'time', 'placeholder' => 'hh:mm')) ?>
+				</div>
+				<div class="clear"></div>
+				
+				<?php $html->drawFormInput('brandwache_anzahl_personen', _('Anzahl zur BW einges. Personen'), $B->get('brandwache_anzahl_personen'), strtolower($_REQUEST['k']), array('class' => 'right small-text')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('brandwache_anzahl_fahrzeuge', _('Anzahl zur BW einges. Fahrzeuge'), $B->get('brandwache_anzahl_fahrzeuge'), strtolower($_REQUEST['k']), array('class' => 'right small-text')) ?><div class="clear"></div>
+				
+			</div>
+				
+			<div class="form-row">
+				<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[gefahr_freisetzung_gef_stoffe]" value="0" />
+				<?php $html->drawFormCheckbox('gefahr_freisetzung_gef_stoffe', _('Gefärd. durch Freisetzung von gefährlichen Stoffen'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('gefahr_freisetzung_gef_stoffe') == '1')? true:false, 'class' => 'right', 'bold-label' => true)) ?><div class="clear"></div>
+				<div style="height:14px">&nbsp;</div>
+			</div>
+			
+		</div>
+		
+		<div class="content-grid-col2 report-content right">
+			
+			<div class="form-row">
+			 	<?php $html->drawFormInput('brandobjekt', _('Brandobjekt'), $B->get('brandobjekt'), strtolower($_REQUEST['k']), array('class' => 'right', 'bold-label' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('brandobjekt_e-stelle', _('Einsatzstelle'), $B->get('brandobjekt_e-stelle'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('brandobjekt_adresse', _('Adresse'), $B->get('brandobjekt_adresse'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('brandobjekt_ort', _('Ort'), $B->get('brandobjekt_ort'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
+			</div>
+			
+			<div class="form-row">
+				<?php $html->drawFormInput('brandobjekt_eigentuemer', _('Eigentümer'), $B->get('brandobjekt_eigentuemer'), strtolower($_REQUEST['k']), array('class' => 'right', 'bold-label' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('brandobjekt_eigentuemer_name', _('Name'), $B->get('brandobjekt_eigentuemer_name'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('brandobjekt_eigentuemer_adresse', _('Anschrift'), $B->get('brandobjekt_eigentuemer_adresse'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
+				<br />
+				<p class="right"><?php echo _('Mehrere Eigentümer im Feld "Einsatzbericht" erfassen!') ?></p>
+				<div class="clear"></div>
+			</div>
+			<div class="form-row">
+				<?php $html->drawFormInput('brandobjekt_geschaedigter', _('Geschädigter'), $B->get('brandobjekt_geschaedigter'), strtolower($_REQUEST['k']), array('class' => 'right', 'bold-label' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('brandobjekt_geschaedigter_name', _('Name'), $B->get('brandobjekt_geschaedigter_name'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('brandobjekt_geschaedigter_adresse', _('Anschrift'), $B->get('brandobjekt_geschaedigter_adresse'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
+				<br />
+				<p class="right"><?php echo _('Mehrere Geschädigte im Feld "Einsatzbericht" erfassen!') ?></p>
+				<div class="clear"></div>
+			</div>
+			
+			<div class="form-row">
+			 	<?php $html->drawFormInput('personen_rettung_anzahl_gesamt', _('Anzahl geretteter Personen (Summe)'), $B->get('personen_rettung_anzahl_gesamt'), strtolower($_REQUEST['k']), array('class' => 'right small-text readonly', 'bold-label' => true, 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('personen_rettung_anzahl_baulich', _('davon über baulichen Rettungsweg'), $B->get('personen_rettung_anzahl_baulich'), strtolower($_REQUEST['k']), array('class' => 'right small-text personen_rettung')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('personen_rettung_anzahl_hubrettung', _('davon über Hubrettungsfahrzeuge'), $B->get('personen_rettung_anzahl_hubrettung'), strtolower($_REQUEST['k']), array('class' => 'right small-text personen_rettung')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('personen_rettung_anzahl_tragbar', _('davon über tragbare Leitern'), $B->get('personen_rettung_anzahl_tragbar'), strtolower($_REQUEST['k']), array('class' => 'right small-text personen_rettung')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('personen_rettung_anzahl_sonstiges', _('davon über Sonstiges'), $B->get('personen_rettung_anzahl_sonstiges'), strtolower($_REQUEST['k']), array('class' => 'right small-text personen_rettung')) ?><div class="clear"></div>
+			</div>
+			
+			<div class="form-row">
+				<?php $html->drawFormInput('tiere_rettung_anzahl_gesamt', _('Anzahl geretteter Tiere'), $B->get('tiere_rettung_anzahl_gesamt'), strtolower($_REQUEST['k']), array('class' => 'right small-text', 'bold-label' => true)) ?><div class="clear"></div>
+			</div>
+			
+			<div class="form-row">
+				<?php $html->drawFormInput('personal_schaeden_anzahl_gesamt', _('Anzahl geschädigter Feuerwehrangehöriger (Summe)'), $B->get('personal_schaeden_anzahl_gesamt'), strtolower($_REQUEST['k']), array('class' => 'right small-text readonly', 'bold-label' => true, 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('personal_schaeden_anzahl_tod', _('tödlich verunglückte'), $B->get('personal_schaeden_anzahl_tod'), strtolower($_REQUEST['k']), array('class' => 'right small-text personal_schaeden')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('personal_schaeden_anzahl_verletzt', _('verletzte/ verunglückte'), $B->get('personal_schaeden_anzahl_verletzt'), strtolower($_REQUEST['k']), array('class' => 'right small-text personal_schaeden')) ?><div class="clear"></div>
+			</div>
+			
+			<div class="form-row">
+				<?php $html->drawFormInput('personen_schaeden_anzahl_gesamt', _('Anzahl geschädigter anderer Personen (Summe)'), $B->get('personen_schaeden_anzahl_gesamt'), strtolower($_REQUEST['k']), array('class' => 'right small-text readonly', 'bold-label' => true, 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('personen_schaeden_anzahl_tod', _('tödlich verunglückte'), $B->get('personen_schaeden_anzahl_tod'), strtolower($_REQUEST['k']), array('class' => 'right small-text personen_schaeden')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('personen_schaeden_anzahl_verletzt', _('verletzte/ verunglückte'), $B->get('personen_schaeden_anzahl_verletzt'), strtolower($_REQUEST['k']), array('class' => 'right small-text personen_schaeden')) ?><div class="clear"></div>
+			</div>
+			
+		</div>
+		<div class="clear"></div>
+		
+		<div class="report-content">
+			
+			<div class="form-row">
+				<p class="bold label"><?php echo _('Angaben zum Brandobjekt') ?>:</p>
+				<br />
+				
+				<div class="left content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_wohnung_kritisch]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_wohnung_kritisch', _('kritischer Wohnungsbrand'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_wohnung_kritisch') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="left content-grid-col4" style="margin-left:5.0%;">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_heime]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_heime', _('Heime'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_heime') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="right content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_muellcontainer]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_muellcontainer', _('Müllbehälter/ Kontainer'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_muellcontainer') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="clear"></div>
+				
+				<div class="left content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_wohngebaeude]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_wohngebaeude', _('Wohngebäude (sonstige)'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_wohngebaeude') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="left content-grid-col4" style="margin-left:5.0%;">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_kindertageseinrichtung]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_kindertageseinrichtung', _('Kindertageseinrichtung'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_kindertageseinrichtung') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="right content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_krankenhaus]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_krankenhaus', _('Krankenhaus'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_krankenhaus') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="clear"></div>
+				
+				<div class="left content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_versammlungsraum]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_versammlungsraum', _('Versammlungsstätte'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_versammlungsraum') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="left content-grid-col4" style="margin-left:5.0%;">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_schule]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_schule', _('Schulen/ Hochschulen'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_schule') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="right content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_freiland]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_freiland', _('Gras/ Heide/ Busch/ Moor/ Acker'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_freiland') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="clear"></div>
+				
+				<div class="left content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_herberge]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_herberge', _('Beherbergungssttätte'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_herberge') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="left content-grid-col4" style="margin-left:5.0%;">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_lager]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_lager', _('Lager/ Logistik'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_lager') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="right content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_wald]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_wald', _('Wald/ Baum'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_wald') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="clear"></div>
+				
+				<div class="left content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_verkaufstelle]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_verkaufstelle', _('Verkaufsstätte'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_verkaufstelle') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="left content-grid-col4" style="margin-left:5.0%;">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_verkehr]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_verkehr', _('Verkehrsanlage/ Tunnel'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_verkehr') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="right content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_fahrzeug_nicht_in_betrieb]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_fahrzeug_nicht_in_betrieb', _('Fahrzeug nicht in Betrieb'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_fahrzeug_nicht_in_betrieb') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="clear"></div>
+				
+				<div class="left content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_buero]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_buero', _('Büro und Verwaltung'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_buero') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="left content-grid-col4" style="margin-left:5.0%;">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_landw_benutzung]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_landw_benutzung', _('Gebäude mit landw. Nutzung'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_landw_benutzung') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="right content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_fahrzeug_in_betrieb]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_fahrzeug_in_betrieb', _('Fahrzeug in Betrieb'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_fahrzeug_in_betrieb') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="clear"></div>
+				
+				<div class="left content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_industrie]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_industrie', _('Industrie'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_industrie') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="left content-grid-col4" style="margin-left:5.0%;">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_deponie]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_deponie', _('Deponie/ Recyclinganlage'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_deponie') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="right content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_keine_nutzung]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_keine_nutzung', _('keine Nutzung'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_keine_nutzung') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="clear"></div>
+				
+				<div class="left content-grid-col3">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_gewerbe]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_gewerbe', _('Gewerbe und Handwerk'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_gewerbe') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+				</div>
+				<div class="left content-grid-col4" style="margin-left:5.0%;">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_sonstige]" value="0" />
+					<?php $html->drawFormCheckbox('brandobjekt_sonstige', _('Sonstige Nutzung'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_sonstige') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+					</div>
+				<div class="right content-grid-col3">
+					<?php $html->drawFormInput('brandobjekt_sonstige_name', _('Sonstige Nutzung (Text)'), $B->get('brandobjekt_sonstige_name'), strtolower($_REQUEST['k']), array('class' => 'right', 'style' => 'width:45%')) ?>
+				</div>
+				<div class="clear"></div>
+			</div>
+			
+		</div>
+		
+		<div class="report-content">
+			
+			<div class="form-row">
+				<!-- Abschnitt Zugang start -->
+				<div class="left content-grid-col2">
+					<p style="margin-top:5px;" class="left bold content-grid-col2"><?php echo _('Zugang vorhanden') ?>:</p>
+					
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_zugang_vorhanden]" value="0" />
+					
+					<div class="form_field left content-grid-col5">
+						<label for="report_art_haupt"><?php echo _('Ja') ?>:
+						<input id="report_brandobjekt_zugang_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_zugang_vorhanden]" value="ja" type="radio" <?php echo ($B->get('brandobjekt_zugang_vorhanden') == 'ja')? 'checked="checked"':'' ?> /></label>
+					</div>
+					<div class="form_field right content-grid-col5">
+						<label for="report_art_neben"><?php echo _('Nein') ?>:
+						<input id="report_brandobjekt_zugang_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_zugang_vorhanden]" value="nein" type="radio" <?php echo ($B->get('brandobjekt_zugang_vorhanden') == 'nein')? 'checked="checked"':'' ?> /></label>
+					</div>
+					<div class="clear"></div>
+				</div>
+				
+				<div class="right content-grid-col2">
+					<?php $html->drawFormInput('brandobjekt_zugang_bemerkungen', _('Bemerkungen'), $B->get('brandobjekt_zugang_bemerkungen'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
+				</div><div class="clear"></div><!-- Abschnitt Zugang ende -->
+			</div>
+			
+			<div class="form-row">	
+				<!-- Abschnitt BMA start -->
+				<div class="left content-grid-col2">
+					<p style="margin-top:5px;" class="left bold content-grid-col2"><?php echo _('BMA vorhanden') ?>:</p>
+					
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_vorhanden]" value="0" />
+					
+					<div class="form_field left content-grid-col5">
+						<label for="report_art_haupt"><?php echo _('Ja') ?>:
+						<input id="report_brandobjekt_bma_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_vorhanden]" value="ja" type="radio" <?php echo ($B->get('brandobjekt_bma_vorhanden') == 'ja')? 'checked="checked"':'' ?> /></label>
+					</div>
+					<div class="form_field right content-grid-col5">
+						<label for="report_art_neben"><?php echo _('Nein') ?>:
+						<input id="report_brandobjekt_bma_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_vorhanden]" value="nein" type="radio" <?php echo ($B->get('brandobjekt_bma_vorhanden') == 'nein')? 'checked="checked"':'' ?> /></label>
+					</div>
+					<div class="clear"></div>
+				</div>
+				
+				<div class="right content-grid-col2">
+				
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_ausgeloest]" value="0" />
+				
+					<div class="form_field left content-grid-col3">
+						<label for="report_art_haupt"><?php echo _('BMA ausgelöst') ?>:
+						<input class="right" id="report_brandobjekt_bma_ausgeloest" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_ausgeloest]" value="ja" type="radio" <?php echo ($B->get('brandobjekt_bma_ausgeloest') == 'ja')? 'checked="checked"':'' ?> /></label>
+					</div>
+					<div class="form_field right content-grid-col2">
+						<label for="report_art_neben"><?php echo _('BMA nicht ausgelöst') ?>:
+						<input class="right" id="report_brandobjekt_bma_nicht_ausgeloest" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_ausgeloest]" value="nein" type="radio" <?php echo ($B->get('brandobjekt_bma_ausgeloest') == 'nein')? 'checked="checked"':'' ?> /></label>
+					</div>
+					<div class="clear"></div>
+				</div><div class="clear"></div><!-- Abschnitt BMA ende -->
+			</div>
+			
+			<div class="form-row">	
+				<!-- Abschnitt Löschanlage start -->
+				<div class="left content-grid-col2">
+					<p style="margin-top:5px;" class="left bold content-grid-col2"><?php echo _('ortsf. Löschanlage vorhanden') ?>:</p>
+					
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_vorhanden]" value="0" />
+					
+					<div class="form_field left content-grid-col5">
+						<label for="report_art_haupt"><?php echo _('Ja') ?>:
+						<input id="report_brandobjekt_loeschanlage_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_vorhanden]" value="ja" type="radio" <?php echo ($B->get('brandobjekt_loeschanlage_vorhanden') == 'ja')? 'checked="checked"':'' ?> /></label>
+					</div>
+					<div class="form_field right content-grid-col5">
+						<label for="report_art_neben"><?php echo _('Nein') ?>:
+						<input id="report_brandobjekt_loeschanlage_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_vorhanden]" value="nein" type="radio" <?php echo ($B->get('brandobjekt_loeschanlage_vorhanden') == 'nein')? 'checked="checked"':'' ?> /></label>
+					</div>
+					<div class="clear"></div>
+				</div>
+				
+				<div class="right content-grid-col2">
+				
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_wirkung]" value="0" />
+				
+					<div class="form_field left content-grid-col3">
+						<label for="report_art_haupt"><?php echo _('Wirkung positiv') ?>:
+						<input class="right" id="report_brandobjekt_loeschanlage_positiv" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_wirkung]" value="positiv" type="radio" <?php echo ($B->get('brandobjekt_loeschanlage_wirkung') == 'positiv')? 'checked="checked"':'' ?> /></label>
+					</div>
+					<div class="form_field right content-grid-col2">
+						<label for="report_art_neben"><?php echo _('Wirkung negativ') ?>:
+						<input class="right" id="report_brandobjekt_loeschanlage_negativ" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_wirkung]" value="negativ" type="radio" <?php echo ($B->get('brandobjekt_loeschanlage_wirkung') == 'negativ')? 'checked="checked"':'' ?> /></label>
+					</div>
+					<div class="clear"></div>
+				</div><div class="clear"></div><!-- Abschnitt Löschanlage ende -->
+			</div>
+			
+			<div class="form-row">	
+				<!-- Abschnitt Rauchabzug start -->
+				<div class="left content-grid-col2">
+					<p style="margin-top:5px;" class="left bold content-grid-col2"><?php echo _('Rauchabzug vorhanden') ?>:</p>
+					
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_vorhanden]" value="0" />
+					
+					<div class="form_field left content-grid-col5">
+						<label for="report_art_haupt"><?php echo _('Ja') ?>:
+						<input id="report_brandobjekt_rauchabzug_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_vorhanden]" value="ja" type="radio" <?php echo ($B->get('brandobjekt_rauchabzug_vorhanden') == 'ja')? 'checked="checked"':'' ?> /></label>
+					</div>
+					<div class="form_field right content-grid-col5">
+						<label for="report_art_neben"><?php echo _('Nein') ?>:
+						<input id="report_brandobjekt_rauchabzug_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_vorhanden]" value="nein" type="radio" <?php echo ($B->get('brandobjekt_rauchabzug_vorhanden') == 'nein')? 'checked="checked"':'' ?> /></label>
+					</div>
+					<div class="clear"></div>
+				</div>
+				
+				<div class="right content-grid-col2">
+				
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_wirkung]" value="0" />
+				
+					<div class="form_field left content-grid-col3">
+						<label for="report_art_haupt"><?php echo _('Wirkung positiv') ?>:
+						<input class="right" id="report_brandobjekt_rauchabzug_positiv" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_wirkung]" value="positiv" type="radio" <?php echo ($B->get('brandobjekt_rauchabzug_wirkung') == 'positiv')? 'checked="checked"':'' ?> /></label>
+					</div>
+					<div class="form_field right content-grid-col2">
+						<label for="report_art_neben"><?php echo _('Wirkung negativ') ?>:
+						<input class="right" id="report_brandobjekt_rauchabzug_negativ" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_wirkung]" value="negativ" type="radio" <?php echo ($B->get('brandobjekt_rauchabzug_wirkung') == 'negativ')? 'checked="checked"':'' ?> /></label>
+					</div>
+					<div class="clear"></div>
+				</div><div class="clear"></div><!-- Abschnitt Rauchabzug ende -->
+			</div>
+			
+		</div>
+		
+		<div class="content-grid-col2 report-content left">
+			
+			<div class="form-row">
+				<p class="bold content-grid-col3"><?php echo _('Brandausmaß') ?>:</p>
+				<br />
+				
+				<div class="left content-grid-col2">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandausmass_geloescht]" value="0" />
+					<?php $html->drawFormCheckbox('brandausmass_geloescht', _('vor Ankunft gelöscht'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandausmass_geloescht') == '1')? true:false, 'class' => 'right brandausmass radiocheck')) ?>
+				</div>				
+				<div class="right content-grid-col2">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandausmass_vollbrand]" value="0" />
+					<?php $html->drawFormCheckbox('brandausmass_vollbrand', _('Gesamtobjekt'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandausmass_vollbrand') == '1')? true:false, 'class' => 'right brandausmass radiocheck')) ?>
+				</div>
+				<div class="clear"></div>
+				
+				<div class="left content-grid-col2">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandausmass_teilobjekt]" value="0" />
+					<?php $html->drawFormCheckbox('brandausmass_teilobjekt', _('auf Objektteil begrenzt'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandausmass_teilobjekt') == '1')? true:false, 'class' => 'right brandausmass radiocheck')) ?>
+				</div>				
+				<div class="right content-grid-col2">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandausmass_uebergriff]" value="0" />
+					<?php $html->drawFormCheckbox('brandausmass_uebergriff', _('Übergriff auf andere'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandausmass_uebergriff') == '1')? true:false, 'class' => 'right brandausmass radiocheck')) ?>
+				</div>
+				<div class="clear"></div>
+			</div>
+			
+		</div>
+		
+		<div class="content-grid-col2 report-content right">
+			
+			<div class="form-row">
+				<p class="bold content-grid-col3"><?php echo _('Löschwasserversorgung') ?>:</p>
+				<br />
+				
+				<div class="left content-grid-col2">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[loeschwasser_kfz]" value="0" />
+					<?php $html->drawFormCheckbox('loeschwasser_kfz', _('Kfz- Löschwasserbehälter'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('loeschwasser_kfz') == '1')? true:false, 'class' => 'right loeschwasser radiocheck')) ?>
+				</div>				
+				<div class="right content-grid-col2">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[loeschwasser_offen]" value="0" />
+					<?php $html->drawFormCheckbox('loeschwasser_offen', _('offenes Gewässer'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('loeschwasser_offen') == '1')? true:false, 'class' => 'right loeschwasser radiocheck')) ?>
+				</div>
+				<div class="clear"></div>
+				
+				<div class="left content-grid-col2">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[loeschwasser_hydrant]" value="0" />
+					<?php $html->drawFormCheckbox('loeschwasser_hydrant', _('Hydrant'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('loeschwasser_hydrant') == '1')? true:false, 'class' => 'right loeschwasser radiocheck')) ?>
+				</div>				
+				<div class="right content-grid-col2">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[loeschwasser_sonstige]" value="0" />
+					<?php $html->drawFormCheckbox('loeschwasser_sonstige', _('Sonstige'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('loeschwasser_sonstige') == '1')? true:false, 'class' => 'right loeschwasser radiocheck')) ?>
+				</div>
+				<div class="clear"></div>
+			</div>
+			
+		</div>
+		<div class="clear"></div>
+		
+		<div class="report-content">
+			<div class="form-row">
+				<?php $html->drawFormTextarea('eingesetzte_geraete', _('Eingesetzte Geräte'), $B->get('eingesetzte_geraete'), strtolower($_REQUEST['k']), array('class' => 'right', 'rows' => '5', 'bold-label' => true)) ?><div class="clear"></div>
+			</div>
+		</div>
+		
+		<div class="report-content">
+			<div class="form-row">
+				<?php $html->drawFormTextarea('verbrauchsmaterial', _('Verbrauchsmaterial'), $B->get('verbrauchsmaterial'), strtolower($_REQUEST['k']), array('class' => 'right', 'rows' => '5', 'bold-label' => true)) ?><div class="clear"></div>
+			</div>
+		</div>
+		
+	</div>
+	
+	<!-- Seite 2 als eigenes Template einbinden -->
+		<?php include VIEW_PATH.'/Report/edit_brand2.phtml' ?>
+	<!-- Seite 2 als eigenes Template einbinden -->
+	
+	<?php echo $html->drawFormEnde() ?>
+	
+	<script type="text/javascript">
+	//<![CDATA[
+	
+	// ausgelagert custom.js	
+	
+	//]]>
+	</script>
+	
+</div>

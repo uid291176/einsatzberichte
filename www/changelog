@@ -1,0 +1,76 @@
+#0.0.1
+- Initial Version
+
+#1.0.0
+- erstes Release
+- Benutzerverwaltung (Berechtigungen "Administrator", "Benutzer")
+- Konfigurationverwaltung
+- Modul Rettungsdienst Recherche
+	Übersichten (alle anzeigen, storniert, beendet, abgeschlossen, alarmiert)
+	Datumsauswahl
+	Einzelansicht (Adressdaten, Patienetendaten, Einsatzzeiten, Anruferdaten)
+	
+#1.1.0
+- Neue Funktion abwechselnde Sortierung der Spalten Aufsteigend/ Absteigend
+- Neue Funktion Direktsuche nach Einsatznummer
+- Bugfixes
+	Sortierreihenfolge und Spalte bleiben beim Seitenwechsel (Pager) erhalten
+	Datum bleibt beim Seitenwechsel (Pager) erhalten
+	
+#1.1.1
+- Neue Funktion(en)
+	Pager unterhalb der Liste ebenfalls anzeigen
+- Bugfix(es)
+	Rücksprung von Detailansicht zur Übersicht über einen eigenen Button
+- geänderte Datei(en)
+	IndexController.class.php
+	index.phtml
+	view.phtml
+	screen.css
+
+#1.1.2
+- Bugfix(es)
+	$this->view (SystemController) als array Variable ab php 7.x -> ansonsten Fehler::"Illegal string offset"
+	
+#1.2.0
+- neues Modul Feuerwehr Einsatzberichte
+
+#1.2.1
+- Bugfix(es)
+	leere Formularfelder welche als int Wert gespeichert werden sollen bekommen den Wert 0 (Null)
+- Erfassung Anruferdaten (Notrufender)
+- neuer Punkt Klassifikation Hilfeleistung "Amtshilfe Polizei"
+- Anzahl der ausgerückten Kräfte mit anzeigen
+- Rückmeldungen aus dem ELS mit erfassen
+
+#1.2.2
+- Vorbelegung Berichtsart -> Hauptbericht
+- Funktion Radiobuttons für: 
+	Brandausmaß
+	Fehlalarm
+	Brandobjekt
+	HL- Klassifizierung
+	Brandumfang
+	Löschwasserversorgung
+- Berichtsabschluss Unterschrift "ELD"
+- aufsummierte Felder farbig (grau)
+- Ressourcen Untereinsatz hinzugefügt
+- neue Hauptstichworte
+- Anzeige unbearbeitet auf Erfurt begrenzt
+
+#1.2.3
+- neues Feld "Anzahl Berufsfeuerwehren"
+- nur im ELS abgeschlossene Einsätze werden als "offen" angezeigt
+- Tooltips Brand Klassifizierung (Kleinbrand, Mittelbrand, ...)
+- Anzahl der offenen Einsätze richtig berechnen -> anzeigen
+- Datumsübergabe zum Datepicker bei Einsatzabschluss berichtigt
+- Sortierung und Filter für Einsätze in "Bearbeitung" und bei "Abgeschlossene"
+- Suche nach Einsatznummer optimiert (entf. Datumsfeld und Übersichten)
+- JavaScript Code zentral ausgelagert "custom.js"
+
+#
+- Seite 3 Statistik BMA
+- Vorbelegung Einsatzstärken der BF
+
+
+

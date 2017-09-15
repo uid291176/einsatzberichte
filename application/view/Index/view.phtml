@@ -1,0 +1,143 @@
+<?php 
+/**
+ * Template Einsatzdetails
+ */
+$Einsatz = $this->view['data'];
+//$this->tools->debug($Einsatz->eData);
+?>
+
+<div id="einsatz-details-<?php echo _('id') ?>" class="single-view">
+
+	<h1><span class="fa fa-file-text-o"></span>&nbsp;<?php echo _('Details zur Einsatz- ') ?>&nbsp;<?php echo _('Nr.-') ?>&nbsp;<span class="bold"><?php echo $Einsatz->get('EINSATZ_NUMMER') ?></span>&nbsp;-&nbsp;<?php echo $Einsatz->get('EINSATZ_STICHWORT') ?></h1>
+
+	<?php echo $this->drawMessages() ?>
+	
+	<p class="left"><?php echo _('Details durch anklicken der jeweiligen "Sektion" anzeigen') ?></p>
+	<div class="left">
+		<a class="button" href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="fa fa-angle-double-left"></span>&nbsp;<?php echo _('Zurück zur Auswahl') ?></a>
+	</div>
+	<div class="clear"></div>
+	<br />
+	
+	<div class="accordion">
+	
+		<h3><?php echo _('Einsatz- Adressdaten') ?></h3>
+		
+		<div id="einsatz-adressdaten" class="accordion-content">
+			<table  cellspacing="1" class="single-view-content-table">
+			
+				<tr><td class="label"><h2><?php echo _('Transport - Start') ?></h2></td><td class="label" colspan="4" ><?php echo $Einsatz->get('EINSATZ_OBJEKTNAME') ?></td></tr>
+				
+				<tr><td class="label"><?php echo _('Straße 1')?>:</td><td><?php echo $Einsatz->get('EINSATZ_STRASSE1') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Hausnummer') ?>:</td><td><?php echo $Einsatz->get('EINSATZ_HNR') ?></td></tr>
+				<tr><td class="label"><?php echo _('Straße 2')?>:</td><td><?php echo $Einsatz->get('EINSATZ_STRASSE2') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Info Ort') ?>:</td><td>---noch leer---</td></tr>
+				<tr><td class="label"><?php echo _('PLZ')?>:</td><td><?php echo $Einsatz->get('EINSATZ_PLZ') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Ort') ?>:</td><td><?php echo $Einsatz->get('EINSATZ_ORT') ?></td></tr>
+				<tr><td class="label"><?php echo _('Ortsteil')?>:</td><td><?php echo $Einsatz->get('EINSATZ_ORTSTEIL') ?></td><td class="label">&nbsp;</td><td colspan="2" class="label">&nbsp;</td></tr>
+				<tr><td class="label"><?php echo _('Region')?>:</td><td><?php echo $Einsatz->get('EINSATZ_REGION') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Land') ?>:</td><td><?php echo $Einsatz->get('EINSATZ_LAND') ?></td></tr>
+			
+				<tr><td colspan="5" class="label"><?php echo _('ausgehende Nachrichten') ?>:</td></tr>
+				<tr><td colspan="5" class="textarea"><?php echo ($Einsatz->get('RESOURCE_INFO') == '')? _('keine ausgehenden Meldungen erfasst') : $Einsatz->get('RESOURCE_INFO') ?></td></tr>
+
+				<tr><td class="label"><h2><?php echo _('Transport - Ziel') ?></h2></td><td class="label bold" colspan="4"><?php echo $Einsatz->get('ZIEL_OBJEKTNAME') ?></td></tr>
+				
+				<tr><td class="label"><?php echo _('Straße 1')?>:</td><td><?php echo $Einsatz->get('ZIEL_STRASSE1') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Hausnummer') ?>:</td><td><?php echo $Einsatz->get('ZIEL_HNR') ?></td></tr>
+				<tr><td class="label"><?php echo _('Straße 2')?>:</td><td><?php echo $Einsatz->get('ZIEL_STRASSE2') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Info Ort') ?>:</td><td>---noch leer---</td></tr>
+				<tr><td class="label"><?php echo _('PLZ')?>:</td><td><?php echo $Einsatz->get('ZIEL_PLZ') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Ort') ?>:</td><td><?php echo $Einsatz->get('ZIEL_ORT') ?></td></tr>
+				<tr><td class="label"><?php echo _('Ortsteil')?>:</td><td><?php echo $Einsatz->get('ZIEL_ORTSTEIL') ?></td><td class="label">&nbsp;</td><td colspan="2" class="label">&nbsp;</td></tr>
+				<tr><td class="label"><?php echo _('Region')?>:</td><td><?php echo $Einsatz->get('ZIEL_REGION') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Land') ?>:</td><td><?php echo $Einsatz->get('ZIEL_LAND') ?></td></tr>
+			
+			</table>
+		</div>
+		
+		<h3><?php echo _('Patientendaten') ?></h3>
+		
+		<div id="einsatz-patientendaten" class="accordion-content">
+			
+			<table  cellspacing="1" class="single-view-content-table">
+				
+				<tr><td class="label"><?php echo _('Name')?>:</td><td><?php echo $Einsatz->get('PATIENT_NAME') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Vorname') ?>:</td><td><?php echo $Einsatz->get('PATIENT_VORNAME') ?></td></tr>
+				<tr><td class="label"><?php echo _('Geburtsdatum')?>:</td><td><?php echo $Einsatz->get('PATIENT_GEBURTSDATUM') ?></td><td class="label">&nbsp;</td><td colspan="2" class="label">&nbsp;</td></tr>
+				<tr><td class="label"><?php echo _('Straße 1')?>:</td><td><?php echo $Einsatz->get('PATIENT_STRASSE1') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Hausnummer') ?>:</td><td><?php echo $Einsatz->get('PATIENT_HNR') ?></td></tr>
+				<tr><td class="label"><?php echo _('Straße 2')?>:</td><td><?php echo $Einsatz->get('PATIENT_STRASSE2') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Land') ?>:</td><td><?php echo $Einsatz->get('PATIENT_LAND') ?></td></tr>
+				<tr><td class="label"><?php echo _('PLZ')?>:</td><td><?php echo $Einsatz->get('PATIENT_PLZ') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Ort') ?>:</td><td><?php echo $Einsatz->get('PATIENT_ORT') ?></td></tr>
+				<tr><td class="label"><?php echo _('Region')?>:</td><td><?php echo $Einsatz->get('PATIENT_REGION') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Land') ?>:</td><td><?php echo $Einsatz->get('PATIENT_LAND') ?></td></tr>
+						
+			</table>
+			
+		</div>
+		
+		<h3><?php echo _('Einsatzzeiten') ?></h3>
+		
+		<div id="einsatz-statuszeiten" class="accordion-content">
+			
+			<table  cellspacing="1" class="single-view-content-table">
+				
+				<tr><td class="label"><?php echo _('Einsatz- Status')?>:</td><td><?php echo $Einsatz->get('EINSATZ_STATUS') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Meldungsaufnahme') ?>:</td><td><?php echo $Einsatz->get('ANRUFER_ANRUFZEIT') ?></td></tr>
+				<tr><td class="label"><?php echo _('Bearbeiter- Kürzel')?>:</td><td><?php echo $Einsatz->get('PERSONAL_KUERZEL') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Bearbeiter')?>:</td><td><?php echo $Einsatz->get('PERSONAL_VORNAME') ?>&nbsp;<?php echo $Einsatz->get('PERSONAL_NAME') ?></td></tr>
+				<tr><td class="label"><?php echo _('Einsatzbeginn')?>:</td><td><?php echo $Einsatz->get('EINSATZ_BEGINN') ?></td><td class="label">&nbsp;</td><td colspan="2" class="label">&nbsp;</td></tr>
+				
+				<tr><td colspan="5" class="label"></td></tr>
+				
+			</table>
+			
+			<p class="bold"><?php echo _('Fahrzeugübersicht') ?></p>
+			
+			<table  cellspacing="1" class="single-view-content-table">
+				<tr>
+					<td class="bold" width="20%"><?php echo _('Organisation') ?></td>
+					<td class="bold"><?php echo _('Fahrzeugkenner') ?></td>
+					<td class="bold"><?php echo _('Alarmzeit') ?></td>
+					<td class="bold"><?php echo _('Einsatz übernommen') ?></td>
+					<td class="bold"><?php echo _('am Einsatzort') ?></td>
+					<td class="bold"><?php echo _('frei über Funk') ?></td>
+					<td class="bold"><?php echo _('einsatzbereit auf Wache') ?></td>
+				</tr>
+				
+				<?php if ($this->tools->isSizedArray($Einsatz->getResourchen())) { ?>
+				<?php foreach ($Einsatz->getResourchen() as $resource) { ?>
+				<tr>
+					<td width="20%"><?php echo $resource['RESOURCE_ORGANISATION'] ?></td>
+					<td><?php echo $resource['RESOURCE_KENNER'] ?></td>
+					<td><?php echo $resource['RESOURCE_ALARM'] ?></td>
+					<td><?php echo $resource['RESOURCE_EINSATZ_UEBERNOMMEN'] ?></td>
+					<td><?php echo $resource['RESOURCE_ANKUNFT'] ?></td>
+					<td><?php echo $resource['RESOURCE_FREI_UEBER_FUNK'] ?></td>
+					<td><?php echo $resource['RESOURCE_EINSATZENDE'] ?></td>
+				</tr>
+				<?php } ?>
+				<?php } else { ?>
+					<tr><td colspan="7"><?php echo _('Dem Einsatz ist keine Resource zugewiesen!') ?></td></tr>
+				<?php } ?>		
+			</table>
+			
+		</div>
+		
+		<h3><?php echo _('Anruferdaten') ?></h3>
+		
+		<div id="einsatz-anruferdaten" class="accordion-content">
+			
+			<table  cellspacing="1" class="single-view-content-table">
+				
+				<tr><td class="label"><?php echo _('Telefonnummer')?>:</td><td><?php echo $Einsatz->get('ANRUFER_TELEFONNUMMER') ?></td><td class="label">&nbsp;</td><td class="label"><?php echo _('Anrufzeit') ?>:</td><td><?php echo $Einsatz->get('ANRUFER_ANRUFZEIT') ?></td></tr>
+				
+			</table>
+			
+		</div>
+	  
+	</div>		
+	
+	<script type="text/javascript">
+	//<![CDATA[
+	
+		$(document).ready(function(){
+
+			$( ".accordion" ).accordion({
+				active: 0,
+				heightStyle: 'content'
+			});	
+			
+		})
+	
+	//]]>
+	</script>
+	
+</div>

@@ -1,0 +1,473 @@
+<?php 
+/**
+ * template Seite 2 zum editieren des E- Berichtes
+ */
+?>
+<div class="report-content-wrap" id="tab_2" style="display:none;">
+	<div class="report-content">
+		<div class="form-row">
+		
+			<p class="bold"><?php echo _('Ausgerückte Fahrzeuge und Einsatzzeiten') ?></p>
+			<br />
+			<table class="resourcen-overview">
+
+				<tr>
+					<td><?php echo _('Funkrufname') ?></td>
+					<td><?php echo _('Ausrücken') ?></td>
+					<td><?php echo _('Eintreffen') ?></td>
+					<td><?php echo _('Frei über Funk') ?></td>
+					<td><?php echo _('Rückkehr') ?></td>
+				</tr>
+
+				<?php $index = 0; foreach ($B->getRessources() as $res) { ?>
+				<tr>
+					<td>
+						<table>
+							<tr>
+								<td><?php $html->drawFormInput('funkkenner', '', $res['f_kenner'], strtolower($_REQUEST['k']).'[resourcen]['.$index.']', array()) ?></td>
+							</tr>
+						</table>
+					</td>
+
+					<td>
+						<table>
+							<tr>
+								<td><?php $html->drawFormInput('uebernommen_date', '', ($res['f3'])? date('d.m.Y', $res['f3']):'', strtolower($_REQUEST['k']).'[resourcen]['.$index.']', array()) ?></td>
+								<td><?php $html->drawFormInput('uebernommen_time', '', ($res['f3'])? date('H:i:s', $res['f3']):'', strtolower($_REQUEST['k']).'[resourcen]['.$index.']', array()) ?></td>
+							</tr>
+						</table>
+					</td>
+
+					<td>
+						<table>
+							<tr>
+								<td><?php $html->drawFormInput('ankunft_date', '', ($res['f4'])? date('d.m.Y', $res['f4']):'', strtolower($_REQUEST['k']).'[resourcen]['.$index.']', array()) ?></td>
+								<td><?php $html->drawFormInput('ankunft_time', '', ($res['f4'])? date('H:i:s', $res['f4']):'', strtolower($_REQUEST['k']).'[resourcen]['.$index.']', array()) ?></td>
+							</tr>
+						</table>
+					</td>
+
+					<td>
+						<table>
+							<tr>
+								<td><?php $html->drawFormInput('frei_ueber_funk_date', '', ($res['f1'])? date('d.m.Y', $res['f1']):'', strtolower($_REQUEST['k']).'[resourcen]['.$index.']', array()) ?></td>
+								<td><?php $html->drawFormInput('frei_ueber_funk_time', '', ($res['f1'])? date('H:i:s', $res['f1']):'', strtolower($_REQUEST['k']).'[resourcen]['.$index.']', array()) ?></td>
+							</tr>
+						</table>
+					</td>
+
+					<td>
+						<table>
+							<tr>
+								<td><?php $html->drawFormInput('rueckkehr_date', '', ($res['f2'])? date('d.m.Y', $res['f2']):'', strtolower($_REQUEST['k']).'[resourcen]['.$index.']', array()) ?></td>
+								<td><?php $html->drawFormInput('rueckkehr_time', '', ($res['f2'])? date('H:i:s', $res['f2']):'', strtolower($_REQUEST['k']).'[resourcen]['.$index.']', array()) ?></td>
+								<td>&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<?php $arrEinsatzzeit[$index] = $B->getEinsatzZeit($res['f3'], $res['f2']) // hier werden die Einsatzzeiten ermittelt ?>
+				<?php $index++; } ?>
+				
+			</table>
+			<br />
+			
+			<div id="report-resource-add">
+				<span class="fa fa-plus"></span>&nbsp;<a id="add_index_<?php echo $index ?>" class="add-resource" href="#"><?php echo _('weiteres Fahrzeug hinzufügen') ?></a>
+			</div>
+			
+			<!-- Start Formularfelder zum erfassen weiterer Fahrzeuge welche nicht aus dem ELS kommen -->
+			<table class="table-add-report-resource" style="display:none;">
+				<tr id="add-resource-###index###">
+					<td>
+						<table>
+							<tr>
+								<td><?php $html->drawFormInput('funkkenner', '', '', strtolower($_REQUEST['k']).'[resourcen][###index###]', array()) ?></td>
+							</tr>
+						</table>
+					</td>
+				
+					<td>
+						<table>
+							<tr>
+								<td><?php $html->drawFormInput('uebernommen_date', '', '', strtolower($_REQUEST['k']).'[resourcen][###index###]', array('placeholder' => 'dd.mm.YYYY')) ?></td>
+								<td><?php $html->drawFormInput('uebernommen_time', '', '', strtolower($_REQUEST['k']).'[resourcen][###index###]', array('placeholder' => 'hh:mm')) ?></td>
+							</tr>
+						</table>
+					</td>
+					
+					<td>
+						<table>
+							<tr>
+								<td><?php $html->drawFormInput('ankunft_date', '', '', strtolower($_REQUEST['k']).'[resourcen][###index###]', array('placeholder' => 'dd.mm.YYYY')) ?></td>
+								<td><?php $html->drawFormInput('ankunft_time', '', '', strtolower($_REQUEST['k']).'[resourcen][###index###]', array('placeholder' => 'hh:mm')) ?></td>
+							</tr>
+						</table>
+					</td>
+					
+					<td>
+						<table>
+							<tr>
+								<td><?php $html->drawFormInput('frei_ueber_funk_date', '','', strtolower($_REQUEST['k']).'[resourcen][###index###]', array('placeholder' => 'dd.mm.YYYY')) ?></td>
+								<td><?php $html->drawFormInput('frei_ueber_funk_time', '', '', strtolower($_REQUEST['k']).'[resourcen][###index###]', array('placeholder' => 'hh:mm')) ?></td>
+							</tr>
+						</table>
+					</td>
+					
+					<td>
+						<table>
+							<tr>
+								<td><?php $html->drawFormInput('rueckkehr_date', '', '', strtolower($_REQUEST['k']).'[resourcen][###index###]', array('placeholder' => 'dd.mm.YYYY')) ?></td>
+								<td><?php $html->drawFormInput('rueckkehr_time', '', '', strtolower($_REQUEST['k']).'[resourcen][###index###]', array('placeholder' => 'hh:mm')) ?></td>
+								<td><a id="rem-resource-###index###" class="remove" href="#" onclick="remResource(this);"><span class="fa fa-times"></span></a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table><!-- Ende Formularfelder zum erfassen weiterer Fahrzeuge welche nicht aus dem ELS kommen -->
+			
+		</div>
+	</div>
+	
+	<div class="report-content">
+		<div class="form-row">
+		
+			<p class="bold"><?php echo _('Ausgerücktes und eingesetztes Personal') ?></p>
+			<br />
+			
+			<div class="content-grid-col70-30 report-content left">
+			
+				<table class="personal-overview">
+					
+					<tr>
+						<td style="padding:5px 0;"><?php echo _('Funkrufname') ?></td>
+						<td style="padding:5px 0;"><?php echo _('Einsatzzeit') ?></td>
+						<td style="padding:5px 0;"><?php echo _('Ausgerücktes Personal') ?></td>
+						<td style="padding:5px 0;"><?php echo _('Eingesetztes Personal') ?></td>
+					</tr>
+					
+					<tr>
+						<td>&nbsp;</td>
+						<td>
+							<table>
+								<tr><td class="center"><?php echo _('Tag') ?></td><td class="center"><?php echo _('Std.') ?></td><td class="center"><?php echo _('Min.') ?></td></tr>
+							</table>
+						</td>
+						<td>
+							<table>
+								<tr><td class="center"><?php echo _('hD') ?></td><td class="center"><?php echo _('gD') ?></td><td class="center"><?php echo _('mD') ?></td><td class="center"><?php echo _('FF') ?></td></tr>
+							</table>
+						</td>
+						<td>
+							<table>
+								<tr><td class="center"><?php echo _('hD') ?></td><td class="center"><?php echo _('gD') ?></td><td class="center"><?php echo _('mD') ?></td><td class="center"><?php echo _('FF') ?></td><td>&nbsp;&nbsp;</td></tr>
+							</table>
+						</td>
+					
+					</tr>
+
+					<?php $index = 0; foreach ($B->getPersonal() as $p) { ?>
+						<tr>
+							<td>
+								<table>
+									<tr>
+										<td><?php $html->drawFormInput('funkkenner', '', $p['f_kenner'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array()) ?></td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td><?php $html->drawFormInput('einsatzzeit_day', '', $arrEinsatzzeit[$index]['tag'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'einsatzzeit-day')) ?></td>
+										<td><?php $html->drawFormInput('einsatzzeit_std', '', $arrEinsatzzeit[$index]['std'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'einsatzzeit-std')) ?></td>
+										<td><?php $html->drawFormInput('einsatzzeit_min', '', $arrEinsatzzeit[$index]['min'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'einsatzzeit-min')) ?></td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td><?php $html->drawFormInput('ausgerueckt_hoeherer', '', $p['aus_h'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-aus')) ?></td>
+										<td><?php $html->drawFormInput('ausgerueckt_gehobener', '', $p['aus_g'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-aus')) ?></td>
+										<td><?php $html->drawFormInput('ausgerueckt_mittlerer', '', $p['aus_m'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-aus')) ?></td>
+										<td><?php $html->drawFormInput('ausgerueckt_ff', '', $p['aus_ff'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-aus')) ?></td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td><?php $html->drawFormInput('eingesetzt_hoeherer', '', $p['eingesetzt_h'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-personal')) ?></td>
+										<td><?php $html->drawFormInput('eingesetzt_gehobener', '', $p['eingesetzt_g'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-personal')) ?></td>
+										<td><?php $html->drawFormInput('eingesetzt_mittlerer', '', $p['eingesetzt_m'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-personal')) ?></td>
+										<td><?php $html->drawFormInput('eingesetzt_ff', '', $p['eingesetzt_ff'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-personal')) ?></td>
+										<td>&nbsp;&nbsp;&nbsp;</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					<?php $index++; } ?>
+				</table>
+				<br />
+				
+				<div id="report-personal-add">
+					<span class="fa fa-plus"></span>&nbsp;<a id="add_index_<?php echo $index ?>" class="add-personal" href="#"><?php echo _('weiteres Personal hinzufügen') ?></a>
+				</div>
+				
+				<!-- Start Formularfelder zum erfassen von weiterem Personal welches nicht aus dem ELS kommen -->	
+				<table class="table-add-report-personal" style="display:none;">
+					<tr id="add-personal-###index###">
+						<td>
+							<table>
+								<tr>
+									<td><?php $html->drawFormInput('funkkenner', '', '', strtolower($_REQUEST['k']).'[personal][###index###]', array()) ?></td>
+								</tr>
+							</table>
+						</td>
+						<td>
+							<table>
+								<tr>
+									<td><?php $html->drawFormInput('einsatzzeit_day', '', '', strtolower($_REQUEST['k']).'[personal][###index###]', array('class' => 'einsatzzeit-day')) ?></td>
+									<td><?php $html->drawFormInput('einsatzzeit_std', '', '', strtolower($_REQUEST['k']).'[personal][###index###]', array('class' => 'einsatzzeit-std')) ?></td>
+									<td><?php $html->drawFormInput('einsatzzeit_min', '', '', strtolower($_REQUEST['k']).'[personal][###index###]', array('class' => 'einsatzzeit-min')) ?></td>
+								</tr>
+							</table>
+						</td>
+						<td>
+							<table>
+								<tr>
+									<td><?php $html->drawFormInput('ausgerueckt_hoeherer', '', '', strtolower($_REQUEST['k']).'[personal][###index###]', array('class' => 'calc-aus')) ?></td>
+									<td><?php $html->drawFormInput('ausgerueckt_gehobener', '', '', strtolower($_REQUEST['k']).'[personal][###index###]', array('class' => 'calc-aus')) ?></td>
+									<td><?php $html->drawFormInput('ausgerueckt_mittlerer', '', '', strtolower($_REQUEST['k']).'[personal][###index###]', array('class' => 'calc-aus')) ?></td>
+									<td><?php $html->drawFormInput('ausgerueckt_ff', '', '', strtolower($_REQUEST['k']).'[personal][###index###]', array('class' => 'calc-aus')) ?></td>
+								</tr>
+							</table>
+						</td>
+						<td>
+							<table>
+								<tr>
+									<td><?php $html->drawFormInput('eingesetzt_hoeherer', '', '', strtolower($_REQUEST['k']).'[personal][###index###]', array('class' => 'calc-personal')) ?></td>
+									<td><?php $html->drawFormInput('eingesetzt_gehobener', '', '', strtolower($_REQUEST['k']).'[personal][###index###]', array('class' => 'calc-personal')) ?></td>
+									<td><?php $html->drawFormInput('eingesetzt_mittlerer', '', '', strtolower($_REQUEST['k']).'[personal][###index###]', array('class' => 'calc-personal')) ?></td>
+									<td><?php $html->drawFormInput('eingesetzt_ff', '', '', strtolower($_REQUEST['k']).'[personal][###index###]', array('class' => 'calc-personal')) ?></td>
+									<td><a id="rem-personal-###index###" class="remove" href="#" onclick="remPersonal(this);"><span class="fa fa-times"></span></a></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table><!-- Ende Formularfelder zum erfassen von weiterem Personal welches nicht aus dem ELS kommen -->	
+				
+			</div>
+	
+			<div class="content-grid-col3 report-content right">
+				
+				<table style="margin-top:20px;">
+					<tr>
+						<td>
+							<?php $html->drawFormInput('anzahl_fw', _('Anzahl Feuerwehren'), $B->get('anzahl_fw'), strtolower($_REQUEST['k']), array()) ?>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<?php $html->drawFormInput('anzahl_fw_bf', _('davon Berufsfeuerwehr'), $B->get('anzahl_fw_bf'), strtolower($_REQUEST['k']), array()) ?>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<?php $html->drawFormInput('anzahl_ausgerueckt', _('Anzahl ausgerückter Kräfte'), $B->get('anzahl_ausgerueckt'), strtolower($_REQUEST['k']), array('class' => 'readonly')) ?>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							<?php $html->drawFormInput('anzahl_eingesetzt', _('Anzahl eingesetzter Kräfte'), $B->get('anzahl_eingesetzt'), strtolower($_REQUEST['k']), array('class' => 'readonly')) ?>
+						</td>
+					</tr>
+					<!--
+					<tr>
+						<td>
+							<?php //$html->drawFormInput('zeit_ausgerueckt', _('Gesamtstunden ausgerückte Kräfte'), '', strtolower($_REQUEST['k']), array()) ?>
+						</td>
+					</tr>
+					-->
+					<tr>
+						<td>
+							<?php $html->drawFormInput('zeit_eingesetzt', _('Gesamtstunden eingesetzterKräfte'), $B->get('zeit_eingesetzt'), strtolower($_REQUEST['k']), array('class' => 'readonly')) ?>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="clear"></div>
+			
+		</div>
+		
+		<div class="report-content">
+			<div class="form-row">
+				<div class="left">
+					<p>
+						<span class="bold"><?php echo _('Einsatzbericht') ?></span><br />
+						- Anfahrt<br />
+						- Lage<br />
+						- Taktik<br />
+						- Wirkung<br />
+						- Probleme<br />
+						- Weiteres...
+					</p>
+				</div>
+				<div class="right" style="width:70%">
+					<?php $html->drawFormTextarea('long_description', '', $B->get('long_description'), strtolower($_REQUEST['k']), array('class' => 'right', 'rows' => '15', 'style' => 'width:100%')) ?>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		
+		<div class="report-content">
+			<div class="form-row">
+				<div class="content-grid-col3 left">
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[anlage_beigefuegt]" value="0" />
+					<?php $html->drawFormCheckbox('anlage_beigefuegt', _('Anlage beigefügt'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('anlage_beigefuegt') == '1')? true:false, 'class' => 'right', 'bold-label' => true)) ?>
+				</div>
+				<div class="content-grid-col3 right">
+					<?php $html->drawFormInput('anlage_seiten', _('Anzahl der Seiten'), $B->get('anlage_seiten'), strtolower($_REQUEST['k']), array('class' => 'right small-text', 'bold-label' => true)) ?>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		
+		<div class="report-content">
+			<div class="form-row">
+				
+				<p class="label bold"><?php echo _('Verständigung/ Anwesenheit') ?></p>
+				
+				<div class="form_field left content-grid-col3">
+					
+					<div class="margin_checkbox_fieldset_top">
+						<label class="left" for="info_buergermeister"><?php echo _('Bürgermeister') ?></label>
+						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_buergermeister]" value="0" />
+						<input class="info_buergermeister right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_buergermeister]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_buergermeister') == 'anwesend')? 'checked="checked"':''?> />
+						<input class="info_buergermeister right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_buergermeister]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_buergermeister') == 'verstaendigt')? 'checked="checked"':''?> />
+						<div class="clear"></div>
+					</div>
+					
+					<div class="margin_checkbox_fieldset_top">
+						<label class="left" for="info_kbi"><?php echo _('KBI') ?></label>
+						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_kbi]" value="0" />
+						<input class="info_kbi right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_kbi]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_kbi') == 'anwesend')? 'checked="checked"':''?> />
+						<input class="info_kbi right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_kbi]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_kbi') == 'verstaendigt')? 'checked="checked"':''?> />
+						<div class="clear"></div>
+					</div>
+					
+					<div class="margin_checkbox_fieldset_top">
+						<label class="left" for="info_rettungsdienst"><?php echo _('Rettungsdienst') ?></label>
+						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_rettungsdienst]" value="0" />
+						<input class="info_rettungsdienst right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_rettungsdienst]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_rettungsdienst') == 'anwesend')? 'checked="checked"':''?> />
+						<input class="info_rettungsdienst right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_rettungsdienst]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_rettungsdienst') == 'verstaendigt')? 'checked="checked"':''?> />
+						<div class="clear"></div>
+					</div>
+					
+					<div class="margin_checkbox_fieldset_top">
+						<label class="left" for="info_polizei"><?php echo _('Polizei') ?></label>
+						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_polizei]" value="0" />
+						<input class="info_polizei right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_polizei]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_polizei') == 'anwesend')? 'checked="checked"':''?> />
+						<input class="info_polizei right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_polizei]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_polizei') == 'verstaendigt')? 'checked="checked"':''?> />
+						<div class="clear"></div>
+					</div>
+					
+					<div class="margin_checkbox_fieldset_top">
+						<label class="left" for="info_arbeitsschutz"><?php echo _('Arbeitsschutzbehörde') ?></label>
+						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_arbeitsschutz]" value="0" />
+						<input class="info_arbeitsschutz right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_arbeitsschutz]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_arbeitsschutz') == 'anwesend')? 'checked="checked"':''?> />
+						<input class="info_arbeitsschutz right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_arbeitsschutz]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_arbeitsschutz') == 'verstaendigt')? 'checked="checked"':''?> />
+						<div class="clear"></div>
+					</div>
+					
+				</div>
+				
+				<div class="form_field left content-grid-col4" style="margin-left:8%;">
+					
+					<div class="margin_checkbox_fieldset_top">
+						<label class="left" for="info_strassenbaulasttraeger"><?php echo _('Straßenbaulastträger') ?></label>
+						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_strassenbaulasttraeger]" value="0" />
+						<input class="info_strassenbaulasttraeger right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_strassenbaulasttraeger]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_strassenbaulasttraeger') == 'anwesend')? 'checked="checked"':''?> />
+						<input class="info_strassenbaulasttraeger right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_strassenbaulasttraeger]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_strassenbaulasttraeger') == 'verstaendigt')? 'checked="checked"':''?> />
+						<div class="clear"></div>
+					</div>
+					
+					<div class="margin_checkbox_fieldset_top">
+						<label class="left" for="info_wasserbehoerde"><?php echo _('Untere Wasserbehörde') ?></label>
+						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_wasserbehoerde]" value="0" />
+						<input class="info_wasserbehoerde right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_wasserbehoerde]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_wasserbehoerde') == 'anwesend')? 'checked="checked"':''?> />
+						<input class="info_wasserbehoerde right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_wasserbehoerde]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_wasserbehoerde') == 'verstaendigt')? 'checked="checked"':''?> />
+						<div class="clear"></div>
+					</div>
+					
+					<div class="margin_checkbox_fieldset_top">
+						<label class="left" for="info_bauaufsicht"><?php echo _('Bauaufsicht') ?></label>
+						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_bauaufsicht]" value="0" />
+						<input class="info_bauaufsicht right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_bauaufsicht]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_bauaufsicht') == 'anwesend')? 'checked="checked"':''?> />
+						<input class="info_bauaufsicht right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_bauaufsicht]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_bauaufsicht') == 'verstaendigt')? 'checked="checked"':''?> />
+						<div class="clear"></div>
+					</div>
+					
+					<div class="margin_checkbox_fieldset_top">
+						<label class="left" for="info_abwasserbetrieb"><?php echo _('Abwasserbetrieb') ?></label>
+						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_abwasserbetrieb]" value="0" />
+						<input class="info_abwasserbetrieb right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_abwasserbetrieb]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_abwasserbetrieb') == 'anwesend')? 'checked="checked"':''?> />
+						<input class="info_abwasserbetrieb right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_abwasserbetrieb]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_abwasserbetrieb') == 'verstaendigt')? 'checked="checked"':''?> />
+						<div class="clear"></div>
+					</div>
+					
+					<div class="margin_checkbox_fieldset_top">
+						<label class="left" for="info_sonstige"><?php echo _('Sonstige') ?></label>
+						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_sonstige]" value="0" />
+						<input class="info_sonstige right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_sonstige]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_sonstige') == 'anwesend')? 'checked="checked"':''?> />
+						<input class="info_sonstige right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_sonstige]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_sonstige') == 'verstaendigt')? 'checked="checked"':''?> />
+						<div class="clear"></div>
+					</div>
+					
+				</div>
+				
+				<div class="form_field right content-grid-col4">
+					
+					<div class="margin_checkbox_fieldset_top">
+						<label class="left" for="info_gasversorger"><?php echo _('Gasversorgung') ?></label>
+						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_gasversorger]" value="0" />
+						<input class="info_gasversorger right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_gasversorger]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_gasversorger') == 'anwesend')? 'checked="checked"':''?> />
+						<input class="info_gasversorger right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_gasversorger]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_gasversorger') == 'verstaendigt')? 'checked="checked"':''?> />
+						<div class="clear"></div>
+					</div>
+					
+					<div class="margin_checkbox_fieldset_top">
+						<label class="left" for="info_wasserversorger"><?php echo _('Wasserversorgung') ?></label>
+						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_wasserversorger]" value="0" />
+						<input class="info_wasserversorger right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_wasserversorger]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_wasserversorger') == 'anwesend')? 'checked="checked"':''?> />
+						<input class="info_wasserversorger right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_wasserversorger]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_wasserversorger') == 'verstaendigt')? 'checked="checked"':''?> />
+						<div class="clear"></div>
+					</div>
+					
+					<div class="margin_checkbox_fieldset_top">
+						<label class="left" for="info_stromversorger"><?php echo _('Sromversorgung') ?></label>
+						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_stromversorger]" value="0" />
+						<input class="info_stromversorger right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_stromversorger]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_stromversorger') == 'anwesend')? 'checked="checked"':''?> />
+						<input class="info_stromversorger right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_stromversorger]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_stromversorger') == 'verstaendigt')? 'checked="checked"':''?> />
+						<div class="clear"></div>
+					</div>
+					
+					<div class="margin_checkbox_fieldset_top">
+						<label class="left" for="info_medienvertreter"><?php echo _('Medienvertreter') ?></label>
+						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_medienvertreter]" value="0" />
+						<input class="info_medienvertreter right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_medienvertreter]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_medienvertreter') == 'anwesend')? 'checked="checked"':''?> />
+						<input class="info_medienvertreter right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_medienvertreter]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_medienvertreter') == 'verstaendigt')? 'checked="checked"':''?> />
+						<div class="clear"></div>
+					</div>
+						
+					<?php $html->drawFormInput('info_sonstige_name', '', $B->get('info_sonstige_name'), strtolower($_REQUEST['k']), array('class' => 'right', 'style' => 'width:100%;')) ?>
+
+				</div>
+				
+				<div class="clear"></div>
+				
+			</div>
+		</div>
+	</div>
+</div>
