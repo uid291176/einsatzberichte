@@ -63,9 +63,9 @@
 				<tr>
 					<td style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Alarmzeit') ?></td>
 					<td style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Datum') ?></td>
-					<td style="border:1px solid #666666;"><?php echo $B->get('alarmzeit_datum') ?></td>
+					<td style="border:1px solid #666666;"><?php echo date('d.m.Y', $B->get('alarm')) ?></td>
 					<td style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Uhrzeit') ?></td>
-					<td><?php echo $B->get('alarmzeit_uhrzeit') ?></td>
+					<td><?php echo date('H:i:s', $B->get('alarm')) ?></td>
 				</tr>
 			</table>
 			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
@@ -79,7 +79,7 @@
 			</table>
 			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
 				<tr>
-					<td style="width:60%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Eigener Ausrückebereich') ?></td>				
+					<td style="width:60%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Entfernung zur E- Stelle (km)') ?></td>				
 					<td style="width:40%;"><?php echo $B->get('entfernung_einsatzstelle') ?> <?php echo ($this->tools->isSizedString($B->get('entfernung_einsatzstelle')))? _('km'):'' ?></td>
 				</tr>
 			</table>
@@ -171,10 +171,10 @@
 		<!-- rechter Block -->
 		<td>
 			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
-				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Brandobjekt') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('haupt_stichwort') ?></td></tr>
-				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Einsatzstelle') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_e-stelle') ?></td></tr>
-				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Adresse') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_adresse') ?></td></tr>
-				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ort') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_ort') ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Brandobjekt') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('stichwort') ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Einsatzstelle') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('objektname') ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Adresse') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('adresse1') ?> <?php echo $B->get('hnr') ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ort') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('ort') ?> <?php echo $B->get('ortsteil') ?></td></tr>
 			</table>
 			<br /><br />
 			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
@@ -442,7 +442,7 @@
 				<?php foreach ($B->getRessources() as $arrRes) { ?>
 					<?php if (strpos($arrRes['f_kenner'], '/')) $arrFkenner = explode('/', $arrRes['f_kenner']) ?>
 					<?php if (strpos($arrRes['f_kenner'], ' ')) $arrFkenner = explode(' ', $arrRes['f_kenner']) ?>
-					<tr><td style="border:1px solid #666666;"><?php echo $arrFkenner[0] ?></td><td style="border:1px solid #666666;"><?php echo $arrFkenner[1] ?></td><td style="border:1px solid #666666;"><?php echo $arrFkenner[2] ?></td></tr>
+					<tr><td style="border:1px solid #666666;"><?php echo substr($arrFkenner[0], 0, 5) ?></td><td style="border:1px solid #666666;"><?php echo substr($arrFkenner[1], 0, 5) ?></td><td style="border:1px solid #666666;"><?php echo substr($arrFkenner[2], 0, 5) ?></td></tr>
 				<?php } ?>
 			</table>
 		</td>
@@ -515,7 +515,7 @@
 				<?php $i = 0; foreach ($B->getPersonal() as $arrPer) { ?>
 					<?php if (strpos($arrPer['f_kenner'], '/')) $arrFkenner = explode('/', $arrPer['f_kenner']) ?>
 					<?php if (strpos($arrPer['f_kenner'], ' ')) $arrFkenner = explode(' ', $arrPer['f_kenner']) ?>
-					<tr><td style="border:1px solid #666666;"><?php echo $arrFkenner[0] ?></td><td style="border:1px solid #666666;"><?php echo $arrFkenner[1] ?></td><td style="border:1px solid #666666;"><?php echo $arrFkenner[2] ?></td></tr>
+					<tr><td style="border:1px solid #666666;"><?php echo substr($arrFkenner[0], 0, 5) ?></td><td style="border:1px solid #666666;"><?php echo substr($arrFkenner[1], 0, 5) ?></td><td style="border:1px solid #666666;"><?php echo substr($arrFkenner[2], 0, 5) ?></td></tr>
 				<?php $i++; } ?>
 				
 				<?php while ($i < 11) { ?>
@@ -611,7 +611,7 @@
 <table cellpadding="3" cellspacing="0" style="width:99%;">
 	<tr>
 		<td style="width:20%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Einsatzbericht<br /><br />(Anfahrt, Lage, Taktik, Wirkung, Probleme usw.)') ?></td>
-		<td style="width:80%; height:250px; border:1px solid #666666;"><?php echo nl2br($B->get('long_description')) ?></td>
+		<td style="width:80%; height:250px; border:1px solid #666666;"><?php echo nl2br($B->getProtokoll()) ?></td>
 	</tr>
 </table>
 

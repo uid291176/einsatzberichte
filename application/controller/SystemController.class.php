@@ -184,6 +184,7 @@ abstract class SystemController
 			//js laden
 			$this->arrJsFiles[] = '/jquery/1.12.0/jquery.min.js';
 			$this->arrJsFiles[] = '/jquery-ui/1.12.1/jquery-ui.min.js';
+			$this->arrJsFiles[] = '/jquery/jquery.cookie.js';
 			$this->arrJsFiles[] = '/custom.js';
 	
 			require_once VIEW_PATH.'/'.FULL.'.phtml';

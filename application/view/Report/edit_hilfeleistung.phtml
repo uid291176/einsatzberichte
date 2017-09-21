@@ -3,8 +3,7 @@
  * template Seite 1 zum editieren des E- Berichtes
  */
 $B = $this->view['data'];
-$B->init();
-//$this->tools->debug(var_dump($B));
+//$this->tools->debug($B->_data);
 ?>
 <div id="einsatz-details-<?php echo _('id') ?>" class="single-view">
 
@@ -36,14 +35,14 @@ $B->init();
 	</div>
 	
 	<?php $html = Html_Factory::getHtml('forms') ?>
-	<?php echo $html->drawFormStart('post', $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'save', array('tmpl' => 'hilfeleistung')), '', array('class' => 'report-save-form')) ?>
+	<?php echo $html->drawFormStart('post', $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'save', array('tmpl' => 'edit_hilfeleistung')), '', array('class' => 'report-save-form')) ?>
 	
 	<!-- uebergeben der Benutzer ID (Bearbeiter)  -->
 		<input type="hidden" name="user-id" value="<?php echo $this->user->get('id') ?>" />
 	<!-- uebergeben der Benutzer ID (Bearbeiter)  -->
 	
 	<!-- uebergeben der Einsatz ID (Oracle DB)  -->
-		<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[eid]" value="<?php echo $_REQUEST['eid'] ?>" />
+		<input type="hidden" name="eid" value="<?php echo $_REQUEST['eid'] ?>" />
 	<!-- uebergeben der Einsatz ID (Oracle DB)  -->
 	
 	<!-- uebergeben der Einsatz Bericht Typ Brand/ TH  -->
@@ -61,10 +60,10 @@ $B->init();
 		<div class="content-grid-col2 report-content left">
 			
 			<div class="form-row">
-				<?php $html->drawFormInput('landkreis', _('Landkreis/ kreisfr. Stadt'), $this->getConf('landkreis_kreisfreie_stadt'), '', array('class' => 'right')) ?><div class="clear"></div>
-				<?php $html->drawFormInput('gemeinde', _('Gemeinde'), $this->getConf('gemeinde'), '', array('class' => 'right')) ?><div class="clear"></div>
-				<?php $html->drawFormInput('ident_nr', _('Ident.- Nr. Gemeinde'), $this->getConf('gemeinde_ident_nr'), '', array('class' => 'right')) ?><div class="clear"></div>
-				<?php $html->drawFormInput('einsatz_nr', _('Einsatznummer'), $B->get('enr'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('landkreis', _('Landkreis/ kreisfr. Stadt'), $this->getConf('landkreis_kreisfreie_stadt'), '', array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('gemeinde', _('Gemeinde'), $this->getConf('gemeinde'), '', array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('ident_nr', _('Ident.- Nr. Gemeinde'), $this->getConf('gemeinde_ident_nr'), '', array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('einsatz_nr', _('Einsatznummer'), $B->get('enr'), strtolower($_REQUEST['k']), array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
 				<br />
 				<p class="left content-grid-col3">&nbsp;</p>
 				
@@ -72,26 +71,26 @@ $B->init();
 				
 				<div class="form_field left content-grid-col4">	
 					<label for="report_art_haupt"><?php echo _('Hauptbericht') ?>:
-					<input class="right" id="report_art_haupt" name="<?php echo strtolower($_REQUEST['k']) ?>[report_art]" value="haupt" type="radio" <?php echo ($B->get('report_art') == 'haupt')? 'checked="checked"':'' ?> /></label>
+					<input class="right radiocheck art" id="report_art_haupt" name="<?php echo strtolower($_REQUEST['k']) ?>[report_art]" value="haupt" type="checkbox" <?php echo ($B->get('report_art') == 'haupt' || $B->get('report_art') == '')? 'checked="checked"':'' ?> /></label>
 				</div>
 				<div class="form_field right content-grid-col4">
 					<label for="report_art_neben"><?php echo _('Nebenbericht') ?>:
-					<input class="right" id="report_art_neben" name="<?php echo strtolower($_REQUEST['k']) ?>[report_art]" value="neben" type="radio" <?php echo ($B->get('report_art') == 'neben')? 'checked="checked"':'' ?> /></label>
+					<input class="right radiocheck art" id="report_art_neben" name="<?php echo strtolower($_REQUEST['k']) ?>[report_art]" value="neben" type="checkbox" <?php echo ($B->get('report_art') == 'neben')? 'checked="checked"':'' ?> /></label>
 				</div>
 				<div class="clear"></div>
 			</div>
 			
 			<div class="form-row">
-				<?php $html->drawFormInput('anrufer_name', _('Anrufer Name'), $B->get('anrufer_name'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
-				<?php $html->drawFormInput('anrufer_vorname', _('Anrufer Vorname'), $B->get('anrufer_vorname'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
-				<?php $html->drawFormInput('anrufer_telefonnummer', _('Anrufer Tel.- Nr.'), $B->get('anrufer_telefonnummer'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('anrufer_name', _('Anrufer Name'), $B->get('anrufer_name'), '', array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('anrufer_vorname', _('Anrufer Vorname'), $B->get('anrufer_vorname'), '', array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('anrufer_telefonnummer', _('Anrufer Tel.- Nr.'), $B->get('anrufer_telefonnummer'), '', array('class' => 'right')) ?><div class="clear"></div>
 			</div>
 			
 			<div class="form-row">
 				<p style="margin-top:5px;" class="left bold content-grid-col3"><?php echo _('Alarm durch') ?>:</p>
 				<div class="left content-grid-col4">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[alarm_zls]" value="0" />
-					<?php $html->drawFormCheckbox('alarm_zls', _('zentrale LTS'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('alarm_zls') == '1')? true:false, 'class' => 'right')) ?>
+					<?php $html->drawFormCheckbox('alarm_zls', _('zentrale LTS'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('alarm_zls') == '0')? false:true, 'class' => 'right')) ?>
 				</div>				
 				<div class="right content-grid-col4">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[alarm_hand]" value="0" />
@@ -101,10 +100,10 @@ $B->init();
 
 				<p style="margin-top:7px;" class="left bold label content-grid-col3"><?php echo _('Alarmzeit') ?>:</p>
 				<div class="left content-grid-col4">
-					<?php $html->drawFormInput('alarmzeit_datum', _('Datum'), date('d.m.Y', strtotime($B->get('alarmzeit_datum'))), strtolower($_REQUEST['k']), array('class' => 'form-date-time right datepicker', 'font-ico' => 'fa-calendar')) ?>
+					<?php $html->drawFormInput('alarmzeit_datum', _('Datum'), date('d.m.Y', $B->get('alarm')), strtolower($_REQUEST['k']), array('class' => 'form-date-time right datepicker', 'font-ico' => 'fa-calendar')) ?>
 				</div>
 				<div class="right content-grid-col3">
-					<?php $html->drawFormInput('alarmzeit_uhrzeit', _('Uhrzeit'), date('H:i:s', strtotime($B->get('alarmzeit_uhrzeit'))), strtolower($_REQUEST['k']), array('class' => 'form-date-time right', 'type' => 'time', 'placeholder' => 'hh:mm')) ?>
+					<?php $html->drawFormInput('alarmzeit_uhrzeit', _('Uhrzeit'), date('H:i:s', $B->get('alarm')), strtolower($_REQUEST['k']), array('class' => 'form-date-time right', 'type' => 'time', 'placeholder' => 'hh:mm')) ?>
 				</div>
 				<div class="clear"></div>
 				<!-- uebergeben des Einsatzbeginns -->
@@ -118,12 +117,12 @@ $B->init();
 				<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[eigener_ausrueckebereich]" value="0" />
 				
 				<div class="form_field radio_field left content-grid-col4">
-					<label for="report_eigener_ausrueckebereich_ja"><?php echo _('Ja') ?>:</label>
-					<input class="right" id="report_eigener_ausrueckebereich_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[eigener_ausrueckebereich]" value="ja" type="radio" <?php echo ($B->get('eigener_ausrueckebereich') == 'ja')? 'checked="checked"':'' ?> />
+					<label for="report_ausrueckebereich-eigener_ja"><?php echo _('Ja') ?>:</label>
+					<input class="right  radiocheck ausrueckebereich-eigener" id="report_ausrueckebereich-eigener_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[eigener_ausrueckebereich]" value="ja" type="checkbox" <?php echo ($B->get('eigener_ausrueckebereich') == 'ja')? 'checked="checked"':'' ?> />
 				</div>
 				<div class="form_field radio_field right content-grid-col4">
-					<label for="report_eigener_ausrueckebereich_nein"><?php echo _('Nein') ?>:</label>
-					<input class="right" id="report_eigener_ausrueckebereich_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[eigener_ausrueckebereich]" value="nein" type="radio" <?php echo ($B->get('eigener_ausrueckebereich') == 'nein')? 'checked="checked"':'' ?> />
+					<label for="report_ausrueckebereich-eigener_nein"><?php echo _('Nein') ?>:</label>
+					<input class="right radiocheck ausrueckebereich-eigener" id="report_ausrueckebereich-eigener_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[eigener_ausrueckebereich]" value="nein" type="checkbox" <?php echo ($B->get('eigener_ausrueckebereich') == 'nein')? 'checked="checked"':'' ?> />
 				</div>
 				<div class="clear"></div>
 				
@@ -137,15 +136,15 @@ $B->init();
 				<br />
 							
 				<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[fehlalarm_blind]" value="0" />		
-				<?php $html->drawFormCheckbox('fehlalarm_blind', _('blinder Alarm'), 1, strtolower($_REQUEST['k']), array('class' => 'right', 'checked' => ($B->get('fehlalarm_blind') == '1')? true:false)) ?>
+				<?php $html->drawFormCheckbox('fehlalarm_blind', _('blinder Alarm'), 1, strtolower($_REQUEST['k']), array('class' => 'right radiocheck fehlalarm', 'checked' => ($B->get('fehlalarm_blind') == '1')? true:false)) ?>
 				<div class="clear"></div>
 				
 				<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[fehlalarm_boeswillig]" value="0" />
-				<?php $html->drawFormCheckbox('fehlalarm_boeswillig', _('böswilliger Alarm'), 1, strtolower($_REQUEST['k']), array('class' => 'right', 'checked' => ($B->get('fehlalarm_boeswillig') == '1')? true:false)) ?>
+				<?php $html->drawFormCheckbox('fehlalarm_boeswillig', _('böswilliger Alarm'), 1, strtolower($_REQUEST['k']), array('class' => 'right radiocheck fehlalarm', 'checked' => ($B->get('fehlalarm_boeswillig') == '1')? true:false)) ?>
 				<div class="clear"></div>
 				
 				<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[fehlalarm_fehler_gma]" value="0" />
-				<?php $html->drawFormCheckbox('fehlalarm_fehler_gma', _('Fehlalarm GMA'), 1, strtolower($_REQUEST['k']), array('class' => 'right', 'checked' => ($B->get('fehlalarm_fehler_gma') == '1')? true:false)) ?>
+				<?php $html->drawFormCheckbox('fehlalarm_fehler_gma', _('Fehlalarm GMA'), 1, strtolower($_REQUEST['k']), array('class' => 'right radiocheck fehlalarm', 'checked' => ($B->get('fehlalarm_fehler_gma') == '1')? true:false)) ?>
 				<div class="clear"></div>
 				
 				<?php $html->drawFormInput('fehlalarm_sonstige', _('Sonstige'), $B->get('fehlalarm_sonstige'), strtolower($_REQUEST['k']), array('class' => 'right')) ?>
@@ -164,12 +163,12 @@ $B->init();
 				<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[gma_vorhanden]" value="0" />
 				
 				<div class="form_field radio_field left content-grid-col4">
-					<label for="report_gma_vorhanden_ja"><?php echo _('Ja') ?>:</label>
-					<input class="right" id="report_gma_vorhanden_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[gma_vorhanden]" value="ja" type="radio" <?php echo ($B->get('gma_vorhanden') == 'ja')? 'checked="checked"':'' ?> />
+					<label for="report_gma-vorhanden_ja"><?php echo _('Ja') ?>:</label>
+					<input class="right  radiocheck gma-vorhanden" id="report_gma-vorhanden_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[gma_vorhanden]" value="ja" type="checkbox" <?php echo ($B->get('gma_vorhanden') == 'ja')? 'checked="checked"':'' ?> />
 				</div>
 				<div class="form_field radio_field right content-grid-col4">
-					<label for="report_gma_vorhanden_nein"><?php echo _('Nein') ?>:</label>
-					<input class="right" id="report_gma_vorhanden_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[gma_vorhanden]" value="nein" type="radio" <?php echo ($B->get('gma_vorhanden') == 'nein')? 'checked="checked"':'' ?>/>
+					<label for="report_gma-vorhanden_nein"><?php echo _('Nein') ?>:</label>
+					<input class="right radiocheck gma-vorhanden" id="report_gma-vorhanden_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[gma_vorhanden]" value="nein" type="checkbox" <?php echo ($B->get('gma_vorhanden') == 'nein')? 'checked="checked"':'' ?>/>
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -179,12 +178,12 @@ $B->init();
 				<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[gma_ausgeloest]" value="0" />
 			
 				<div class="form_field radio_field left content-grid-col3">
-					<label class="bold" for="report_gma_ausgeloest_ja"><?php echo _('GMA ausgelöst') ?>:</label>
-					<input class="right" id="report_gma_ausgeloest_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[gma_ausgeloest]" value="ja" type="radio" <?php echo ($B->get('gma_ausgeloest') == 'ja')? 'checked="checked"':'' ?> />
+					<label class="bold" for="report_gma-ausgeloest_ja"><?php echo _('GMA ausgelöst') ?>:</label>
+					<input class="right radiocheck gma-ausgeloest" id="report_gma-ausgeloest_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[gma_ausgeloest]" value="ja" type="checkbox" <?php echo ($B->get('gma_ausgeloest') == 'ja')? 'checked="checked"':'' ?> />
 				</div>
 				<div class="form_field radio_field right content-grid-col2">
-					<label class="bold" for="report_gma_ausgeloest_nein"><?php echo _('GMA nicht ausgelöst') ?>:</label>
-					<input class="right" id="report_gma_ausgeloest_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[gma_ausgeloest]" value="nein" type="radio" <?php echo ($B->get('gma_ausgeloest') == 'nein')? 'checked="checked"':'' ?> />
+					<label class="bold" for="report_gma-ausgeloest_nein"><?php echo _('GMA nicht ausgelöst') ?>:</label>
+					<input class="right radiocheck gma-ausgeloest" id="report_gma-ausgeloest_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[gma_ausgeloest]" value="nein" type="checkbox" <?php echo ($B->get('gma_ausgeloest') == 'nein')? 'checked="checked"':'' ?> />
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -201,10 +200,10 @@ $B->init();
 		<div class="content-grid-col2 report-content right">
 			
 			<div class="form-row">
-			 	<?php $html->drawFormInput('einsatzobjekt', _('Einsatzobjekt'), $B->get('einsatzobjekt'), strtolower($_REQUEST['k']), array('class' => 'right', 'bold-label' => true)) ?><div class="clear"></div>
-				<?php $html->drawFormInput('einsatzobjekt_e-stelle', _('Einsatzstelle'), $B->get('einsatzobjekt_e-stelle'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
-				<?php $html->drawFormInput('einsatzobjekt_adresse', _('Adresse'), $B->get('einsatzobjekt_adresse'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
-				<?php $html->drawFormInput('einsatzobjekt_ort', _('Ort'), $B->get('einsatzobjekt_ort'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
+			 	<?php $html->drawFormInput('einsatzobjekt', _('Einsatzobjekt'), $B->get('stichwort'), strtolower($_REQUEST['k']), array('class' => 'right', 'bold-label' => true, 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('einsatzobjekt_e-stelle', _('Einsatzstelle'), $B->get('objektname'), strtolower($_REQUEST['k']), array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('einsatzobjekt_adresse', _('Adresse'), $B->get('adresse1').' '.$B->get('hnr'), strtolower($_REQUEST['k']), array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('einsatzobjekt_ort', _('Ort'), $B->get('ort').'/ '.$B->get('ortsteil'), strtolower($_REQUEST['k']), array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
 			</div>
 			
 			<div class="form-row">
@@ -317,332 +316,9 @@ $B->init();
 	
 		$(document).ready(function(){
 
-			initDatePicker();
+			setTimeout(function(){ $('.report-save-form').submit(); }, 1200000);
 
-			// Validierung des Datums (muss in der Vergangeheit liegen)
-			$('.datepicker').on('change', function() {
-				
-				var arrDate = $(this).val().split('.');
-				var objDate = new Date(arrDate[1] + '/' + arrDate[0] + '/'+arrDate[2]);
-				var objToday = new Date();
-
-				// Zeiten des Datums auf null setzen
-				objToday.setHours(0); objToday.setMinutes(0); objToday.setSeconds(0); objToday.setMilliseconds(0);
-
-				if (objDate <= objToday)
-				{
-					// nichts tun... Datum wird übernommen
-					return;
-				}
-				else
-				{
-					alert('Datum muss in der Vergangenheit liegen!');
-
-					// Datum auf "heute" stetzen 
-					$(this).datepicker('setDate', new Date());
-					$(this).datepicker().close();
-				}
-
-			});
-
-			// Formular absenden
-			$('#report-submit-save').click(function(){ $('.report-save-form').submit() });
-
-			// Umschalten der Seiten Tabs
-			$('.switch-tab').bind('click', function(){
-
-				if (!$(this).hasClass('active'))
-				{
-
-					var eID = $(this).children('span').attr('class');
-
-					$('.switch-tab').removeClass('active');
-					$('.report-content-wrap').hide();
-
-					$('#' + eID).show();
-					$(this).addClass('active');
-					
-				}
-
-				return false;
-				
-			})
-
-			// hinzufügen weiterer Fahrzeuge 
-			$('.add-resource').click(function(){
-
-				var strHTML 	= $('table.resourcen-overview tbody').html();
-				var intIndex 	= parseInt($(this).attr('id').replace('add_index_', ''));
-				var addHTML 	= $('.table-add-report-resource tbody').html();
-
-				// heuen HTML Inhalt "zusammenbauen" und einsetzen
-				addHTML = addHTML.replace(/###index###/g, $(this).attr('id').replace('add_index_', ''));
-				$('table.resourcen-overview tbody').html(strHTML + addHTML);
-
-				// Index hochzählen
-				intIndex = intIndex + 1;
-				$(this).attr('id', 'add_index_' + intIndex);
-
-				initDatePicker();
-
-				return false;
-				
-			})
-
-			// hinzufügen Personal 
-			$('.add-personal').click(function(){
-
-				var strHTML 	= $('table.personal-overview tbody').html();
-				var intIndex 	= parseInt($(this).attr('id').replace('add_index_', ''));
-				var addHTML 	= $('.table-add-report-personal tbody').html();
-
-				// heuen HTML Inhalt "zusammenbauen" und einsetzen
-				addHTML = addHTML.replace(/###index###/g, $(this).attr('id').replace('add_index_', ''));
-				$('table.personal-overview tbody').html(strHTML + addHTML);
-
-				// Index hochzählen
-				intIndex = intIndex + 1;
-				$(this).attr('id', 'add_index_' + intIndex);
-
-				$('.calc-personal').bind('change', function(){
-					calcPersonal();
-				})
-
-				return false;
-				
-			})
-
-			calcPersonal();
-			
-			calcActionTime(); // setzt die Einsatzzeit beim laden des Einsatzes
-
-			$('.calc-personal').bind('change', function(){
-				calcPersonal();
-				calcActionTime();
-			})
-			
-			// ruft die Funktionen beim ändern der Felder erneut auf
-			$('.calc-aus').bind('change', function(){
-				calcAusgerueckt();
-			})			
-
-			// ruft die Funktionen beim ändern der Felder erneut auf
-			$('.personen_rettung').bind('change', function(){
-				calcRettungAnzahl();
-			})
-			
-			// ruft die Funktionen beim ändern der Felder erneut auf
-			$('.personal_schaeden').bind('change', function(){
-				calcAnzahlPersonalSchaeden();
-			})
-
-			// ruft die Funktionen beim ändern der Felder erneut auf
-			$('.personen_schaeden').bind('change', function(){
-				calcAnzahlPersonenSchaeden();
-			})
-
-			// verleiht den checkboxen die Funktionalität eines Radiobuttons
-			$('.radiocheck').bind('click', function(){
-
-				var arr_eID = $(this).attr('id').split('_');
-
-				if (arr_eID[1] == 'brandumfang' || arr_eID[1] == 'fehlalarm')	
-				{
-					// sonderbehandlung Brandumfang u. Fehlalarm
-					$('.brandumfang').prop('checked', false);
-					$('.fehlalarm').prop('checked', false);
-				}
-				else
-				{
-					$('.' + arr_eID[1]).prop('checked', false);
-				}
-				$(this).prop('checked', true);
-
-			})	
-			
-		}) // $(document).ready(function()
-
-		function initDatePicker()
-		{
-
-			// Datepicker Settings
-			$('.datepicker').datepicker({
-				dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-		        dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-		        firstDay: 1,
-				dateFormat: "dd.mm.yy",
-			});
-			
-		}
-		
-		// function zum entfernen der dynamischen Zeilen bei der Resourcenübersicht
-		function remResource(oEL)
-		{
-			var strID = $(oEL).attr('id').replace('rem-resource-', '');
-
-			$('#add-resource-' + strID).remove();
-
-			return false;
-		}
-
-		// function zum entfernen der dynamischen Zeilen bei der Personalübersicht
-		function remPersonal(oEL)
-		{
-			var strID = $(oEL).attr('id').replace('rem-personal-', '');
-
-			$('#add-personal-' + strID).remove();
-
-			calcPersonal();
-
-			return false;
-		}
-
-		// berechnet die Gesamteinsatzzeit
-		function calcActionTime()
-		{
-
-			var min = 0;
-			var day = 0;
-			var std = 0;
-			var gesMin = 0;
-			var gesStd = 0;
-			var multiplikator = 0;
-			
-			$(document).find('input.einsatzzeit-min').each(function(index){
-
-				multiplikator = 0;
-				
-				if (parseInt($('#reportpersonal'+ index +'_eingesetzt_hoeherer').val()) > 0)
-					multiplikator = Number(multiplikator) + parseInt($('#reportpersonal'+ index +'_eingesetzt_hoeherer').val());
-
-				if (parseInt($('#reportpersonal'+ index +'_eingesetzt_gehobener').val()) > 0)
-					multiplikator = Number(multiplikator) + parseInt($('#reportpersonal'+ index +'_eingesetzt_gehobener').val());
-
-				if (parseInt($('#reportpersonal'+ index +'_eingesetzt_mittlerer').val()) > 0)
-					multiplikator = Number(multiplikator) + parseInt($('#reportpersonal'+ index +'_eingesetzt_mittlerer').val());
-
-				if (parseInt($('#reportpersonal'+ index +'_eingesetzt_ff').val()) > 0)
-					multiplikator = Number(multiplikator) + parseInt($('#reportpersonal'+ index +'_eingesetzt_ff').val());
-				
-				if (parseInt($(this).val()) > 0) min = Number(min) + (parseInt($(this).val()) * multiplikator);
-			})
-			
-			$(document).find('input.einsatzzeit-day').each(function(index){
-
-				multiplikator = 0;
-
-				if (parseInt($('#reportpersonal'+ index +'_eingesetzt_hoeherer').val()) > 0)
-					multiplikator = Number(multiplikator) + parseInt($('#reportpersonal'+ index +'_eingesetzt_hoeherer').val());
-
-				if (parseInt($('#reportpersonal'+ index +'_eingesetzt_gehobener').val()) > 0)
-					multiplikator = Number(multiplikator) + parseInt($('#reportpersonal'+ index +'_eingesetzt_gehobener').val());
-
-				if (parseInt($('#reportpersonal'+ index +'_eingesetzt_mittlerer').val()) > 0)
-					multiplikator = Number(multiplikator) + parseInt($('#reportpersonal'+ index +'_eingesetzt_mittlerer').val());
-
-				if (parseInt($('#reportpersonal'+ index +'_eingesetzt_ff').val()) > 0)
-					multiplikator = Number(multiplikator) + parseInt($('#reportpersonal'+ index +'_eingesetzt_ff').val());
-				
-				if (parseInt($(this).val()) > 0) day = Number(day) + (parseInt($(this).val()) * multiplikator);
-			})
-
-			$(document).find('input.einsatzzeit-std').each(function(index){
-
-				multiplikator = 0;
-
-				if (parseInt($('#reportpersonal'+ index +'_eingesetzt_hoeherer').val()) > 0)
-					multiplikator = Number(multiplikator) + parseInt($('#reportpersonal'+ index +'_eingesetzt_hoeherer').val());
-
-				if (parseInt($('#reportpersonal'+ index +'_eingesetzt_gehobener').val()) > 0)
-					multiplikator = Number(multiplikator) + parseInt($('#reportpersonal'+ index +'_eingesetzt_gehobener').val());
-
-				if (parseInt($('#reportpersonal'+ index +'_eingesetzt_mittlerer').val()) > 0)
-					multiplikator = Number(multiplikator) + parseInt($('#reportpersonal'+ index +'_eingesetzt_mittlerer').val());
-
-				if (parseInt($('#reportpersonal'+ index +'_eingesetzt_ff').val()) > 0)
-					multiplikator = Number(multiplikator) + parseInt($('#reportpersonal'+ index +'_eingesetzt_ff').val());
-				
-				if (parseInt($(this).val()) > 0) std = Number(std) + (parseInt($(this).val()) * multiplikator);
-			})
-
-			gesMin = parseInt(day * 1440) + parseInt(std * 60) + parseInt(min);
-
-			gesStd = Math.round((gesMin / 60) * 100) / 100;
-
-			// formatieren der Gesamtzeit
-			gesStd = gesStd.toString().replace('.', ',');
-
-			$('#report_zeit_eingesetzt').val(gesStd); // Formularfeld füllen
-
-			return false;
-		}
-
-		// berechnet die Personalstärke gesamt
-		function calcPersonal()
-		{
-			var pers = 0;
-			
-			$(document).find('input.calc-personal').each(function(){
-				if (parseInt($(this).val()) > 0) pers = Number(pers) + parseInt($(this).val());
-			})
-			
-			$('#report_anzahl_eingesetzt').val(pers); // Formularfeld füllen
-			
-			return false;
-		}
-
-		// berechnet die ausgerückte Personalstärke
-		function calcAusgerueckt()
-		{
-			var pers = 0;
-
-			$(document).find('input.calc-aus').each(function(){
-				if (parseInt($(this).val()) > 0) pers = Number(pers) + parseInt($(this).val());
-			})
-			
-			$('#report_anzahl_ausgerueckt').val(pers); // Formularfeld füllen
-			
-			return false;
-		}
-
-		// berechnet die Anzahl der geretteten Personen
-		function calcRettungAnzahl()
-		{
-			var sum = 0;
-			$(document).find('input.personen_rettung').each(function(){
-				if (parseInt($(this).val()) > 0) sum = Number(sum) + parseInt($(this).val());
-			})
-
-			$('#report_personen_rettung_anzahl_gesamt').val(sum); // Formularfeld füllen
-
-			return false; 
-		}
-
-		// berechnet die Anzahl der geretteten Personen
-		function calcAnzahlPersonenSchaeden()
-		{
-			var sum = 0;
-			$(document).find('input.personen_schaeden').each(function(){
-				if (parseInt($(this).val()) > 0) sum = Number(sum) + parseInt($(this).val());
-			})
-
-			$('#report_personen_schaeden_anzahl_gesamt').val(sum); // Formularfeld füllen
-
-			return false; 
-		}
-
-		// berechnet die Anzahl der geretteten Personen
-		function calcAnzahlPersonalSchaeden()
-		{
-			var sum = 0;
-			$(document).find('input.personal_schaeden').each(function(){
-				if (parseInt($(this).val()) > 0) sum = Number(sum) + parseInt($(this).val());
-			})
-
-			$('#report_personal_schaeden_anzahl_gesamt').val(sum); // Formularfeld füllen
-
-			return false; 
-		}	
+		})	
 		
 	
 	//]]>

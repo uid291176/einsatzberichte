@@ -13,4 +13,5 @@ define('TBL_EINSAETZE'				,	TBL_PREFIX.'_tbl_einsaetze'				);
 define('TBL_EINSAETZE_EAV'			,	TBL_PREFIX.'_tbl_einsaetze_eav'			);
 define('TBL_EINSAETZE_PERSONAL'		,	TBL_PREFIX.'_tbl_einsaetze_personal'	);
 define('TBL_EINSAETZE_RESSOURCEN'	,	TBL_PREFIX.'_tbl_einsaetze_ressourcen'	);
+define('TBL_EINSAETZE_PROTOKOLL'	,	TBL_PREFIX.'_tbl_einsaetze_protokoll'	);
 ?>

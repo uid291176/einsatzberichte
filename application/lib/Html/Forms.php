@@ -178,7 +178,7 @@ class Html_Forms
 		
 		($enctype != '')? $enctype = 'enctype="'.$enctype.'" ':$enctype = ' ';
 		
-		$content = '<form method="'.$method.'" action="'.$action.'" '.$enctype.''.$this->parseFieldConf($arConf).' />';
+		$content = '<form method="'.$method.'" action="'.$action.'" '.$enctype.''.$this->parseFieldConf($arConf).'>';
 		
 		return $content;
 	}

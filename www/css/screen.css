@@ -40,7 +40,7 @@ h3 { font-size:16px; margin-bottom:20px; font-weight:600; }
 /** header */
 #header-wrap { position:absolute; width:100%; height:25px; background:#222222; z-index:9999; }
 #header-content { margin-left:230px; }
-#header-content p { color:#ffffff; font-size:14px; margin:0 10px; padding:5px 0; }
+#header-content p { color:#ffffff; font-size:14px; margin:0 10px; padding:5px 0; margin-top:1px; }
 #header-content p a { color:#ffffff; font-size:14px; text-decoration:none; }
 #header-content p a span.fa { font-size:16px; }
 #header-content p a:hover { color:#00a0d2; }
@@ -221,6 +221,7 @@ table.resourcen-overview td table td { padding-right:0; }
 table.personal-overview th { text-align:left; }
 table.personal-overview td { padding-right:20px; }
 table.personal-overview td table { width:100%; }
+table.personal-overview td table .form_field .color-grey { color:#999999; }
 table.personal-overview td table .input_field input { width:90%; }
 table.personal-overview td table td { padding-right:4px; }
 

@@ -1,12 +1,9 @@
 <div class="report-content-wrap" id="tab_3" style="display:none;">
 	<div class="report-content">
-		<div class="form-row">
 		
 			<div class="form-row">
 				<p class="bold"><?php echo _('Angaben zu Objekten mit Brandmeldeanlagen') ?></p>
-			</div>
-			
-			<div class="form-row">
+				<br />
 				<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[bma_reset]" value="0" />
 				<?php $html->drawFormCheckbox('bma_reset', _('Anlage wurde vor Eintreffen der Feuerwehr zurückgesetzt (weiteres Ausfüllen zu Angaben der BMA entfällt)'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('bma_reset') == '1')? true:false, 'class' => 'left')) ?>
 			</div>
@@ -128,8 +125,7 @@
 			
 			<div class="form-row">
 				<p class="bold"><?php echo _('auslösender Melder') ?></p>
-			</div>
-			<div class="form-row">
+				<br />
 				<div class="left content-grid-col4">
 					<p><?php echo _('Meldergruppe / -nummer') ?></p>
 					<div class="left content-grid-col2"><?php $html->drawFormInput('meldergruppe', '', $B->get('meldergruppe'), strtolower($_REQUEST['k']), array()) ?></div>
@@ -139,7 +135,7 @@
 				
 				<div class="left content-grid-col70-30">
 					<p><?php echo _('Gebäudeteil/ Geschoß/ Raumbezeichnung bzw. -nummer') ?></p>
-					<?php $html->drawFormInput('melder_ort_beschreibung', '', $B->get('meldernummer'), strtolower($_REQUEST['k']), array()) ?>
+					<?php $html->drawFormInput('melder_ort_beschreibung', '', $B->get('melder_ort_beschreibung'), strtolower($_REQUEST['k']), array()) ?>
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -161,12 +157,10 @@
 					<?php $html->drawFormCheckbox('gruppenmeldekartei_nicht_angewendet', _('wurde nicht zur Anwendung gebracht'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('gruppenmeldekartei_nicht_angewendet') == '1')? true:false, 'class' => 'left gruppenmeldekartei radiocheck')) ?>
 				</div>
 				<div class="clear"></div>
-			</div>
-			
-			<div class="form-row">
+				</div>
+			<div class="form-row">	
 				<p class="bold"><?php echo _('Mängel und Probleme sind im "Bericht des Einsatzleiters" zu schildern!') ?></p>
 			</div>
-			
-		</div>
+
 	</div>
 </div>

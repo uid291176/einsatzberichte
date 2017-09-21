@@ -74,14 +74,14 @@
 				<tr <?php echo (($i % 2) == 0)? 'class="even"':'class="odd"' ?>>
 					<td class="check-col" title="<?php echo $einsatz['typ'] ?>"><span class="fa <?php echo $this->getEventIcon($einsatz['typ']) ?> <?php echo $this->getIconColor($einsatz['typ']) ?>"></span></td>
 					<td>
-						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('eid' => $einsatz['eid'], 'order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'], 'cmd' => 'detailview', 'tmpl' => strtolower($einsatz['typ']))) ?>"><strong><?php echo $einsatz['enr'] ?></strong></a><br />
-						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('eid' => $einsatz['eid'], 'order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'], 'cmd' => 'detailview', 'tmpl' => strtolower($einsatz['typ']))) ?>"><span class="view-details"><?php echo _('Details ansehen') ?></span></a>
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('eid' => $einsatz['eid'], 'order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'], 'tmpl' => 'edit_'.strtolower($einsatz['typ']))) ?>"><strong><?php echo $einsatz['enr'] ?></strong></a><br />
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('eid' => $einsatz['eid'], 'order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'], 'tmpl' => 'edit_'.strtolower($einsatz['typ']))) ?>"><span class="view-details"><?php echo _('Details bearbeiten') ?></span></a>
 					</td>
-					<td><?php echo $einsatz['haupt_stichwort'] ?></td>
+					<td><?php echo $einsatz['stichwort'] ?></td>
 					<td><?php echo date('d.m.Y H:i:s', $einsatz['beginn']) ?></td>
 					<td><?php echo date('d.m.Y H:i:s', $einsatz['alarm']) ?></td>
 					<td><?php echo $einsatz['ort'] ?></td>
-					<td><?php echo $einsatz['adresse'] ?></td>
+					<td><?php echo $einsatz['adresse1'] ?></td>
 				</tr>
 				<?php } ?>
 				<?php } else { ?>
@@ -157,6 +157,8 @@
 			$('#submit-search').bind('click', function(){
 				$('#search-form').submit();
 			})
+
+			$.removeCookie('active_tab');
 			
 		})
 	

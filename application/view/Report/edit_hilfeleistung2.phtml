@@ -178,29 +178,29 @@
 							<td>
 								<table>
 									<tr>
-										<td><?php $html->drawFormInput('einsatzzeit_day', '', $arrEinsatzzeit[$index]['tag'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'einsatzzeit-day')) ?></td>
-										<td><?php $html->drawFormInput('einsatzzeit_std', '', $arrEinsatzzeit[$index]['std'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'einsatzzeit-std')) ?></td>
-										<td><?php $html->drawFormInput('einsatzzeit_min', '', $arrEinsatzzeit[$index]['min'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'einsatzzeit-min')) ?></td>
+										<td><?php $html->drawFormInput('einsatzzeit_day', '', $arrEinsatzzeit[$index]['tag'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($arrEinsatzzeit[$index]['tag'] == '0')? 'einsatzzeit-day color-grey':'einsatzzeit-day')) ?></td>
+										<td><?php $html->drawFormInput('einsatzzeit_std', '', $arrEinsatzzeit[$index]['std'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($arrEinsatzzeit[$index]['std'] == '0')? 'einsatzzeit-day color-grey':'einsatzzeit-std')) ?></td>
+										<td><?php $html->drawFormInput('einsatzzeit_min', '', $arrEinsatzzeit[$index]['min'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($arrEinsatzzeit[$index]['min'] == '0')? 'einsatzzeit-day color-grey':'einsatzzeit-min')) ?></td>
 									</tr>
 								</table>
 							</td>
 							<td>
 								<table>
 									<tr>
-										<td><?php $html->drawFormInput('ausgerueckt_hoeherer', '', $p['aus_h'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-aus')) ?></td>
-										<td><?php $html->drawFormInput('ausgerueckt_gehobener', '', $p['aus_g'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-aus')) ?></td>
-										<td><?php $html->drawFormInput('ausgerueckt_mittlerer', '', $p['aus_m'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-aus')) ?></td>
-										<td><?php $html->drawFormInput('ausgerueckt_ff', '', $p['aus_ff'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-aus')) ?></td>
+										<td><?php $html->drawFormInput('ausgerueckt_hoeherer', '', $p['aus_h'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($p['aus_h'] == '0')? 'calc-aus color-grey':'calc-aus')) ?></td>
+										<td><?php $html->drawFormInput('ausgerueckt_gehobener', '', $p['aus_g'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($p['aus_g'] == '0')? 'calc-aus color-grey':'calc-aus')) ?></td>
+										<td><?php $html->drawFormInput('ausgerueckt_mittlerer', '', $p['aus_m'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($p['aus_m'] == '0')? 'calc-aus color-grey':'calc-aus')) ?></td>
+										<td><?php $html->drawFormInput('ausgerueckt_ff', '', $p['aus_ff'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($p['aus_ff'] == '0')? 'calc-aus color-grey':'calc-aus')) ?></td>
 									</tr>
 								</table>
 							</td>
 							<td>
 								<table>
 									<tr>
-										<td><?php $html->drawFormInput('eingesetzt_hoeherer', '', $p['eingesetzt_h'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-personal')) ?></td>
-										<td><?php $html->drawFormInput('eingesetzt_gehobener', '', $p['eingesetzt_g'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-personal')) ?></td>
-										<td><?php $html->drawFormInput('eingesetzt_mittlerer', '', $p['eingesetzt_m'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-personal')) ?></td>
-										<td><?php $html->drawFormInput('eingesetzt_ff', '', $p['eingesetzt_ff'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => 'calc-personal')) ?></td>
+										<td><?php $html->drawFormInput('eingesetzt_hoeherer', '', $p['eingesetzt_h'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($p['eingesetzt_h'] == '0')? 'calc-personal color-grey':'calc-personal')) ?></td>
+										<td><?php $html->drawFormInput('eingesetzt_gehobener', '', $p['eingesetzt_g'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($p['eingesetzt_g'] == '0')? 'calc-personal color-grey':'calc-personal')) ?></td>
+										<td><?php $html->drawFormInput('eingesetzt_mittlerer', '', $p['eingesetzt_m'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($p['eingesetzt_m'] == '0')? 'calc-personal color-grey':'calc-personal')) ?></td>
+										<td><?php $html->drawFormInput('eingesetzt_ff', '', $p['eingesetzt_ff'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($p['eingesetzt_ff'] == '0')? 'calc-personal color-grey':'calc-personal')) ?></td>
 										<td>&nbsp;&nbsp;&nbsp;</td>
 									</tr>
 								</table>
@@ -315,7 +315,7 @@
 					</p>
 				</div>
 				<div class="right" style="width:70%">
-					<?php $html->drawFormTextarea('long_description', '', $B->get('long_description'), strtolower($_REQUEST['k']), array('class' => 'right', 'rows' => '15', 'style' => 'width:100%')) ?>
+					<?php $html->drawFormTextarea('long_description', '', $B->getProtokoll(), strtolower($_REQUEST['k']), array('class' => 'right', 'rows' => '15', 'style' => 'width:100%')) ?>
 				</div>
 				<div class="clear"></div>
 			</div>

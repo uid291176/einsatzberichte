@@ -9,6 +9,19 @@ $(document).ready(function(){
 	// Datepicker Felder Init
 	initDatePicker();
 	
+	// aktiven Seiten TAB bei reload erhalten
+	if ($.cookie('active_tab'))
+	{
+		var strID 	= $.cookie('active_tab');
+		var strTab 	= $('#' + strID).children().attr('class');
+
+		$('.switch-tab').removeClass('active');
+		$('#' + strID).addClass('active');
+		$('.report-content-wrap').hide();
+		$('#' + strTab).show();
+
+	}
+	
 	// Tooltipps
 	$('.tooltip').bind('mouseenter', function(){
 		
@@ -70,6 +83,7 @@ $(document).ready(function(){
 			$('.report-content-wrap').hide();
 
 			$('#' + eID).show();
+			$.cookie('active_tab', $(this).attr('id'));
 			$(this).addClass('active');
 			
 		}
@@ -122,6 +136,7 @@ $(document).ready(function(){
 	})
 
 	calcActionTime(); // setzt die Einsatzzeit beim laden des Einsatzes
+	calcAusgerueckt(); //setzt die Anzahl der ausgerückten Kräfte beim laden der Seite
 
 	// ruft die Funktionen beim ändern der Felder erneut auf
 	$('.calc-personal').bind('change', function(){
@@ -151,12 +166,19 @@ $(document).ready(function(){
 
 	// verleiht den checkboxen die Funktionalität eines Radiobuttons
 	$('.radiocheck').bind('click', function(){
-
+		
 		var arr_eID = $(this).attr('id').split('_');
 
 		if (arr_eID[1] == 'brandumfang' || arr_eID[1] == 'fehlalarm')	
 		{
+			
 			// sonderbehandlung Brandumfang u. Fehlalarm
+			if (!$(this).prop('checked'))
+			{
+				$(this).prop('checked', false);
+				return;
+			}
+			
 			$('.brandumfang').prop('checked', false);
 			$('.fehlalarm').prop('checked', false);
 		}
@@ -176,6 +198,14 @@ $(document).ready(function(){
 		$(this).prop('checked', true);
 
 	})	
+	
+	// Schriftfarbe in den Personaltabellen ändern
+	$('.color-grey').bind('change', function(){
+		
+		if ($(this).val() != '0') $(this).removeClass('color-grey');
+		if ($(this).val() == '0') $(this).addClass('color-grey');
+		
+	})
 
 	
 }) // $(document).ready(function()
@@ -406,3 +436,25 @@ function calcAnzahlPersonalSchaeden()
 	return false; 
 	
 } // calcAnzahlPersonalSchaeden()
+
+// verhalten der checkboxen nur für den Abschnitt "Verständigung/ Anwesenheit" Seite2 des Formulars
+function checked_value(oEL)
+{
+	var strClass = $(oEL).attr('class');
+	var arrClass = strClass.split(' ');
+	var checkClass = arrClass[0];
+	
+	if (!$(oEL).prop('checked'))
+	{
+		$(oEL).prop('checked', false); return;
+	}
+	else
+	{
+		$('.' + checkClass).prop('checked', false);
+		
+	}
+	
+	$(oEL).prop('checked', true);
+	
+}
+	

@@ -11,7 +11,7 @@ class Einsatz_Bericht
 	 * ID des Einsatzes
 	 * @var string
 	 */
-	protected $_eid = null;
+	public $_eid = null;
 	
 	/**
 	 * enthällt die Daten des Berichtes
@@ -56,22 +56,31 @@ class Einsatz_Bericht
 	 */
 	public function init()
 	{
-		$arrStammdaten = $this->_db->fetchRow("SELECT * FROM `".TBL_EINSAETZE."` WHERE `eid` = '".$this->_eid."'");
+		
+	    $arrStammdaten = $this->_db->fetchRow("SELECT * FROM `".TBL_EINSAETZE."` WHERE `eid` = '".$this->_eid."'");
 		
 		$arrEavRaw = $this->_db->fetchAssoc("SELECT `attribut`, `value` FROM `".TBL_EINSAETZE_EAV."` WHERE `eid` = '".$this->_eid."'");
 		
-		foreach ($arrEavRaw as $data)
+
+		if($this->tools->isSizedArray($arrEavRaw))
 		{
-			$arrEAV[$data['attribut']] = $data['value'];
+		    foreach ($arrEavRaw as $data)
+		    {
+		        $arrEAV[$data['attribut']] = $data['value'];
+		    }
+		    
+		    $this->_data = array_merge($arrStammdaten, $arrEAV);
 		}
-		
-		$this->_data = array_merge($arrStammdaten, $arrEAV);
-		
-		$this->_data['resourcen'] = $this->getRessources();
-		
-		$this->_data['personal'] = $this->getPersonal();		
+		else 
+		{
+		    
+		    $this->_data = $arrStammdaten;
+		    
+		}
+	
 		
 	} // public function init()
+	
 	
 	/**
 	 * get funktion für die Daten des Berichtes
@@ -79,16 +88,23 @@ class Einsatz_Bericht
 	public function get($key)
 	{
 		if (array_key_exists($key, $this->_data)) return $this->_data[$key];
-		else return _('ERROER::Ein Eintrag mit dem Key "'.$key.'" existiert für diesen Einsatz nicht');
+		else return '';
 				
 	} // public function get($key)
+	
+	public function set($key, $value)
+	{
+	    
+	    $arrUpdate = array('attribut' => $key, 'value'    => $value);
+	    
+	} // public function set($key, $value)
 	
 	private function __clone() {}
 	
 	/**
 	 * statische Methode zur Rückgabe der Objektinstanz
 	 * @param	array	Konfigurationsdaten
-	 * @return 	Einsatz
+	 * @return 	object Einsatz
 	 */
 	public static function geInstance($eID, $db)
 	{
@@ -99,125 +115,45 @@ class Einsatz_Bericht
 		}
 		return self::$instance;
 	}
-	
-	/**
-	 * sichert die Daten des Berichts in eine MySQL DB
-	 */
-	public function save()
-	{
-		
-		$requestData 	= $_REQUEST['report'];
-		$userID 		= $_REQUEST['user-id'];
-		
-		if($this->_db->fetchOne("SELECT `eid` FROM `".TBL_EINSAETZE."` WHERE `eid` = '".$this->_eid."'"))
-		{
-			
-			// einen vorhandenen Bericht updaten
-			$this->saveData($this->_eid, $requestData);
-		}
-		else 
-		{
-			// neuen Bericht in der MySQL DB anlegen
-			$this->createReport($userID, $requestData);
-		}
-		
-		// Einsatzmittel (Fahrzeuge) sichern
-		$this->saveRessources($this->_eid, $requestData);
-			
-		// Personal zum Einsatz sichern
-		$this->savePersonal($this->_eid, $requestData);
-		
-		return;
-		
-	} // public function save()
-	
-	/**
-	 * legt einen neuen Einsatz im Berichtswesen an
-	 * @param array $arrData
-	 */
-	public function createReport($uID, $arrData)
-	{
-		
-		if ($arrData['einsatz_haupt_stichwort'] == 'Brand') $object = 'brandobjekt';
-		if ($arrData['einsatz_haupt_stichwort'] == 'Hilfeleistung') $object = 'einsatzobjekt';
-		
-		$arrImport = array(
-			'eid' 				=> $this->_eid,
-			'enr' 				=> $this->tools->q($arrData['einsatz_nr']),
-			'haupt_stichwort' 	=> $this->tools->q($arrData[$object]),
-			'stichwort' 		=> $this->tools->q($arrData[$object.'_e-stelle']),
-			'beginn' 			=> strtotime($this->tools->toDBtime($arrData['einsatz_beginn'])),
-			'alarm' 			=> strtotime($this->tools->toDBtime($arrData['alarmzeit_datum'].' '.$arrData['alarmzeit_uhrzeit'])),
-			'adresse' 			=> $this->tools->q($arrData[$object.'_adresse']),
-			'ort' 				=> $this->tools->q($arrData[$object.'_ort']),
-			'uid'				=> $uID,
-			'status'			=> 'edit',
-			'typ' 				=> $this->tools->q($arrData['einsatz_haupt_stichwort']),
-		);
 
-		$importID = $this->_db->ImportQuery(TBL_EINSAETZE, $arrImport);
-		
-		foreach ($arrData as $key => $value)
-		{
-			if ($this->tools->isSizedArray($value) || $key == 'eid' || $key == 'enr') continue;
-			
-			$this->_db->ImportQuery(TBL_EINSAETZE_EAV, array('attribut' => $this->tools->q($key), 'value' => $this->tools->q($value), 'eid' => $this->_eid, 'enr' => $this->tools->q($arrData['einsatz_nr'])));;
-		}
-		
-		return $importID;
-		
-	} // public function createReport($arrData)
 	
 	/**
 	 * aktualisiert die Berichtsdaten
-	 * @param varchar (16) $eID
-	 * @param array $arrData
+	 * @param string $strKey
+	 * @param string $value
 	 */
-	public function saveData($eID, $arrData)
+	public function saveEAV2db($strKey, $value)
 	{
 		
-		$arrdbData 	= array();
-		$arrImport 	= array();
-		$arrUpdate 	= array();
-
-		/**
-		 * sichern der Berichtsdaten ohne ressourchen und personal
-		 */
-		foreach ($arrData as $key => $value)
+	    if ($this->_db->fetchOne("SELECT `attribut` FROM `".TBL_EINSAETZE_EAV."` WHERE `attribut` = '".$strKey."' AND `eid` = '".$this->_eid."'"))
 		{
-			// personal u. ressourcen array , eID und eNr. nicht berücksichtigen
-			if ($this->tools->isSizedArray($value) || $key == 'eid' || $key == 'enr') continue;
-			
-			if ($this->_db->fetchOne("SELECT `attribut` FROM `".TBL_EINSAETZE_EAV."` WHERE `attribut` = '".$key."'"))
-			{
-				$arrUpdate = array(
-					'attribut' => $this->tools->q($key),
-					'value' => $this->tools->q($value)
-				);
-				$this->_db->UpdateQuery(TBL_EINSAETZE_EAV, $arrUpdate, "`attribut` = '".$this->tools->q($key)."' AND `eid` = '".$eID."'");
-			}
-			else 
-			{
-				$arrImport = array(
-					'attribut' => $this->tools->q($key),
-					'value' => $this->tools->q($value),
-					'eid' => $this->_eid,
-					'enr' => $this->tools->q($arrData['einsatz_nr'])
-				);
-				$this->_db->ImportQuery(TBL_EINSAETZE_EAV, $arrImport);
-			}
+			$arrUpdate = array(
+			    'attribut' => $strKey,
+			    'value' => $value
+			);
+			$this->_db->UpdateQuery(TBL_EINSAETZE_EAV, $arrUpdate, "`attribut` = '".$strKey."' AND `eid` = '".$this->_eid."'");
+		}
+		else 
+		{
+			$arrImport = array(
+			    'attribut' => $strKey,
+			    'value' => $value,
+				'eid' => $this->_eid,
+				'enr' => $this->_data['enr']
+			);
+			$this->_db->ImportQuery(TBL_EINSAETZE_EAV, $arrImport);
 		}
 		
 		return;
 	
-	} // public function saveData($eID, $arrData)
+	} //public function saveEAV2db($strKey, $value)
+	
 	
 	/**
 	 * sichert die Ressourcen (Fahrzeuge) des Einsatzes
-	 * @param varchar (16) $eID
 	 * @param array $arrData 
 	 */
-	public function saveRessources($eID, $arrData)
+	public function saveRessources($arrData)
 	{
 		//$this->tools->debug($arrData);
 		$arrdbData 	= array();
@@ -227,14 +163,14 @@ class Einsatz_Bericht
 		/**
 		 * sichern der ressourcen in eigener Tabelle
 		 */
-		foreach ($arrData['resourcen'] as $index => $r)
+		foreach ($arrData as $index => $r)
 		{
 				
 			if ($index === '###index###') continue;
 			
 			$arrdbData = array(
-					'eid' 		=> $eID,
-					'enr' 		=> $this->tools->q($arrData['einsatz_nr']),
+			        'eid' 		=> $this->_eid,
+			        'enr' 		=> $this->_data['enr'],
 					'f_kenner' 	=> $this->tools->q($r['funkkenner']),
 					'f3' 		=> ($this->tools->isSizedString($r['uebernommen_date']))? strtotime($this->tools->toDBtime($r['uebernommen_date']).' '.$this->tools->q($r['uebernommen_time'])):0,
 					'f4' 		=> ($this->tools->isSizedString($r['ankunft_date']))? strtotime($this->tools->toDBtime($r['ankunft_date']).' '.$this->tools->q($r['ankunft_time'])):0,
@@ -242,7 +178,7 @@ class Einsatz_Bericht
 					'f2' 		=> ($this->tools->isSizedString($r['rueckkehr_date']))? strtotime($this->tools->toDBtime($r['rueckkehr_date']).' '.$this->tools->q($r['rueckkehr_time'])):0
 			);
 			
-			$arrSelect = $this->_db->fetchRow("SELECT `f_kenner`, `f3` FROM `".TBL_EINSAETZE_RESSOURCEN."` WHERE `eid` = '".$eID."' AND `f_kenner` = '".$r['funkkenner']."'");
+			$arrSelect = $this->_db->fetchRow("SELECT `f_kenner`, `f3` FROM `".TBL_EINSAETZE_RESSOURCEN."` WHERE `eid` = '".$this->_eid."' AND `f_kenner` = '".$r['funkkenner']."'");
 			
 			if ($arrSelect['f_kenner'] == $arrdbData['f_kenner'])
 			{
@@ -250,7 +186,7 @@ class Einsatz_Bericht
 			    if (intval($arrSelect['f3']) > intval($arrdbData['f3'])) return;
 			    else $arrUpdate = $arrdbData;
 				
-			    $this->_db->UpdateQuery(TBL_EINSAETZE_RESSOURCEN, $arrUpdate, "`f_kenner` = '". $arrdbData['f_kenner']."' AND `eid` = '".$eID."'");
+			    $this->_db->UpdateQuery(TBL_EINSAETZE_RESSOURCEN, $arrUpdate, "`f_kenner` = '". $arrdbData['f_kenner']."' AND `eid` = '".$this->_eid."'");
 			}
 			else
 			{
@@ -263,14 +199,13 @@ class Einsatz_Bericht
 
 		return;
 		
-	} // public function saveRessources($eID, $arrData)
+	} // public function saveRessources($arrData)
 	
 	/**
 	 * sichert das Persanl des Einsatzes
-	 * @param varchar (16) $eID
 	 * @param array $arrData
 	 */
-	public function savePersonal($eID, $arrData)
+	public function savePersonal($arrData)
 	{
 		
 		$arrdbData 	= array();
@@ -280,14 +215,14 @@ class Einsatz_Bericht
 		/**
 		 * sichern des einsatzpersonals in eigener Tabelle
 		 */
-		foreach ($arrData['personal'] as $index => $p)
+		foreach ($arrData as $index => $p)
 		{
 				
 			if ($index === '###index###') continue;
 				
 			$arrdbData = array(
-					'eid' 				=> $eID,
-					'enr' 				=> $this->tools->q($arrData['einsatz_nr']),
+    			    'eid' 		=> $this->_eid,
+    			    'enr' 		=> $this->_data['enr'],
 					'f_kenner' 			=> $this->tools->q($p['funkkenner']),
 					'e_zeit'			=> intval($p['einsatzzeit_day']) * 24 * 60 + intval($p['einsatzzeit_std']) * 60 + intval($p['einsatzzeit_min']),
 					'aus_h'				=> ($this->tools->isSizedString($p['ausgerueckt_hoeherer']))? intval($this->tools->q($p['ausgerueckt_hoeherer'])):0,
@@ -300,12 +235,12 @@ class Einsatz_Bericht
 					'eingesetzt_ff'		=> ($this->tools->isSizedString($p['eingesetzt_ff']))? intval($this->tools->q($p['eingesetzt_ff'])):0,	
 			);
 				
-			if ($this->_db->fetchOne("SELECT `f_kenner` FROM `".TBL_EINSAETZE_PERSONAL."` WHERE `eid` = '".$eID."' AND `f_kenner` = '".$p['funkkenner']."'"))
+			if ($this->_db->fetchOne("SELECT `f_kenner` FROM `".TBL_EINSAETZE_PERSONAL."` WHERE `eid` = '".$this->_eid."' AND `f_kenner` = '".$p['funkkenner']."'"))
 			{
 		
 				$arrUpdate = $arrdbData;
 				
-				$this->_db->UpdateQuery(TBL_EINSAETZE_PERSONAL, $arrUpdate, "`eid` = '".$eID."' AND `f_kenner` = '".$p['funkkenner']."'");
+				$this->_db->UpdateQuery(TBL_EINSAETZE_PERSONAL, $arrUpdate, "`eid` = '".$this->_eid."' AND `f_kenner` = '".$p['funkkenner']."'");
 			}
 			else
 			{
@@ -318,7 +253,34 @@ class Einsatz_Bericht
 
 		return;
 		
-	} // public function savePersonal($eID, $arrData)
+	} // public function savePersonal($arrData)
+	
+	public function saveProtokoll($strData, $strUserName)
+	{
+	    $strProtokoll = $strData;
+	    
+	    if ($this->_db->fetchOne("SELECT `id` FROM `".TBL_EINSAETZE_PROTOKOLL."` WHERE `eid` = '".$this->_eid."'"))
+	    {
+	        $arrUpdate = array(
+	            'inhalt' => $strProtokoll,
+	            'ersteller' => $strUserName
+	        );
+	        $this->_db->UpdateQuery(TBL_EINSAETZE_PROTOKOLL, $arrUpdate, "`eid` = '".$this->_eid."'");
+	    }
+	    else
+	    {
+	        $arrImport = array(
+	            'eid' => $this->_eid,
+	            'enr' => $this->_data['enr'],
+	            'inhalt' => $strProtokoll,
+	            'ersteller' => $strUserName
+	        );
+	        $this->_db->ImportQuery(TBL_EINSAETZE_PROTOKOLL, $arrImport);
+	    }
+	    
+	    return;
+	    
+	}
 	
 	public function getRessources()
 	{
@@ -332,6 +294,14 @@ class Einsatz_Bericht
 		$arrReturn = $this->_db->FetchAssoc("SELECT * FROM `".TBL_EINSAETZE_PERSONAL."` WHERE `eid` = '".$this->_eid."'");
 		
 		return $arrReturn;
+	}
+	
+	public function getProtokoll()
+	{
+	    
+	    $arrProtokoll = $this->_db->FetchRow("SELECT * FROM `".TBL_EINSAETZE_PROTOKOLL."` WHERE `eid` = '".$this->_eid."'");
+
+	    return $arrProtokoll['inhalt'];
 	}
 	
 	public function getEinsatzZeit($aus, $ende)

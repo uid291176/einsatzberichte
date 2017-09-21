@@ -158,7 +158,7 @@ class ReportController extends SystemController
 		      						".$this->strStichwortFilter."
 		      					)
 		      					AND
-                                EP.CITY = 'Erfurt' AND
+                                EP.CITY = 'Erfurt' AND 
 		      					E.STARTTIME > to_date('".$arrPeriod['start']."', 'DD.MM.YYYY hh24:Mi:SS') AND
 		      					E.STARTTIME < to_date('".$arrPeriod['end']."', 'DD.MM.YYYY hh24:Mi:SS') AND
                                 E.STATUS = 'finished'
@@ -194,141 +194,164 @@ class ReportController extends SystemController
 		
 	} // public function indexAction()
 	
+	
 	/**
-	 * speichert die Daten eines Einsatzes für die Berichtgenerierung
-	 * 
+	 * speichert die bearbeiteten Daten aus dem Einsatz
 	 */
 	public function saveAction()
 	{
+	    
+	    $eid = $this->tools->q(trim($_REQUEST['eid']));
+	    
+	    // Stammdaten update
+	    $arrUpdateStammdaten = array(
+	        
+	        'anrufer_name'             => $this->tools->q(trim($_REQUEST['anrufer_name'])),
+	        'anrufer_vorname'          => $this->tools->q(trim($_REQUEST['anrufer_vorname'])),
+	        'anrufer_telefonnummer'    => $this->tools->q(trim($_REQUEST['anrufer_telefonnummer']))
+	        
+	    );
+	    $this->db->UpdateQuery(TBL_EINSAETZE, $arrUpdateStammdaten, "`eid` = '".$eid."'");
+	    
+        // EAV TAB update
+	    if ($this->tools->isSizedArray($_REQUEST['report'])) $arrEAVData = $_REQUEST['report'];
 		
-		$Bericht = Einsatz_Bericht::geInstance($this->tools->q($_REQUEST['report']['eid']), $this->db);
+		if(array_key_exists('resourcen', $arrEAVData)) unset ($arrEAVData['resourcen']);
+		if(array_key_exists('personal', $arrEAVData)) unset ($arrEAVData['personal']);
+		if(array_key_exists('long_description', $arrEAVData)) unset ($arrEAVData['long_description']);
 		
-		$Bericht->save();
+		$B = Einsatz_Bericht::geInstance($eid, $this->db);
+		$B->init();
 		
-		$this->setPosMessage(_('Daten zu dem Bericht wurden gespeichert'));
+		foreach ($arrEAVData as $k => $v)
+		{ 
+		    //$B->_data[$k] = $v;
+		    $B->saveEAV2db($this->tools->q($k), $this->tools->q($v));
+		}
 		
-		$this->redirect($_REQUEST['k'], 'edit', array('cmd' => 'detailview', 'eid' => $this->tools->q($_REQUEST['report']['eid']), 'tmpl' => $this->tools->q($_REQUEST['tmpl']))); die();
+		$B->saveRessources($_REQUEST['report']['resourcen']);
+		$B->savePersonal($_REQUEST['report']['personal']);	
+		$B->saveProtokoll($_REQUEST['report']['long_description'], $this->user->username);
 		
-	}
+		$this->setPosMessage(_('Daten wurden erfolgreich gespeichert'));
+		
+		$this->redirect($_REQUEST['k'], 'view', array('eid' => $B->_eid, 'tmpl' => $this->tools->q(trim($_REQUEST['tmpl'])))); die();
+		
+		
+	} // public function saveAction()
 	
 	public function editAction()
 	{
-		// wurde ein Einsatz übergeben?
-		if (isset($_REQUEST['eid']))
-		{
-			$eId = $this->tools->q($_REQUEST['eid']);
-			$Bericht = Einsatz_Bericht::geInstance($this->tools->q($_REQUEST['eid']), $this->db); // Einsatz instanzieren
-			$Bericht->init();
-		}
 		
-		switch($_REQUEST['cmd'])
-		{
-			
-			case 'detailview': // Einzelansicht der Berichte im Editiermodus
-				
-				$this->view['data'] = $Bericht;
-					
-				$this->render(FULL, 'Report', 'edit_'.$this->tools->q($_REQUEST['tmpl']));
-				
-				break;
-				
-			case 'to-pdf': // Erzeugung der PDF Berichte
-				
-				if ($_REQUEST['status'] == 'finish')
-				{
-					if ($_REQUEST['typ'] == 'brandbericht') $this->createPDF($eId, 'brandbericht', $archiv = true);
-					if ($_REQUEST['typ'] == 'hilfeleistungsbericht') $this->createPDF($eId, 'hilfeleistungsbericht', $archiv = true);
-				
-					$this->db->UpdateQuery(TBL_EINSAETZE, array('status' => 'finish'), "`eid` = '".$eId."'");
-					
-					// Sprung zu allen abgeschlossenen Einsätze mit Beginn am übergebenen Datum
-					$this->redirect($_REQUEST['k'], 'finish', array('date-select' => $Bericht->get('beginn')));
-				}
-				else 
-				{
-					if ($_REQUEST['typ'] == 'brandbericht') $this->createPDF($eId, 'brandbericht');
-					if ($_REQUEST['typ'] == 'hilfeleistungsbericht') $this->createPDF($eId, 'hilfeleistungsbericht');
-				}
-				
-				break;
-				
-			default: // Standard Anzeige (Liste) der Berichte des jeweils angemeldeten Benutzer
-			 
-				// Sortierung nach...[Spalte]
-			    if (isset($_REQUEST['order_by']))
-			    {
-			        
-			        switch ($_REQUEST['order_by'])
-			        {
-			            case 'enr':
-			                $strOrderBy = 'enr';
-			                break;
-			                
-			            case 'stichwort':
-			                $strOrderBy = 'haupt_stichwort';
-			                break;
-			                
-			            case 'beginn':
-			                $strOrderBy = $strOrderBy = 'beginn';
-			                break;
-			                
-			            case 'adresse':
-			                $strOrderBy = $strOrderBy = 'adresse';
-			                break;
-			                
-			            case 'uid':
-			                $strOrderBy = $strOrderBy = 'uid';
-			                break;
-			                
-			            default:
-			                $strOrderBy = 'enr';
-			                
-			        }
-			    }
-			    else
-			    {
-			        $strOrderBy = 'enr';
-			    }
-				 
-				// Aufsteigend / Absteigend
-				$strOrderDirection = $this->setSQLOrderDirection();
-
-				// Anzahl der Einträge für den Nutzer ermitteln
-				$countEntrys = $this->db->FetchOne("SELECT COUNT(*) FROM `".TBL_EINSAETZE."` WHERE 1 AND `uid` = '".$this->user_id."' AND `status` = 'edit'");
-				 
-				// Anzahl der Seiten für die gewünschte Ergebnismenge
-				$pages = ceil($countEntrys / $this->pageEntrys);
-				 
-				// Offset ab welchen die Datensätze aus der DB geholt werden
-				if (isset($_REQUEST['pPage']) && intval($_REQUEST['pPage']) > 0) $offset = ($_REQUEST['pPage'] - 1) * $this->pageEntrys;
-				else $offset = 0;
-				 
-				// bis zu diesem Eintrag der Ergebnismenge werden die Daten gesammelt
-				if ($offset > 0) $limit = $_REQUEST['pPage'] * $this->pageEntrys;
-				else $limit = $this->pageEntrys;
-				 
-				if (isset($_REQUEST['pPage']) && intval($_REQUEST['pPage']) > 0) $currentPage = intval($_REQUEST['pPage']);
-				else $currentPage = 1;
-				 
-				// set Pager
-				$PAGER = new MySQLi_Pager($pages, $this->pageEntrys, $this->pageRange);
-				$PAGER->setActivePage($currentPage);
-				$arrUrlParam = array(
-						'k' 				=> $_REQUEST['k'], 					// Controller
-						'action' 			=> $_REQUEST['action'], 			// Action
-						'period' 			=> $_REQUEST['period'], 			// Zeitraum
-						'order_by' 			=> $_REQUEST['order_by'], 			// Sortierung nach
-						'order_direction' 	=> $_REQUEST['order_direction'] 	// Sortierrichtung
-				);
-	
-				$PAGER->setUrl($arrUrlParam);
-				 
-				// http://use-the-index-luke.com/de/sql/partielle-ergebnisse/blaettern
-				$sql = "SELECT 
+	    //$this->tools->debug($_REQUEST);
+	    
+	    // wurde ein Einsatz übergeben?
+	    if (isset($_REQUEST['eid']))
+	    {
+	        
+	        $eId = $this->tools->q(trim($_REQUEST['eid']));
+	        
+	        /**
+	         * ein neuer Einsatz der noch nicht bearbeitet wurde wird hier in der MySQL DB angelegt
+	         */
+	        if ($_REQUEST['cmd'] == 'presave')
+	        {
+	            $E = Einsatz_Handler::geInstance($eId, $this->db, $this->user_id);
+	            $E->init();
+	            $E->presave();
+	            
+	            $this->setPosMessage(_('Daten zu dem Bericht wurden gespeichert'));
+	            
+	            $this->redirect($_REQUEST['k'], 'view', array('eid' => $eId, 'tmpl' => $this->tools->q(trim($_REQUEST['tmpl'])))); die();
+	            
+	        } // Umleitung zur Einzelansicht des neuen Berichts
+	        
+	        /**
+	         * todo der PDF Aufruf
+	         */
+	        
+	        // ENDE PDF
+	        
+	        // einen bereits übernommen Einsatz weiter bearbeiten Einsatz 
+	        $this->redirect($_REQUEST['k'], 'view', array('eid' => $eId, 'tmpl' => $this->tools->q(trim($_REQUEST['tmpl'])))); die();
+	        
+	    }
+	    
+	    // Sortierung nach...[Spalte]
+	    if (isset($_REQUEST['order_by']))
+	    {
+	        
+	        switch ($_REQUEST['order_by'])
+	        {
+	            case 'enr':
+	                $strOrderBy = 'enr';
+	                break;
+	                
+	            case 'stichwort':
+	                $strOrderBy = 'haupt_stichwort';
+	                break;
+	                
+	            case 'beginn':
+	                $strOrderBy = 'beginn';
+	                break;
+	                
+	            case 'adresse':
+	                $strOrderBy = 'adresse';
+	                break;
+	                
+	            case 'uid':
+	                $strOrderBy = 'uid';
+	                break;
+	                
+	            default:
+	                $strOrderBy = 'enr';
+	                
+	        }
+	    }
+	    else
+	    {
+	        $strOrderBy = 'enr';
+	    }
+	    
+	    // Aufsteigend / Absteigend
+	    $strOrderDirection = $this->setSQLOrderDirection();
+	    
+	    // Anzahl der Einträge für den Nutzer ermitteln
+	    $countEntrys = $this->db->FetchOne("SELECT COUNT(*) FROM `".TBL_EINSAETZE."` WHERE 1 AND `uid` = '".$this->user_id."' AND `status` = 'edit'");
+	    
+	    // Anzahl der Seiten für die gewünschte Ergebnismenge
+	    $pages = ceil($countEntrys / $this->pageEntrys);
+	    
+	    // Offset ab welchen die Datensätze aus der DB geholt werden
+	    if (isset($_REQUEST['pPage']) && intval($_REQUEST['pPage']) > 0) $offset = ($_REQUEST['pPage'] - 1) * $this->pageEntrys;
+	    else $offset = 0;
+	    
+	    // bis zu diesem Eintrag der Ergebnismenge werden die Daten gesammelt
+	    if ($offset > 0) $limit = $_REQUEST['pPage'] * $this->pageEntrys;
+	    else $limit = $this->pageEntrys;
+	    
+	    if (isset($_REQUEST['pPage']) && intval($_REQUEST['pPage']) > 0) $currentPage = intval($_REQUEST['pPage']);
+	    else $currentPage = 1;
+	    
+	    // set Pager
+	    $PAGER = new MySQLi_Pager($pages, $this->pageEntrys, $this->pageRange);
+	    $PAGER->setActivePage($currentPage);
+	    $arrUrlParam = array(
+	        'k' 				=> $_REQUEST['k'], 					// Controller
+	        'action' 			=> $_REQUEST['action'], 			// Action
+	        'period' 			=> $_REQUEST['period'], 			// Zeitraum
+	        'order_by' 			=> $_REQUEST['order_by'], 			// Sortierung nach
+	        'order_direction' 	=> $_REQUEST['order_direction'] 	// Sortierrichtung
+	    );
+	    
+	    $PAGER->setUrl($arrUrlParam);
+	    
+	    // http://use-the-index-luke.com/de/sql/partielle-ergebnisse/blaettern
+	    $sql = "SELECT
 							*
 						FROM
 							`".TBL_EINSAETZE."`
-						WHERE 1 AND 
+						WHERE 1 AND
 							`uid` = '".$this->user_id."' AND
 							`status` = 'edit'
                         ORDER BY
@@ -336,14 +359,13 @@ class ReportController extends SystemController
 						LIMIT ".$limit."
 						OFFSET ".$offset."
 					";
-	
-				$this->view['data'] = $this->db->FetchAssoc($sql);
-				
-				// Pager Ausgabe über OUTPUT BUFFER -> Template pager.phtml
-				if ($this->tools->isSizedArray($this->view['data'])) $this->view['pager'] = $PAGER->renderPager();
-				 
-				$this->render();
-		}
+	    
+	    $this->view['data'] = $this->db->FetchAssoc($sql);
+	    
+	    // Pager Ausgabe über OUTPUT BUFFER -> Template pager.phtml
+	    if ($this->tools->isSizedArray($this->view['data'])) $this->view['pager'] = $PAGER->renderPager();
+	    
+	    $this->render();
 		
 	}
 	
@@ -638,27 +660,72 @@ class ReportController extends SystemController
 		$this->render(FULL, 'Report', 'index');
 	}
 	
+	
 	/**
 	 * generiert das Einsatzobjekt zur Detaildarstellung
 	 */
 	public function viewAction()
 	{
-		
-		// Einsatz ID (EVENT.ID)
-		$eID = 0;
+        
 		$eID = $this->tools->q($_REQUEST['eid']);
 		
 		if(intval($eID) > 0)
 		{
-			$this->view['data'] = Einsatz_Handler::geInstance($eID);
-			$this->view['data']->init();
-
+			$B = Einsatz_Bericht::geInstance($eID, $this->db);
+			$B->init();
 		} 
 		
+		// PDF Ausgaben
+		if ($_REQUEST['cmd'] == 'to-pdf')
+		{
+		    
+		    if ($_REQUEST['status'] == 'finish')
+		    {
+		        if ($_REQUEST['typ'] == 'brandbericht') $this->createPDF($eID, 'brandbericht', true);
+		        if ($_REQUEST['typ'] == 'hilfeleistungsbericht') $this->createPDF($eID, 'hilfeleistungsbericht', true);
+		        
+		        $this->db->UpdateQuery(TBL_EINSAETZE, array('status' => 'finish'), "`eid` = '".$eID."'");
+		        
+		        // Sprung zu allen abgeschlossenen Einsätze mit Beginn am übergebenen Datum
+		        $this->redirect($_REQUEST['k'], 'finish', array('date-select' => $B->get('beginn')));
+		    }
+		    else
+		    {
+		        if ($_REQUEST['typ'] == 'brandbericht') $this->createPDF($eID, 'brandbericht');
+		        if ($_REQUEST['typ'] == 'hilfeleistungsbericht') $this->createPDF($eID, 'hilfeleistungsbericht');
+		    }
+		    
+		}
+		    
+		   /* switch($_REQUEST['cmd'])
+		    {
+		        
+		        case 'detailview': // Einzelansicht der Berichte im Editiermodus
+		            
+		            $this->view['data'] = $Bericht;
+		            
+		            $this->render(FULL, 'Report', 'edit_'.$this->tools->q($_REQUEST['tmpl']));
+		            
+		            break;
+		            
+		        case 'to-pdf': // Erzeugung der PDF Berichte
+		            
+		            
+		            
+		            break;
+		            
+		        default: // Standard Anzeige (Liste) der Berichte des jeweils angemeldeten Benutzer
+		            
+		            
+		}*/
+		
+		$this->view['data'] = $B;
+		
 		// hier wird die Art des Berichtes (Hilfeleistung oder Brandbericht unterschieden)
-		$this->render(FULL, 'Report', strtolower ($this->view['data']->get('EINSATZ_HAUPTSTICHWORT')));
+		$this->render(FULL, 'Report', $this->tools->q($_REQUEST['tmpl']));
 		
 	} // public function viewAction()
+	
 	
 	/**
 	 * gibt den gewählten Filterzeitraum zurück

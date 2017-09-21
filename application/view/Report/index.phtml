@@ -83,8 +83,8 @@
 				<tr <?php echo (($i % 2) == 0)? 'class="even"':'class="odd"' ?>>
 					<td class="check-col" title="<?php echo $einsatz['SUPERIOREVENTTYPE'] ?>"><span class="fa <?php echo $this->getEventIcon($einsatz['SUPERIOREVENTTYPE']) ?> <?php echo $this->getIconColor($einsatz['SUPERIOREVENTTYPE']) ?>"></span></td>
 					<td>
-						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('eid' => $einsatz['EID'], 'order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'], 'cmd' => 'detailview')) ?>"><strong><?php echo $einsatz['EVENTNUM'] ?></strong></a><br />
-						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('eid' => $einsatz['EID'], 'order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'], 'cmd' => 'detailview')) ?>"><span class="view-details"><?php echo _('Details ansehen') ?></span></a>
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'edit', array('cmd' => 'presave', 'eid' => $einsatz['EID'], 'order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'], 'tmpl' => 'edit_'.strtolower($einsatz['SUPERIOREVENTTYPE']))) ?>" onclick="return confirm('Bericht ( ENR. ' + <?php echo $einsatz['EVENTNUM'] ?> + ' ) bearbeiten?')"><strong><?php echo $einsatz['EVENTNUM'] ?></strong></a><br />
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'edit', array('cmd' => 'presave', 'eid' => $einsatz['EID'], 'order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'], 'tmpl' => 'edit_'.strtolower($einsatz['SUPERIOREVENTTYPE']))) ?>" onclick="return confirm('Bericht ( ENR. ' + <?php echo $einsatz['EVENTNUM'] ?> + ' ) bearbeiten?')"><span class="view-details"><?php echo _('Bericht schreiben') ?></span></a>
 					</td>
 					<td><?php echo $einsatz['NAMEEVENTTYPE'] ?></td>
 					<td><?php echo $einsatz['STARTTIME'] ?></td>
@@ -170,6 +170,8 @@
 			$('#submit-search').bind('click', function(){
 				$('#search-form').submit();
 			})
+
+			$.removeCookie('active_tab');
 			
 		})
 	

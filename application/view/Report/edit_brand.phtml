@@ -3,8 +3,7 @@
  * template Seite 1 zum editieren des E- Berichtes
  */
 $B = $this->view['data'];
-$B->init();
-//$this->tools->debug(var_dump($B));
+//$this->tools->debug($B->_data);
 ?>
 <div id="einsatz-details-<?php echo _('id') ?>" class="single-view">
 
@@ -36,14 +35,14 @@ $B->init();
 	</div>
 	
 	<?php $html = Html_Factory::getHtml('forms') ?>
-	<?php echo $html->drawFormStart('post', $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'save', array('tmpl' => 'brand')), '', array('class' => 'report-save-form')) ?>
+	<?php echo $html->drawFormStart('post', $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'save', array('tmpl' => 'edit_brand')), '', array('class' => 'report-save-form')) ?>
 	
 	<!-- uebergeben der Benutzer ID (Bearbeiter)  -->
 		<input type="hidden" name="user-id" value="<?php echo $this->user->get('id') ?>" />
 	<!-- uebergeben der Benutzer ID (Bearbeiter)  -->
 	
 	<!-- uebergeben der Einsatz ID (Oracle DB)  -->
-		<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[eid]" value="<?php echo $_REQUEST['eid'] ?>" />
+		<input type="hidden" name="eid" value="<?php echo $_REQUEST['eid'] ?>" />
 	<!-- uebergeben der Einsatz ID (Oracle DB)  -->
 	
 	<!-- uebergeben der Einsatz Bericht Typ Brand/ TH  -->
@@ -62,10 +61,10 @@ $B->init();
 		<div class="content-grid-col2 report-content left">
 			
 			<div class="form-row">
-				<?php $html->drawFormInput('landkreis', _('Landkreis/ kreisfr. Stadt'), $this->getConf('landkreis_kreisfreie_stadt'), '', array('class' => 'right')) ?><div class="clear"></div>
-				<?php $html->drawFormInput('gemeinde', _('Gemeinde'), $this->getConf('gemeinde'), '', array('class' => 'right')) ?><div class="clear"></div>
-				<?php $html->drawFormInput('ident_nr', _('Ident.- Nr. Gemeinde'), $this->getConf('gemeinde_ident_nr'), '', array('class' => 'right')) ?><div class="clear"></div>
-				<?php $html->drawFormInput('einsatz_nr', _('Einsatznummer'), $B->get('enr'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('landkreis', _('Landkreis/ kreisfr. Stadt'), $this->getConf('landkreis_kreisfreie_stadt'), '', array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('gemeinde', _('Gemeinde'), $this->getConf('gemeinde'), '', array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('ident_nr', _('Ident.- Nr. Gemeinde'), $this->getConf('gemeinde_ident_nr'), '', array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('einsatz_nr', _('Einsatznummer'), $B->get('enr'), '', array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
 				<br />
 				<p class="left content-grid-col3">&nbsp;</p>
 				
@@ -73,11 +72,11 @@ $B->init();
 				
 				<div class="form_field left content-grid-col4">
 					<label for="report_art_haupt"><?php echo _('Hauptbericht') ?>:
-					<input class="right" id="report_art_haupt" name="<?php echo strtolower($_REQUEST['k']) ?>[report_art]" value="haupt" type="radio" <?php echo ($B->get('report_art') == 'haupt')? 'checked="checked"':'' ?> /></label>
+					<input class="right radiocheck art" id="report_art_haupt" name="<?php echo strtolower($_REQUEST['k']) ?>[report_art]" value="haupt" type="checkbox" <?php echo ($B->get('report_art') == 'haupt' || $B->get('report_art') == '')? 'checked="checked"':'' ?> /></label>
 				</div>
 				<div class="form_field right content-grid-col4">
 					<label for="report_art_neben"><?php echo _('Nebenbericht') ?>:
-					<input class="right" id="report_art_neben" name="<?php echo strtolower($_REQUEST['k']) ?>[report_art]" value="neben" type="radio" <?php echo ($B->get('report_art') == 'neben')? 'checked="checked"':'' ?> /></label>
+					<input class="right radiocheck art" id="report_art_neben" name="<?php echo strtolower($_REQUEST['k']) ?>[report_art]" value="neben" type="checkbox" <?php echo ($B->get('report_art') == 'neben')? 'checked="checked"':'' ?> /></label>
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -92,7 +91,7 @@ $B->init();
 				<p style="margin-top:5px;" class="left bold content-grid-col3"><?php echo _('Alarm durch') ?>:</p>
 				<div class="left content-grid-col4">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[alarm_zls]" value="0" />
-					<?php $html->drawFormCheckbox('alarm_zls', _('zentrale LTS'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('alarm_zls') == '1')? true:false, 'class' => 'right')) ?>
+					<?php $html->drawFormCheckbox('alarm_zls', _('zentrale LTS'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('alarm_zls') == '0')? false:true, 'class' => 'right')) ?>
 				</div>				
 				<div class="right content-grid-col4">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[alarm_hand]" value="0" />
@@ -102,14 +101,14 @@ $B->init();
 
 				<p style="margin-top:7px;" class="left bold label content-grid-col3"><?php echo _('Alarmzeit') ?>:</p>
 				<div class="left content-grid-col4">
-					<?php $html->drawFormInput('alarmzeit_datum', _('Datum'), date('d.m.Y', strtotime($B->get('alarmzeit_datum'))), strtolower($_REQUEST['k']), array('class' => 'form-date-time right datepicker', 'font-ico' => 'fa-calendar')) ?>
+					<?php $html->drawFormInput('alarmzeit_datum', _('Datum'), date('d.m.Y', $B->get('alarm')), '', array('class' => 'form-date-time right datepicker', 'font-ico' => 'fa-calendar')) ?>
 				</div>
 				<div class="right content-grid-col3">
-					<?php $html->drawFormInput('alarmzeit_uhrzeit', _('Uhrzeit'), date('H:i:s', strtotime($B->get('alarmzeit_uhrzeit'))), strtolower($_REQUEST['k']), array('class' => 'form-date-time right', 'type' => 'time', 'placeholder' => 'hh:mm')) ?>
+					<?php $html->drawFormInput('alarmzeit_uhrzeit', _('Uhrzeit'), date('H:i:s', $B->get('alarm')), '', array('class' => 'form-date-time right', 'type' => 'time', 'placeholder' => 'hh:mm')) ?>
 				</div>
 				<div class="clear"></div>
 				<!-- uebergeben des Einsatzbeginns -->
-					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[einsatz_beginn]" value="<?php echo $B->get('einsatz_beginn') ?>" />
+					<input type="hidden" name="einsatz_beginn" value="<?php echo $B->get('beginn') ?>" />
 				<!-- uebergeben des Einsatzbeginns  -->
 			</div>
 			
@@ -120,11 +119,11 @@ $B->init();
 				
 				<div class="form_field radio_field left content-grid-col4">
 					<label for="report_eigener_ausrueckebereich_ja"><?php echo _('Ja') ?>:</label>
-					<input class="right" id="report_eigener_ausrueckebereich_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[eigener_ausrueckebereich]" value="ja" type="radio" <?php echo ($B->get('eigener_ausrueckebereich') == 'ja')? 'checked="checked"':'' ?> />
+					<input class="right radiocheck eigener" id="report_eigener_ausrueckebereich_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[eigener_ausrueckebereich]" value="ja" type="checkbox" <?php echo ($B->get('eigener_ausrueckebereich') == 'ja' || $B->get('eigener_ausrueckebereich') == '')? 'checked="checked"':'' ?> />
 				</div>
 				<div class="form_field radio_field right content-grid-col4">
 					<label for="report_eigener_ausrueckebereich_nein"><?php echo _('Nein') ?>:</label>
-					<input class="right" id="report_eigener_ausrueckebereich_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[eigener_ausrueckebereich]" value="nein" type="radio" <?php echo ($B->get('eigener_ausrueckebereich') == 'nein')? 'checked="checked"':'' ?> />
+					<input class="right radiocheck eigener" id="report_eigener_ausrueckebereich_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[eigener_ausrueckebereich]" value="nein" type="checkbox" <?php echo ($B->get('eigener_ausrueckebereich') == 'nein')? 'checked="checked"':'' ?> />
 				</div>
 				<div class="clear"></div>
 				
@@ -240,10 +239,10 @@ $B->init();
 		<div class="content-grid-col2 report-content right">
 			
 			<div class="form-row">
-			 	<?php $html->drawFormInput('brandobjekt', _('Brandobjekt'), $B->get('brandobjekt'), strtolower($_REQUEST['k']), array('class' => 'right', 'bold-label' => true)) ?><div class="clear"></div>
-				<?php $html->drawFormInput('brandobjekt_e-stelle', _('Einsatzstelle'), $B->get('brandobjekt_e-stelle'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
-				<?php $html->drawFormInput('brandobjekt_adresse', _('Adresse'), $B->get('brandobjekt_adresse'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
-				<?php $html->drawFormInput('brandobjekt_ort', _('Ort'), $B->get('brandobjekt_ort'), strtolower($_REQUEST['k']), array('class' => 'right')) ?><div class="clear"></div>
+			 	<?php $html->drawFormInput('stichwort', _('Brandobjekt'), $B->get('stichwort'), '', array('class' => 'right', 'bold-label' => true, 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('objektname', _('Einsatzstelle'), $B->get('objektname'), '', array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('adresse1', _('Adresse'), $B->get('adresse1').' '.$B->get('hnr'), '', array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('ort', _('Ort'), $B->get('ort').'/ '.$B->get('ortsteil'), '', array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
 			</div>
 			
 			<div class="form-row">
@@ -421,11 +420,11 @@ $B->init();
 					
 					<div class="form_field left content-grid-col5">
 						<label for="report_art_haupt"><?php echo _('Ja') ?>:
-						<input id="report_brandobjekt_zugang_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_zugang_vorhanden]" value="ja" type="radio" <?php echo ($B->get('brandobjekt_zugang_vorhanden') == 'ja')? 'checked="checked"':'' ?> /></label>
+						<input id="report_zugang_brandobjekt_ja" class="radiocheck zugang" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_zugang_vorhanden]" value="ja" type="checkbox" <?php echo ($B->get('brandobjekt_zugang_vorhanden') == 'ja' || $B->get('brandobjekt_zugang_vorhanden') == '')? 'checked="checked"':'' ?> /></label>
 					</div>
 					<div class="form_field right content-grid-col5">
 						<label for="report_art_neben"><?php echo _('Nein') ?>:
-						<input id="report_brandobjekt_zugang_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_zugang_vorhanden]" value="nein" type="radio" <?php echo ($B->get('brandobjekt_zugang_vorhanden') == 'nein')? 'checked="checked"':'' ?> /></label>
+						<input id="report_zugang_brandobjekt_nein" class="radiocheck zugang" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_zugang_vorhanden]" value="nein" type="checkbox" <?php echo ($B->get('brandobjekt_zugang_vorhanden') == 'nein')? 'checked="checked"':'' ?> /></label>
 					</div>
 					<div class="clear"></div>
 				</div>
@@ -443,12 +442,12 @@ $B->init();
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_vorhanden]" value="0" />
 					
 					<div class="form_field left content-grid-col5">
-						<label for="report_art_haupt"><?php echo _('Ja') ?>:
-						<input id="report_brandobjekt_bma_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_vorhanden]" value="ja" type="radio" <?php echo ($B->get('brandobjekt_bma_vorhanden') == 'ja')? 'checked="checked"':'' ?> /></label>
+						<label for="report_bma-vorhanden_ja"><?php echo _('Ja') ?>:
+						<input id="report_bma-vorhanden_ja" class="radiocheck bma-vorhanden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_vorhanden]" value="ja" type="checkbox" <?php echo ($B->get('brandobjekt_bma_vorhanden') == 'ja')? 'checked="checked"':'' ?> /></label>
 					</div>
 					<div class="form_field right content-grid-col5">
-						<label for="report_art_neben"><?php echo _('Nein') ?>:
-						<input id="report_brandobjekt_bma_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_vorhanden]" value="nein" type="radio" <?php echo ($B->get('brandobjekt_bma_vorhanden') == 'nein')? 'checked="checked"':'' ?> /></label>
+						<label for="report_bma-vorhanden_nein"><?php echo _('Nein') ?>:
+						<input id="report_bma-vorhanden_nein" class="radiocheck bma-vorhanden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_vorhanden]" value="nein" type="checkbox" <?php echo ($B->get('brandobjekt_bma_vorhanden') == 'nein')? 'checked="checked"':'' ?> /></label>
 					</div>
 					<div class="clear"></div>
 				</div>
@@ -458,12 +457,12 @@ $B->init();
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_ausgeloest]" value="0" />
 				
 					<div class="form_field left content-grid-col3">
-						<label for="report_art_haupt"><?php echo _('BMA ausgelöst') ?>:
-						<input class="right" id="report_brandobjekt_bma_ausgeloest" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_ausgeloest]" value="ja" type="radio" <?php echo ($B->get('brandobjekt_bma_ausgeloest') == 'ja')? 'checked="checked"':'' ?> /></label>
+						<label for="report_bma-ausgeloest_ja"><?php echo _('BMA ausgelöst') ?>:
+						<input class="right radiocheck bma-ausgeloest" id="report_bma-ausgeloest_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_ausgeloest]" value="ja" type="checkbox" <?php echo ($B->get('brandobjekt_bma_ausgeloest') == 'ja')? 'checked="checked"':'' ?> /></label>
 					</div>
 					<div class="form_field right content-grid-col2">
-						<label for="report_art_neben"><?php echo _('BMA nicht ausgelöst') ?>:
-						<input class="right" id="report_brandobjekt_bma_nicht_ausgeloest" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_ausgeloest]" value="nein" type="radio" <?php echo ($B->get('brandobjekt_bma_ausgeloest') == 'nein')? 'checked="checked"':'' ?> /></label>
+						<label for="report_bma-ausgeloest_nein"><?php echo _('BMA nicht ausgelöst') ?>:
+						<input class="right radiocheck bma-ausgeloest" id="report_bma-ausgeloest_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_bma_ausgeloest]" value="nein" type="checkbox" <?php echo ($B->get('brandobjekt_bma_ausgeloest') == 'nein')? 'checked="checked"':'' ?> /></label>
 					</div>
 					<div class="clear"></div>
 				</div><div class="clear"></div><!-- Abschnitt BMA ende -->
@@ -477,12 +476,12 @@ $B->init();
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_vorhanden]" value="0" />
 					
 					<div class="form_field left content-grid-col5">
-						<label for="report_art_haupt"><?php echo _('Ja') ?>:
-						<input id="report_brandobjekt_loeschanlage_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_vorhanden]" value="ja" type="radio" <?php echo ($B->get('brandobjekt_loeschanlage_vorhanden') == 'ja')? 'checked="checked"':'' ?> /></label>
+						<label for="report_loeschanlage-vorhanden_ja"><?php echo _('Ja') ?>:
+						<input id="report_loeschanlage-vorhanden_ja" class="radiocheck loeschanlage-vorhanden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_vorhanden]" value="ja" type="checkbox" <?php echo ($B->get('brandobjekt_loeschanlage_vorhanden') == 'ja')? 'checked="checked"':'' ?> /></label>
 					</div>
 					<div class="form_field right content-grid-col5">
-						<label for="report_art_neben"><?php echo _('Nein') ?>:
-						<input id="report_brandobjekt_loeschanlage_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_vorhanden]" value="nein" type="radio" <?php echo ($B->get('brandobjekt_loeschanlage_vorhanden') == 'nein')? 'checked="checked"':'' ?> /></label>
+						<label for="report_loeschanlage-vorhanden_nein"><?php echo _('Nein') ?>:
+						<input id="report_loeschanlage-vorhanden_nein" class="radiocheck loeschanlage-vorhanden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_vorhanden]" value="nein" type="checkbox" <?php echo ($B->get('brandobjekt_loeschanlage_vorhanden') == 'nein')? 'checked="checked"':'' ?> /></label>
 					</div>
 					<div class="clear"></div>
 				</div>
@@ -492,12 +491,12 @@ $B->init();
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_wirkung]" value="0" />
 				
 					<div class="form_field left content-grid-col3">
-						<label for="report_art_haupt"><?php echo _('Wirkung positiv') ?>:
-						<input class="right" id="report_brandobjekt_loeschanlage_positiv" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_wirkung]" value="positiv" type="radio" <?php echo ($B->get('brandobjekt_loeschanlage_wirkung') == 'positiv')? 'checked="checked"':'' ?> /></label>
+						<label for="report_loeschanlage-wirkung_positiv"><?php echo _('Wirkung positiv') ?>:
+						<input class="right radiocheck loeschanlage-wirkung" id="report_loeschanlage-wirkung_positiv" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_wirkung]" value="positiv" type="checkbox" <?php echo ($B->get('brandobjekt_loeschanlage_wirkung') == 'positiv')? 'checked="checked"':'' ?> /></label>
 					</div>
 					<div class="form_field right content-grid-col2">
-						<label for="report_art_neben"><?php echo _('Wirkung negativ') ?>:
-						<input class="right" id="report_brandobjekt_loeschanlage_negativ" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_wirkung]" value="negativ" type="radio" <?php echo ($B->get('brandobjekt_loeschanlage_wirkung') == 'negativ')? 'checked="checked"':'' ?> /></label>
+						<label for="report_loeschanlage-wirkung_negativ"><?php echo _('Wirkung negativ') ?>:
+						<input class="right radiocheck loeschanlage-wirkung" id="report_loeschanlage-wirkung_negativ" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_loeschanlage_wirkung]" value="negativ" type="checkbox" <?php echo ($B->get('brandobjekt_loeschanlage_wirkung') == 'negativ')? 'checked="checked"':'' ?> /></label>
 					</div>
 					<div class="clear"></div>
 				</div><div class="clear"></div><!-- Abschnitt Löschanlage ende -->
@@ -511,12 +510,12 @@ $B->init();
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_vorhanden]" value="0" />
 					
 					<div class="form_field left content-grid-col5">
-						<label for="report_art_haupt"><?php echo _('Ja') ?>:
-						<input id="report_brandobjekt_rauchabzug_ja" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_vorhanden]" value="ja" type="radio" <?php echo ($B->get('brandobjekt_rauchabzug_vorhanden') == 'ja')? 'checked="checked"':'' ?> /></label>
+						<label for="report_rauchabzug-vorhanden_ja"><?php echo _('Ja') ?>:
+						<input id="report_rauchabzug-vorhanden_ja" class="radiocheck rauchabzug-vorhanden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_vorhanden]" value="ja" type="checkbox" <?php echo ($B->get('brandobjekt_rauchabzug_vorhanden') == 'ja')? 'checked="checked"':'' ?> /></label>
 					</div>
 					<div class="form_field right content-grid-col5">
-						<label for="report_art_neben"><?php echo _('Nein') ?>:
-						<input id="report_brandobjekt_rauchabzug_nein" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_vorhanden]" value="nein" type="radio" <?php echo ($B->get('brandobjekt_rauchabzug_vorhanden') == 'nein')? 'checked="checked"':'' ?> /></label>
+						<label for="report_rauchabzug-vorhanden_nein"><?php echo _('Nein') ?>:
+						<input id="report_rauchabzug-vorhanden_nein" class="radiocheck rauchabzug-vorhanden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_vorhanden]" value="nein" type="checkbox" <?php echo ($B->get('brandobjekt_rauchabzug_vorhanden') == 'nein')? 'checked="checked"':'' ?> /></label>
 					</div>
 					<div class="clear"></div>
 				</div>
@@ -526,12 +525,12 @@ $B->init();
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_wirkung]" value="0" />
 				
 					<div class="form_field left content-grid-col3">
-						<label for="report_art_haupt"><?php echo _('Wirkung positiv') ?>:
-						<input class="right" id="report_brandobjekt_rauchabzug_positiv" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_wirkung]" value="positiv" type="radio" <?php echo ($B->get('brandobjekt_rauchabzug_wirkung') == 'positiv')? 'checked="checked"':'' ?> /></label>
+						<label for="report_rauchabzug-wirkung_positiv"><?php echo _('Wirkung positiv') ?>:
+						<input class="right radiocheck rauchabzug-wirkung" id="report_rauchabzug-wirkung_positiv" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_wirkung]" value="positiv" type="checkbox" <?php echo ($B->get('brandobjekt_rauchabzug_wirkung') == 'positiv')? 'checked="checked"':'' ?> /></label>
 					</div>
 					<div class="form_field right content-grid-col2">
-						<label for="report_art_neben"><?php echo _('Wirkung negativ') ?>:
-						<input class="right" id="report_brandobjekt_rauchabzug_negativ" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_wirkung]" value="negativ" type="radio" <?php echo ($B->get('brandobjekt_rauchabzug_wirkung') == 'negativ')? 'checked="checked"':'' ?> /></label>
+						<label for="report_rauchabzug-wirkung_negativ"><?php echo _('Wirkung negativ') ?>:
+						<input class="right radiocheck rauchabzug-wirkung" id="report_rauchabzug-wirkung_negativ" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_rauchabzug_wirkung]" value="negativ" type="checkbox" <?php echo ($B->get('brandobjekt_rauchabzug_wirkung') == 'negativ')? 'checked="checked"':'' ?> /></label>
 					</div>
 					<div class="clear"></div>
 				</div><div class="clear"></div><!-- Abschnitt Rauchabzug ende -->
@@ -576,21 +575,21 @@ $B->init();
 				
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[loeschwasser_kfz]" value="0" />
-					<?php $html->drawFormCheckbox('loeschwasser_kfz', _('Kfz- Löschwasserbehälter'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('loeschwasser_kfz') == '1')? true:false, 'class' => 'right loeschwasser radiocheck')) ?>
+					<?php $html->drawFormCheckbox('loeschwasser_kfz', _('Kfz- Löschwasserbehälter'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('loeschwasser_kfz') == '1')? true:false, 'class' => 'right')) ?>
 				</div>				
 				<div class="right content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[loeschwasser_offen]" value="0" />
-					<?php $html->drawFormCheckbox('loeschwasser_offen', _('offenes Gewässer'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('loeschwasser_offen') == '1')? true:false, 'class' => 'right loeschwasser radiocheck')) ?>
+					<?php $html->drawFormCheckbox('loeschwasser_offen', _('offenes Gewässer'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('loeschwasser_offen') == '1')? true:false, 'class' => 'right')) ?>
 				</div>
 				<div class="clear"></div>
 				
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[loeschwasser_hydrant]" value="0" />
-					<?php $html->drawFormCheckbox('loeschwasser_hydrant', _('Hydrant'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('loeschwasser_hydrant') == '1')? true:false, 'class' => 'right loeschwasser radiocheck')) ?>
+					<?php $html->drawFormCheckbox('loeschwasser_hydrant', _('Hydrant'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('loeschwasser_hydrant') == '1')? true:false, 'class' => 'right')) ?>
 				</div>				
 				<div class="right content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[loeschwasser_sonstige]" value="0" />
-					<?php $html->drawFormCheckbox('loeschwasser_sonstige', _('Sonstige'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('loeschwasser_sonstige') == '1')? true:false, 'class' => 'right loeschwasser radiocheck')) ?>
+					<?php $html->drawFormCheckbox('loeschwasser_sonstige', _('Sonstige'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('loeschwasser_sonstige') == '1')? true:false, 'class' => 'right')) ?>
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -625,7 +624,11 @@ $B->init();
 	<script type="text/javascript">
 	//<![CDATA[
 	
-	// ausgelagert custom.js	
+		$(document).ready(function(){
+
+			setTimeout(function(){ $('.report-save-form').submit(); }, 1200000);
+			
+		})	
 	
 	//]]>
 	</script>
