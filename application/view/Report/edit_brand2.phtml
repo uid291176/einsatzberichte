@@ -20,7 +20,7 @@
 				</tr>
 
 				<?php $index = 0; foreach ($B->getRessources() as $res) { ?>
-				<tr id="add-resource-<?php echo $index ?>">
+				<tr>
 					<td>
 						<table>
 							<tr>
@@ -61,7 +61,7 @@
 							<tr>
 								<td><?php $html->drawFormInput('rueckkehr_date', '', ($res['f2'])? date('d.m.Y', $res['f2']):'', strtolower($_REQUEST['k']).'[resourcen]['.$index.']', array()) ?></td>
 								<td><?php $html->drawFormInput('rueckkehr_time', '', ($res['f2'])? date('H:i:s', $res['f2']):'', strtolower($_REQUEST['k']).'[resourcen]['.$index.']', array()) ?></td>
-								<td><a id="rem-resource-<?php echo $index ?>" class="remove" href="#" onclick="remResource(this);"><span class="fa fa-times"></span></a></td>
+								<td>&nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
