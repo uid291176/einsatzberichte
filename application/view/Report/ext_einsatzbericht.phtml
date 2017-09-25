@@ -1,0 +1,19 @@
+<?php 
+/**
+ * template zur PDF Ausgabe BMA Statistik
+ */
+?>
+<table cellpadding="5" cellspacing="0" style="width:100%; border:1px solid #333333;">
+	<tr>
+		<td style="text-align:left; font-size:18px; margin-top:5px;"><?php echo _('Einsatzbericht') ?></td>
+		<td style="text-align:center; font-size:18px; margin-top:5px;"><?php echo _('Details') ?></td>
+		<td style="text-align:right;"><img src="gfx/th-logo.gif" alt="Thüringen" /></td>
+	</tr>
+</table>
+<br /><br />
+<table cellpadding="3" cellspacing="0" style="width:100%;">
+	<tr>
+		<td style="width:20%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Einsatzbericht<br /><br />(Anfahrt, Lage, Taktik, Wirkung, Probleme usw.)') ?></td>
+		<td style="width:80%; height:130px; border:1px solid #666666;"><?php echo trim(nl2br($B->getProtokoll())) ?></td>
+	</tr>
+</table>

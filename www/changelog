@@ -68,12 +68,13 @@
 - Suche nach Einsatznummer optimiert (entf. Datumsfeld und Übersichten)
 - JavaScript Code zentral ausgelagert "custom.js"
 
-#2.0.0
+#1.3.0
 - Seite 3 Statistik BMA
-- Vorbelegung Einsatzstärken der BF
-- Zwischenschritt Einsatzvoransicht entfernt
+- Vorbelegung Einsatzstärken der BF <- ELS
+- Zwischenschritt "Einsatzvoransicht" entfernt
 - neues DB Schema
 - automatische Speicherung eines Einsatzes beim editieren (nach 20 min)
+- beim Speichern der Seite bleibt der jeweils geöffnet TAB erhalten (cookie)
 - alle Radio- Buttons durch Checkboxen ersetzt
 
 

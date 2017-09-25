@@ -95,7 +95,7 @@
 				</div>
 				<div class="left content-grid-col2">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[melderausloesung_stoerung]" value="0" />
-					<?php $html->drawFormCheckbox('melderausloesung_stoerung', _('Mängel im Schließsystem festgestellt'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('melderausloesung_stoerung') == '1')? true:false, 'class' => 'left melderausloesung radiocheck')) ?>
+					<?php $html->drawFormCheckbox('melderausloesung_stoerung', _('technische Störung der BMA'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('melderausloesung_stoerung') == '1')? true:false, 'class' => 'left melderausloesung radiocheck')) ?>
 				</div>
 				<div class="clear"></div>
 				

@@ -155,7 +155,7 @@ class Einsatz_Bericht
 	 */
 	public function saveRessources($arrData)
 	{
-		//$this->tools->debug($arrData);
+		
 		$arrdbData 	= array();
 		$arrImport 	= array();
 		$arrUpdate 	= array();
@@ -178,15 +178,15 @@ class Einsatz_Bericht
 					'f2' 		=> ($this->tools->isSizedString($r['rueckkehr_date']))? strtotime($this->tools->toDBtime($r['rueckkehr_date']).' '.$this->tools->q($r['rueckkehr_time'])):0
 			);
 			
-			$arrSelect = $this->_db->fetchRow("SELECT `f_kenner`, `f3` FROM `".TBL_EINSAETZE_RESSOURCEN."` WHERE `eid` = '".$this->_eid."' AND `f_kenner` = '".$r['funkkenner']."'");
+			$arrSelect = $this->_db->fetchRow("SELECT `id`, `f_kenner`, `f3` FROM `".TBL_EINSAETZE_RESSOURCEN."` WHERE `eid` = '".$this->_eid."' AND `f_kenner` = '".$r['funkkenner']."'");
 			
 			if ($arrSelect['f_kenner'] == $arrdbData['f_kenner'])
 			{
 			    
 			    if (intval($arrSelect['f3']) > intval($arrdbData['f3'])) return;
 			    else $arrUpdate = $arrdbData;
-				
-			    $this->_db->UpdateQuery(TBL_EINSAETZE_RESSOURCEN, $arrUpdate, "`f_kenner` = '". $arrdbData['f_kenner']."' AND `eid` = '".$this->_eid."'");
+			    
+			    $this->_db->UpdateQuery(TBL_EINSAETZE_RESSOURCEN, $arrUpdate, "`id` = '". $arrSelect['id']."'");
 			}
 			else
 			{

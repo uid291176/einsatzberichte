@@ -1,9 +1,9 @@
-<!-- 
+<?php
 /**
  * template "Brandbericht-Thüringen" erzeugt das PDF Dokument zum ausdrucken
  */
--->
-<table cellpadding="5" cellspacing="0" style="width:99%; border:1px solid #333333;">
+?>
+<table cellpadding="5" cellspacing="0" style="width:99%; border:1px solid #666666;">
 	<tr>
 		<td style="text-align:left; font-size:18px; margin-top:5px;"><?php echo _('Brandbericht Thüringen') ?></td>
 		<td style="text-align:center; font-size:18px; margin-top:5px;"><?php echo _('Teil 1') ?></td>
@@ -17,7 +17,7 @@
 	<tr>
 		<!-- linker Block -->
 		<td style="margin-right:10px;">
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Landkreis/ kreisfr. Stadt') ?></td>
 					<td colspan="3" style="border:1px solid #666666;"><?php echo $this->getConf('landkreis_kreisfreie_stadt') ?></td>
@@ -36,7 +36,7 @@
 				</tr>
 			</table>
 			<br /><br />
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Hauptbericht') ?></td>
 					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('report_art') == 'haupt')? 'X':'' ?></td>
@@ -59,7 +59,7 @@
 					<td style="width:40%; border:1px solid #666666;"><?php echo $B->get('anrufer_telefonnummer') ?></td>
 				</tr>
 			</table>
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Alarmzeit') ?></td>
 					<td style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Datum') ?></td>
@@ -68,7 +68,7 @@
 					<td><?php echo date('H:i:s', $B->get('alarm')) ?></td>
 				</tr>
 			</table>
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td style="width:60%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Eigener Ausrückebereich') ?></td>
 					<td style="width:15%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ja') ?></td>
@@ -77,14 +77,14 @@
 					<td style="width:5%;"><?php echo ($B->get('eigener_ausrueckebereich') == 'nein')? 'X':'' ?></td>
 				</tr>
 			</table>
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td style="width:60%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Entfernung zur E- Stelle (km)') ?></td>				
 					<td style="width:40%;"><?php echo $B->get('entfernung_einsatzstelle') ?> <?php echo ($this->tools->isSizedString($B->get('entfernung_einsatzstelle')))? _('km'):'' ?></td>
 				</tr>
 			</table>
 			<br /><br />
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td colspan="2" style="width:45%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Brandumfang') ?></td>
 					<td colspan="2" style="width:55%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Fehlalarmierung') ?></td>
@@ -114,7 +114,7 @@
 					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('fehlalarm_sonstige') == '1')? 'X':'' ?></td>
 				</tr>
 			</table>
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<!--
 				<tr>
 					<td colspan="4" style="width:90%; background-color:#cccccc; border:1px solid #666666;"><?php //echo _('In Bereitstellung (Anzahl)') ?></td>
@@ -137,14 +137,14 @@
 				</tr>
 			</table>
 			<br /><br />
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td colspan="4" style="width:95%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Gefährd. durch Freisetzung von gefährlichen Stoffen') ?></td>
 					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('gefahr_freisetzung_gef_stoffe') == '1')? 'X':''?></td>
 				</tr>
 			</table>
 			<br /><br />	
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">	
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">	
 				<tr>
 					<td colspan="4" style="width:95%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Brandwache') ?></td>
 					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('brandwache') == '1')? 'X':''?></td>
@@ -170,26 +170,26 @@
 		
 		<!-- rechter Block -->
 		<td>
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Brandobjekt') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('stichwort') ?></td></tr>
 				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Einsatzstelle') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('objektname') ?></td></tr>
 				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Adresse') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('adresse1') ?> <?php echo $B->get('hnr') ?></td></tr>
 				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ort') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('ort') ?> <?php echo $B->get('ortsteil') ?></td></tr>
 			</table>
 			<br /><br />
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Eigentümer') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_eigentuemer') ?></td></tr>
 				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Name') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_eigentuemer_name') ?></td></tr>
 				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anschrift') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_eigentuemer_adresse') ?></td></tr>
 			</table>
 			<br /><br />
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Geschädigter') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_geschaedigter') ?></td></tr>
 				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Name') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_geschaedigter_name') ?></td></tr>
 				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anschrift') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('brandobjekt_geschaedigter_adresse') ?></td></tr>
 			</table>
 			<br /><br />
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td colspan="4" style="width:90%; text-align:center; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anzahl geretteter Personen') ?>:</td>
 					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('personen_rettung_anzahl_gesamt') ?></td>
@@ -212,14 +212,14 @@
 				</tr>
 			</table>
 			<br /><br />
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td style="width:90%; text-align:center; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anzahl geretteter Tiere') ?>:</td>
 					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('tiere_rettung_anzahl_gesamt') ?></td>
 				</tr>
 			</table>
 			<br /><br />
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td colspan="2" style="text-align:center; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anzahl geschädigter Feuerwehrangehöriger') ?>:</td>
 				</tr>
@@ -233,7 +233,7 @@
 				</tr>
 			</table>
 			<br /><br />
-			<table cellpadding="2" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="2" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td colspan="2" style="text-align:center; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anzahl geschädigter anderer Personen') ?>:</td>
 				</tr>
@@ -245,16 +245,14 @@
 					<td style="width:90%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('verletzte/ verunglückte') ?></td>
 					<td style="width:10%; border:1px solid #666666;"><?php echo $B->get('personen_schaeden_anzahl_verletzt') ?></td>
 				</tr>
-				<tr>
-					<td style="width:100%; height:18px; background-color:#cccccc; border:1px solid #666666;"></td>
-				</tr>
+
 			</table>
 		</td><!-- rechter Block -->
 	</tr>
 </table><!-- Allgemeine Daten zum Einsatz -->
 <br /><br />
 <!-- Angaben zum Brandobjekt -->
-<table cellpadding="3" style="width:99%; border:1px solid #333333; border-collapse:collapse;">
+<table cellpadding="3" style="width:99%; border:1px solid #666666; border-collapse:collapse;">
 	<tr><td colspan="6" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Angaben zum Brandobjekt') ?></td></tr>
 	<tr>
 		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('kritischer Wohnungsbrand') ?></td>
@@ -321,7 +319,7 @@
 	</tr>
 </table><!-- Angaben zum Brandobjekt -->
 <br /><br />
-<table cellpadding="3" style="width:99%; border:1px solid #333333; border-collapse:collapse;">
+<table cellpadding="3" style="width:99%; border:1px solid #666666; border-collapse:collapse;">
 	<tr>
 		<td style="width:30%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Zugang Vorhanden') ?></td>
 		<td style="width:5%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Ja') ?></td>
@@ -370,7 +368,7 @@
 	<tr>
 		<!-- linker Block -->
 		<td style="margin-right:10px;">
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td colspan="4" style="background-color:#cccccc; text-align:center; border:1px solid #666666;"><?php echo _('Brandausmaß') ?></td>
 				</tr>
@@ -391,7 +389,7 @@
 		
 		<!-- rechter Block -->
 		<td style="margin-right:10px;">
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td colspan="4" style="background-color:#cccccc; text-align:center; border:1px solid #666666;"><?php echo _('Löschwasserversorgung') ?></td>
 				</tr>
@@ -416,7 +414,7 @@
 <table cellpadding="3" cellspacing="0" style="width:99%;">
 	<tr>
 		<td style="width:20%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Eingesetzte Geräte') ?></td>
-		<td style="width:80%; height:80px; border:1px solid #666666;"><?php echo $B->get('eingesetzte_geraete') ?></td>
+		<td style="width:80%; height:75px; border:1px solid #666666;"><?php echo $B->get('eingesetzte_geraete') ?></td>
 	</tr>
 </table>
 
@@ -424,19 +422,19 @@
 <table cellpadding="3" cellspacing="0" style="width:99%;">
 	<tr>
 		<td style="width:20%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Verbrauchsmaterial') ?></td>
-		<td style="width:80%; height:80px; border:1px solid #666666;"><?php echo $B->get('verbrauchsmaterial') ?></td>
+		<td style="width:80%; height:75px; border:1px solid #666666;"><?php echo $B->get('verbrauchsmaterial') ?></td>
 	</tr>
 </table>
 <!--  
 <?php //$this->tools->debug($B->getRessources()) ?>
 -->
 <br /><br />
-<table cellpadding="3" style="width:99%; border:1px solid #333333; border-collapse:collapse;">
+<table cellpadding="3" style="width:99%; border:1px solid #666666; border-collapse:collapse;">
 	<tr><td colspan="5" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ausgerückte Fahrzeuge und Einsatzzeiten') ?></td></tr>
 	<?php if($this->tools->isSizedArray($B->getRessources())) { ?>
 	<tr>
 		<td>
-			<table style="border:1px solid #333333; border-collapse:collapse;">
+			<table style="border:1px solid #666666; border-collapse:collapse;">
 				<tr><td colspan="3" style="background-color:#cccccc;"><?php echo _('Funkrufname') ?></td></tr>
 				<tr><td colspan="3" style="background-color:#cccccc;">&nbsp;</td></tr>
 				<?php foreach ($B->getRessources() as $arrRes) { ?>
@@ -447,7 +445,7 @@
 			</table>
 		</td>
 		<td>
-			<table style="border:1px solid #333333; border-collapse:collapse;">
+			<table style="border:1px solid #666666; border-collapse:collapse;">
 				<tr><td colspan="2" style="background-color:#cccccc;"><?php echo _('Ausrücken') ?></td></tr>
 				<tr><td style="background-color:#cccccc;"><?php echo _('Datum') ?></td><td style="background-color:#cccccc;"><?php echo _('Uhrzeit') ?></td></tr>
 				<?php foreach ($B->getRessources() as $arrRes) { ?>
@@ -458,7 +456,7 @@
 			</table>
 		</td>
 		<td>
-			<table style="border:1px solid #333333; border-collapse:collapse;">
+			<table style="border:1px solid #666666; border-collapse:collapse;">
 				<tr><td colspan="2" style="background-color:#cccccc;"><?php echo _('Eintreffen') ?></td></tr>
 				<tr><td style="background-color:#cccccc;"><?php echo _('Datum') ?></td><td style="background-color:#cccccc;"><?php echo _('Uhrzeit') ?></td></tr>
 				<?php foreach ($B->getRessources() as $arrRes) { ?>
@@ -469,7 +467,7 @@
 			</table>
 		</td>
 		<td>
-			<table style="border:1px solid #333333; border-collapse:collapse;">
+			<table style="border:1px solid #666666; border-collapse:collapse;">
 				<tr><td colspan="2" style="background-color:#cccccc;"><?php echo _('Einsatzbereit') ?></td></tr>
 				<tr><td style="background-color:#cccccc;"><?php echo _('Datum') ?></td><td style="background-color:#cccccc;"><?php echo _('Uhrzeit') ?></td></tr>
 				<?php foreach ($B->getRessources() as $arrRes) { ?>
@@ -480,7 +478,7 @@
 			</table>
 		</td>
 		<td>
-			<table style="border:1px solid #333333; border-collapse:collapse;">
+			<table style="border:1px solid #666666; border-collapse:collapse;">
 				<tr><td colspan="2" style="background-color:#cccccc;"><?php echo _('Rückkehr') ?></td></tr>
 				<tr><td style="background-color:#cccccc;"><?php echo _('Datum') ?></td><td style="background-color:#cccccc;"><?php echo _('Uhrzeit') ?></td></tr>
 				<?php foreach ($B->getRessources() as $arrRes) { ?>
@@ -504,12 +502,12 @@
 <?php //$this->tools->debug($B->getPersonal()) ?>
 -->
 <br /><br />
-<table cellpadding="3" style="width:99%; border:1px solid #333333; border-collapse:collapse;">
+<table cellpadding="3" style="width:99%; border:1px solid #666666; border-collapse:collapse;">
 	<tr><td colspan="5" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ausgerücktes und eingesetztes Personal') ?></td></tr>
 	<?php if($this->tools->isSizedArray($B->getPersonal())) { ?>
 	<tr>
 		<td>
-			<table style="border:1px solid #333333; border-collapse:collapse;">
+			<table style="border:1px solid #666666; border-collapse:collapse;">
 				<tr><td colspan="3" style="background-color:#cccccc;"><?php echo _('Funkrufname') ?></td></tr>
 				<tr><td colspan="3" style="background-color:#cccccc;">&nbsp;</td></tr>
 				<?php $i = 0; foreach ($B->getPersonal() as $arrPer) { ?>
@@ -525,7 +523,7 @@
 			</table>
 		</td>
 		<td>
-			<table style="border:1px solid #333333; border-collapse:collapse;">
+			<table style="border:1px solid #666666; border-collapse:collapse;">
 				<tr><td colspan="3" style="background-color:#cccccc;"><?php echo _('Einsatzzeit') ?></td></tr>
 				<tr><td style="background-color:#cccccc;"><?php echo _('Tag') ?></td><td style="background-color:#cccccc;"><?php echo _('Std') ?></td><td style="background-color:#cccccc;"><?php echo _('Min') ?></td></tr>
 				<?php $i = 0; foreach ($B->getPersonal() as $arrPer) { ?>
@@ -540,7 +538,7 @@
 			</table>
 		</td>
 		<td>
-			<table style="border:1px solid #333333; border-collapse:collapse;">
+			<table style="border:1px solid #666666; border-collapse:collapse;">
 				<tr><td colspan="4" style="background-color:#cccccc;"><?php echo _('Ausgerücktes Personal') ?></td></tr>
 				<tr><td style="background-color:#cccccc;"><?php echo _('hD') ?></td><td style="background-color:#cccccc;"><?php echo _('gD') ?></td><td style="background-color:#cccccc;"><?php echo _('mD') ?></td><td style="background-color:#cccccc;"><?php echo _('FF') ?></td></tr>
 				<?php $i = 0; foreach ($B->getPersonal() as $arrPer) { ?>
@@ -559,7 +557,7 @@
 			</table>
 		</td>
 		<td>
-			<table style="border:1px solid #333333; border-collapse:collapse;">
+			<table style="border:1px solid #666666; border-collapse:collapse;">
 				<tr><td colspan="4" style="background-color:#cccccc;"><?php echo _('Eingesetztes Personal') ?></td></tr>
 				<tr><td style="background-color:#cccccc;"><?php echo _('hD') ?></td><td style="background-color:#cccccc;"><?php echo _('gD') ?></td><td style="background-color:#cccccc;"><?php echo _('mD') ?></td><td style="background-color:#cccccc;"><?php echo _('FF') ?></td></tr>
 				<?php $i = 0; foreach ($B->getPersonal() as $arrPer) { ?>
@@ -606,14 +604,23 @@
 	<tr><td colspan="5" style="border:1px solid #666666;"><?php echo _('Für diesen Einsatz wurde kein Personal erfasst') ?></td></tr>
 	<?php } ?>
 </table>
-
 <br /><br />
+
+<?php if (strlen(trim(nl2br($B->getProtokoll()))) > 1024) { ?>
 <table cellpadding="3" cellspacing="0" style="width:99%;">
 	<tr>
 		<td style="width:20%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Einsatzbericht<br /><br />(Anfahrt, Lage, Taktik, Wirkung, Probleme usw.)') ?></td>
-		<td style="width:80%; height:250px; border:1px solid #666666;"><?php echo nl2br($B->getProtokoll()) ?></td>
+		<td style="width:80%; height:130px; border:1px solid #666666;"><?php echo _('--- Bericht liegt als extra Seite vor! ---') ?></td>
 	</tr>
 </table>
+<?php } else { ?>
+<table cellpadding="3" cellspacing="0" style="width:99%;">
+	<tr>
+		<td style="width:20%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Einsatzbericht<br /><br />(Anfahrt, Lage, Taktik, Wirkung, Probleme usw.)') ?></td>
+		<td style="width:80%; height:130px; border:1px solid #666666;"><?php echo trim(nl2br($B->getProtokoll())) ?></td>
+	</tr>
+</table>
+<?php } ?>
 
 <table cellpadding="0" cellspacing="0" style="width:99%;">
 	<tr>
@@ -622,7 +629,7 @@
 		
 		<!-- rechter Block -->
 		<td style="width:50%">
-			<table cellpadding="3" style="border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td style="width:45%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Anlagen beigefügt') ?></td>
 					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('anlage_beigefuegt') == '1')? 'X':'' ?></td>
@@ -633,15 +640,10 @@
 		</td><!-- rechter Block -->
 	</tr>
 </table>
-
-<?php if ($i > 11) { ?>
-<br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br /> 
-<?php } else { ?> 
 <br /><br /> 
-<?php } ?>
 
-<table cellpadding="3" style="width:99%; border:1px solid #333333; border-collapse:collapse;">
-	<tr><td colspan="9" style="background-color:#cccccc;"><?php echo _('Verständigung/ Anwesenheit') ?></td></tr>
+<table cellpadding="3" style="width:99%; border:1px solid #666666; border-collapse:collapse;">
+	<tr><td colspan="9" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Verständigung/ Anwesenheit') ?></td></tr>
 	<tr>
 		<td style="width:26%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Bürgermeister') ?></td>
 		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('info_buergermeister') == 'verstaendigt')? 'X':'' ?></td>
@@ -710,7 +712,7 @@
 	<tr>
 		<!-- linker Block -->
 		<td style="margin-right:10px;">
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Datum, Name, Unterschrift Einsatzleiter') ?></td>
 				</tr>
@@ -722,7 +724,7 @@
 		
 		<!-- rechter Block -->
 		<td style="margin-right:10px;">
-			<table cellpadding="3" style="width:98%; border:1px solid #333333; border-collapse:collapse;">
+			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
 					<td style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Datum, Name, Unterschrift ELD') ?></td>
 				</tr>

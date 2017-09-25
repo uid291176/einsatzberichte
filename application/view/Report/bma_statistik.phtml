@@ -1,0 +1,125 @@
+<?php 
+/**
+ * template zur PDF Ausgabe BMA Statistik
+ */
+?>
+<table cellpadding="5" cellspacing="0" style="width:100%; border:1px solid #333333;">
+	<tr>
+		<td style="text-align:left; font-size:18px; margin-top:5px;"><?php echo _('Brandbericht Thüringen') ?></td>
+		<td style="text-align:center; font-size:18px; margin-top:5px;"><?php echo _('BMA - Statistik') ?></td>
+		<td style="text-align:right;"><img src="gfx/th-logo.gif" alt="Thüringen" /></td>
+	</tr>
+</table>
+<br /><br />
+
+<table cellpadding="0" cellspacing="0" style="width:100%;">
+	<tr>
+		<!-- linker Block -->
+		<td style="margin-right:10px;">
+			<table cellpadding="3" style="width:100%; border:1px solid #666666; border-collapse:collapse;">
+				<tr><td colspan="4" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Angaben zu Objekten mit Brandmeldeanlagen') ?></td></tr>
+            	<tr>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('bma_reset') == '1')? 'X':''?></td>
+            		<td colspan="3" style="width:97%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Anlage wurde vor Eintreffen der Feuerwehr zurückgesetzt (weiteres Ausfüllen zu Angaben der BMA entfällt):') ?></td>
+            	</tr>
+            </table>
+            <br /><br />
+            
+            <table cellpadding="3" style="width:100%; border:1px solid #666666; border-collapse:collapse;">
+            	<tr><td colspan="4" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Blitzlampe') ?></td></tr>
+            	<tr>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('blitzlampe_ein') == '1')? 'X':''?></td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('in Funktion') ?></td>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('blitzlampe_aus') == '1')? 'X':''?></td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('nicht in Funktion') ?></td>
+            	</tr>
+			</table>
+			<br /><br />
+            
+            <table cellpadding="3" style="width:100%; border:1px solid #666666; border-collapse:collapse;">
+            	<tr><td colspan="4" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Feuerwehr Schlüsselkasten') ?></td></tr>
+            	<tr>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('schluesselkasten_ohne') == '1')? 'X':''?></td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('am Objekt nicht vorhanden') ?></td>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('schluesselkasten_nicht_zu_oeffnen') == '1')? 'X':''?></td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('ließ sich nicht öffnen') ?></td>
+            	</tr>
+            	<tr>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('schluesselkasten_geoeffnet') == '1')? 'X':''?></td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('wurde geöffnet, Objektschlüssel entnommen') ?></td>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('schluesselkasten_ohne_oeffnen') == '1')? 'X':''?></td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('brauchte nicht geöffnet werden') ?></td>
+            	</tr>
+			</table>
+			<br /><br />
+            
+            <table cellpadding="3" style="width:100%; border:1px solid #666666; border-collapse:collapse;">
+            	<tr><td colspan="4" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Freischaltelement') ?></td></tr>
+            	<tr>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('freischaltelement_ohne') == '1')? 'X':''?></td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('am Objekt nicht vorhanden') ?></td>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('freischaltelement_geschlossen') == '1')? 'X':''?></td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('wurde zur Alarmauslösung geschlossen') ?></td>
+            	</tr>
+            	<tr>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('freischaltelement_nicht_genutzt') == '1')? 'X':''?></td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('wurde zur Alarmauslösung nicht benötigt') ?></td>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;">&nbsp;</td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;">&nbsp;</td>
+            	</tr>
+			</table>
+			<br /><br />
+            
+            <table cellpadding="3" style="width:100%; border:1px solid #666666; border-collapse:collapse;">
+            	<tr><td colspan="4" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Objektschlüssel') ?></td></tr>
+            	<tr>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('objektschluessel_ohne_verwendung') == '1')? 'X':''?></td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('brauchten nicht zur Anwendung gebracht werden') ?></td>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('objektschluessel_maengel') == '1')? 'X':''?></td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Mängel im Schließsystem festgestellt') ?></td>
+            	</tr>
+            	<tr>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('objektschluessel_schliesst') == '1')? 'X':''?></td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('alle benutzten verschlossenen Türen schließbar') ?></td>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;">&nbsp;</td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;">&nbsp;</td>
+            	</tr>
+			</table>
+			<br /><br />
+            
+            <table cellpadding="3" style="width:100%; border:1px solid #666666; border-collapse:collapse;">
+            	<tr><td colspan="4" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Angaben zur Melderauslösung') ?></td></tr>
+            	<tr>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('melderausloesung_ausgeloest') == '1')? 'X':''?></td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('Melder ausgelöst') ?></td>
+            		<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('melderausloesung_stoerung') == '1')? 'X':''?></td>
+            		<td style="width:47%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('technische Störung der BMA') ?></td>
+            	</tr>
+            </table>	
+             <table cellpadding="3" style="width:100%; border:1px solid #666666; border-collapse:collapse;">
+            	<tr>
+            		<td colspan="4" style="width:100%;">
+            			<table cellpadding="3" style="width:100%; border:1px solid #666666; border-collapse:collapse;">
+            				<tr>
+            					<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('ausloesegrund_brand') == '1')? 'X':''?></td>
+            					<td style="width:97%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('infolge eines Brandes') ?></td>
+            				</tr>
+            				<tr>
+            					<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('ausloesegrund_missbrauch') == '1')? 'X':''?></td>
+            					<td style="width:97%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('infolge Meldermissbrauch (vorsätzlich oder fahrlässing)') ?></td>
+            				</tr>
+            				<tr>
+            					<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('ausloesegrund_kenngroesse') == '1')? 'X':''?></td>
+            					<td style="width:97%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('infolge Brandkenngrößen (Rauch, Wärme, Feuerschein)') ?></td>
+            				</tr>
+            				<tr>
+            					<td style="width:3%; text-align:center; border:1px solid #666666;"><?php echo ($B->get('ausloesegrund_ohne') == '1')? 'X':''?></td>
+            					<td style="width:97%; border:1px solid #666666; background-color:#cccccc;"><?php echo _('nicht feststellbar') ?></td>
+            				</tr>
+            			</table>
+            		</td>
+            	</tr>
+    		</table>
+		</td>
+	</tr>
+</table>

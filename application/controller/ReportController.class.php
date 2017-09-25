@@ -681,43 +681,23 @@ class ReportController extends SystemController
 		    
 		    if ($_REQUEST['status'] == 'finish')
 		    {
-		        if ($_REQUEST['typ'] == 'brandbericht') $this->createPDF($eID, 'brandbericht', true);
-		        if ($_REQUEST['typ'] == 'hilfeleistungsbericht') $this->createPDF($eID, 'hilfeleistungsbericht', true);
+		        // Abschluss des Berichts -> DB -> finisch
+		        if ($_REQUEST['typ'] == 'brandbericht') $this->createPDF($eID, 'brandbericht');
+		        if ($_REQUEST['typ'] == 'hilfeleistungsbericht') $this->createPDF($eID, 'hilfeleistungsbericht');
 		        
-		        $this->db->UpdateQuery(TBL_EINSAETZE, array('status' => 'finish'), "`eid` = '".$eID."'");
+		        $this->db->UpdateQuery(TBL_EINSAETZE, array('status' => 'finish', 'bericht_abgeschlossen' => time()), "`eid` = '".$eID."'");
 		        
 		        // Sprung zu allen abgeschlossenen Einsätze mit Beginn am übergebenen Datum
 		        $this->redirect($_REQUEST['k'], 'finish', array('date-select' => $B->get('beginn')));
 		    }
 		    else
 		    {
-		        if ($_REQUEST['typ'] == 'brandbericht') $this->createPDF($eID, 'brandbericht');
-		        if ($_REQUEST['typ'] == 'hilfeleistungsbericht') $this->createPDF($eID, 'hilfeleistungsbericht');
+		        // Ausgabe Druckansicht PDF
+		        if ($_REQUEST['typ'] == 'brandbericht') $this->createPDF($eID, 'brandbericht', false);
+		        if ($_REQUEST['typ'] == 'hilfeleistungsbericht') $this->createPDF($eID, 'hilfeleistungsbericht', false);
 		    }
 		    
 		}
-		    
-		   /* switch($_REQUEST['cmd'])
-		    {
-		        
-		        case 'detailview': // Einzelansicht der Berichte im Editiermodus
-		            
-		            $this->view['data'] = $Bericht;
-		            
-		            $this->render(FULL, 'Report', 'edit_'.$this->tools->q($_REQUEST['tmpl']));
-		            
-		            break;
-		            
-		        case 'to-pdf': // Erzeugung der PDF Berichte
-		            
-		            
-		            
-		            break;
-		            
-		        default: // Standard Anzeige (Liste) der Berichte des jeweils angemeldeten Benutzer
-		            
-		            
-		}*/
 		
 		$this->view['data'] = $B;
 		
@@ -1044,25 +1024,14 @@ class ReportController extends SystemController
     	
 	} // protected function setSQLOrderDirection()
 	
-	public function createPDF($eID, $tmpl = 'brandbericht', $archiv = false)
+	public function createPDF($eID, $tmpl = 'brandbericht', $archiv = true)
 	{
 		
 		$desPath = $_SERVER['DOCUMENT_ROOT'].$this->getConf('upload_path');
 		
 		$B = new Einsatz_Bericht($eID, $this->db);
 		$B->init();
-		
-		$this->view['data'] = $B;
-		
-		ob_start();
-		
-		require_once VIEW_PATH.'/Report/'.$tmpl.'.phtml';
-		
-		$html = ob_get_contents();
-		
-		ob_clean();
-		
-		//die($html);
+		//$this->view['data'] = $B;
 		
 		// TCPDF Library laden
 		require_once(LIB_PATH.'/Tcpdf/tcpdf.php');
@@ -1104,24 +1073,71 @@ class ReportController extends SystemController
 		// Neue Seite
 		$pdf->AddPage();
 		
+		ob_start();
+		
+		require_once VIEW_PATH.'/Report/'.$tmpl.'.phtml';
+		
+		$html = ob_get_contents();
+		
+		ob_clean();
+		
 		// Fügt den HTML Code in das PDF Dokument ein
 		$pdf->writeHTML($html, true, false, true, false, '');
+		
+		// Statistik BMA anhängen
+        if ($B->get('brandobjekt_bma_vorhanden') == 'ja')
+        {
+            // Neue Seite
+            $pdf->AddPage();
+            
+            ob_start();
+            
+            require_once VIEW_PATH.'/Report/bma_statistik.phtml';
+            
+            $html = ob_get_contents();
+            
+            ob_clean();
+            
+            // Fügt den HTML Code in das PDF Dokument ein
+            $pdf->writeHTML($html, true, false, true, false, '');
+        }
+        
+        // gesonderter Bericht 
+        if (strlen(trim(nl2br($B->getProtokoll()))) > 1024)
+        {
+            // Neue Seite
+            $pdf->AddPage();
+            
+            ob_start();
+            
+            require_once VIEW_PATH.'/Report/ext_einsatzbericht.phtml';
+            
+            $html = ob_get_contents();
+            
+            ob_clean();
+            
+            // Fügt den HTML Code in das PDF Dokument ein
+            $pdf->writeHTML($html, true, false, true, false, '');
+        }
+        
+		
+		$pdfName = $B->get('enr').'.pdf';
 		
 		//Ausgabe der PDF
 		if ($archiv === true)
 		{
+
 			//Variante 1: PDF im Filesystem ablegen:			
 			$arrReportFolders = scandir($desPath);
 			
 			if (in_array(date('Y-m-d', $B->get('beginn')), $arrReportFolders))
 			{
-				$pdfName = $B->get('enr').'.pdf';
+				
 				$pdf->Output($desPath.'/'.date('Y-m-d', $B->get('beginn')).'/'.$pdfName, 'F');
 			}
 			else 
 			{
 				mkdir($desPath.'/'.date('Y-m-d', $B->get('beginn'))); // Ordner mit dem Datum des Einsatzbeginns anlegen
-				$pdfName = $B->get('enr').'.pdf';
 				$pdf->Output($desPath.'/'.date('Y-m-d', $B->get('beginn')).'/'.$pdfName, 'F');
 			}
 			return;
@@ -1129,6 +1145,7 @@ class ReportController extends SystemController
 		}
 		else 
 		{
+		   
 			//Variante 2: PDF direkt an den Benutzer senden:
 			$pdf->Output($pdfName, 'I');
 		}
