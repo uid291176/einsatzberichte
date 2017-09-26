@@ -155,7 +155,7 @@ class Einsatz_Bericht
 	 */
 	public function saveRessources($arrData)
 	{
-		
+	    
 		$arrdbData 	= array();
 		$arrImport 	= array();
 		$arrUpdate 	= array();
@@ -183,10 +183,7 @@ class Einsatz_Bericht
 			if ($arrSelect['f_kenner'] == $arrdbData['f_kenner'])
 			{
 			    
-			    if (intval($arrSelect['f3']) > intval($arrdbData['f3'])) return;
-			    else $arrUpdate = $arrdbData;
-			    
-			    $this->_db->UpdateQuery(TBL_EINSAETZE_RESSOURCEN, $arrUpdate, "`id` = '". $arrSelect['id']."'");
+			    $this->_db->UpdateQuery(TBL_EINSAETZE_RESSOURCEN, $arrdbData, "`id` = '". $arrSelect['id']."'");
 			}
 			else
 			{
@@ -196,7 +193,7 @@ class Einsatz_Bericht
 			}
 				
 		}
-
+		
 		return;
 		
 	} // public function saveRessources($arrData)

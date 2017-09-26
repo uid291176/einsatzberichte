@@ -76,6 +76,8 @@
 - automatische Speicherung eines Einsatzes beim editieren (nach 20 min)
 - beim Speichern der Seite bleibt der jeweils geöffnet TAB erhalten (cookie)
 - alle Radio- Buttons durch Checkboxen ersetzt
+- Feld Einsatzbericht wird ab einer Zeichenlänge > 1024 auf seperater Seite ausgegeben
+- Seite BMA Statistik wird nur bei vorhandener BMA im Brandbericht mit ausgegeben
 
 
 

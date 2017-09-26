@@ -308,6 +308,7 @@ class Einsatz_Handler
 	            'f2'           => $this->tools->mkTimeStamp(trim($res['RESOURCE_EINSATZENDE']))
 	            
 	        );
+	        // ToDo Prüfung auf Dopplung einer Ressource in einem Einsatz (Fehleingabe Disponent)
 	        $this->mysqlDB->ImportQuery(TBL_EINSAETZE_RESSOURCEN, $arrImport);
 	        
 	        // Personal der Ressource
@@ -351,6 +352,7 @@ class Einsatz_Handler
 	            'f2'           => $this->tools->mkTimeStamp(trim($res['RESOURCE_EINSATZENDE']))
 	            
 	        );
+	        // ToDo Prüfung auf Dopplung einer Ressource in einem Einsatz (Fehleingabe Disponent)
 	        $this->mysqlDB->ImportQuery(TBL_EINSAETZE_RESSOURCEN, $arrImport);
 	        
 	        // Personal der Ressource 
