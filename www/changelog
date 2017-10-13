@@ -79,6 +79,15 @@
 - Feld Einsatzbericht wird ab einer Zeichenlänge > 1024 auf seperater Seite ausgegeben
 - Seite BMA Statistik wird nur bei vorhandener BMA im Brandbericht mit ausgegeben
 
-
+#1.3.1
+- Zeitberechnung deaktivieren bei unvollständigen Fahrzeug Status Informatioenen
+- Personalstärken Zuordung FF berichtigen
+- Hinweistext bei Formularänderungen und verlassen der Seite ohne zu speichern
+- zusätzliche Freitextseite "Einsatzbericht" richtig ausgeben -> Drucken
+- fälschlich übernommene Berichte "zurückgeben"
+- Berichte KAT-S/ Sonderlage als HL- Bericht
+- richtiges Speichern zus. eingefügter Fahrzeuge u. Ressourcen
+- #Angaben Barndobjekt/ Einsatzobjekt editierbar
+- #Alarmzeit readonly
 
 

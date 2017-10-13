@@ -156,6 +156,7 @@ class Einsatz_Bericht
 	public function saveRessources($arrData)
 	{
 	    
+	    
 		$arrdbData 	= array();
 		$arrImport 	= array();
 		$arrUpdate 	= array();
@@ -187,9 +188,30 @@ class Einsatz_Bericht
 			}
 			else
 			{
+			    // Fahrzeug neu anlegen
 				$arrImport = $arrdbData;
 				
 				$this->_db->ImportQuery(TBL_EINSAETZE_RESSOURCEN, $arrImport);
+				
+				// Peronaleintrag dazu erzeugen 
+				$arrImportPers = array(
+				    'eid'       => $arrImport['eid'],
+				    'enr'       => $arrImport['enr'],
+				    'f_kenner'  => $arrImport['f_kenner'],
+				    'e_zeit'    => (intval($arrImport['f2']) - intval($arrImport['f3']) / 60),
+				    
+				    'aus_h'     => '0',
+				    'aus_g'     => '0',
+				    'aus_m'     => '0',
+				    'aus_ff'    => '0',
+				    
+				    'eingesetzt_h'  => '0',
+				    'eingesetzt_g'  => '0',
+				    'eingesetzt_m'  => '0',
+				    'eingesetzt_ff' => '0'
+				    
+				);
+				$this->_db->ImportQuery(TBL_EINSAETZE_PERSONAL, $arrImportPers);
 			}
 				
 		}
@@ -241,6 +263,8 @@ class Einsatz_Bericht
 			}
 			else
 			{
+			    
+			    die('darf nie vorkommen!!! model->Einsatz->Bericht->savePersonal::Import');
 				$arrImport = $arrdbData;
 				 
 				$this->_db->ImportQuery(TBL_EINSAETZE_PERSONAL, $arrImport);

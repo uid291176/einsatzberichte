@@ -255,26 +255,27 @@ class Einsatz_Handler
 	    $arrImport = array(
 	        
 	        // Einsatz Stammdaten
-	        'eid'              => $this->tools->q(trim($this->eData['event']['EINSATZ_ID'])),
-	        'enr'              => $this->tools->q(trim($this->eData['event']['EINSATZ_NUMMER'])),
-	        'haupt_stichwort'  => $this->tools->q(trim($this->eData['event']['EINSATZ_HAUPTSTICHWORT'])),
-	        'stichwort'        => $this->tools->q(trim($this->eData['event']['EINSATZ_STICHWORT'])),
-	        'beginn'           => $this->tools->mkTimeStamp(trim($this->eData['event']['EINSATZ_BEGINN'])),
-	        'alarm'            => $this->tools->mkTimeStamp(trim($this->eData['event']['EINSATZ_ALARM'])),
-	        'typ'              => $this->tools->q(trim($this->eData['event']['EINSATZ_HAUPTSTICHWORT'])),
-	        'uid'              => $this->userID,
-	        'status'           => 'edit',
+	        'eid'                      => $this->tools->q(trim($this->eData['event']['EINSATZ_ID'])),
+	        'enr'                      => $this->tools->q(trim($this->eData['event']['EINSATZ_NUMMER'])),
+	        'haupt_stichwort'          => $this->tools->q(trim($this->eData['event']['EINSATZ_HAUPTSTICHWORT'])),
+	        'stichwort'                => $this->tools->q(trim($this->eData['event']['EINSATZ_STICHWORT'])),
+	        'beginn'                   => $this->tools->mkTimeStamp(trim($this->eData['event']['EINSATZ_BEGINN'])),
+	        'alarm'                    => $this->tools->mkTimeStamp(trim($this->eData['event']['EINSATZ_ALARM'])),
+	        'typ'                      => $this->tools->q(trim($this->eData['event']['EINSATZ_HAUPTSTICHWORT'])),
+	        'uid'                      => $this->userID,
+	        'status'                   => 'edit',
 	        
 	        // Einsatzadresse
-	        'adresse1'         => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_STRASSE1'])),
-	        'adresse2'         => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_STRASSE2'])),
-	        'ort'              => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_ORT'])),
-	        'ortsteil'         => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_ORTSTEIL'])),
-	        'region'           => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_REGION'])),
-	        'plz'              => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_PLZ'])),
-	        'land'             => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_LAND'])),
-	        'hnr'              => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_HNR'])),
-	        'objektname'       => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_OBJEKTNAME'])),
+	        'adresse1'                 => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_STRASSE1'])),
+	        'adresse2'                 => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_STRASSE2'])),
+	        'ort'                      => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_ORT'])),
+	        'ortsteil'                 => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_ORTSTEIL'])),
+	        'region'                   => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_REGION'])),
+	        'plz'                      => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_PLZ'])),
+	        'land'                     => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_LAND'])),
+	        'hnr'                      => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_HNR'])),
+	        'objektname'               => $this->tools->q(trim($this->eData['place_of_action']['EINSATZ_OBJEKTNAME'])),
+	        'bericht_abgeschlossen'    => 0,
 	        
 	        // Meldungsaufnahme
 	        'anrufer_anrufzeit'        => $this->tools->mkTimeStamp(trim($this->eData['details_meldungs_aufnahme']['ANRUFER_ANRUFZEIT'])),
@@ -302,15 +303,15 @@ class Einsatz_Handler
 	            'standort'     => $this->tools->q(trim($res['RESOURCE_HOME'])),
 	            'alarm_beginn' => $this->tools->mkTimeStamp(trim($res['RESOURCE_ALARM_BEGINN'])),
 	            'alarm'        => $this->tools->mkTimeStamp(trim($res['RESOURCE_ALARM'])),
-	            'f3'           => $this->tools->mkTimeStamp(trim($res['RESOURCE_EINSATZ_UEBERNOMMEN'])),
-	            'f4'           => $this->tools->mkTimeStamp(trim($res['RESOURCE_ANKUNFT'])),
-	            'f1'           => $this->tools->mkTimeStamp(trim($res['RESOURCE_FREI_UEBER_FUNK'])),
-	            'f2'           => $this->tools->mkTimeStamp(trim($res['RESOURCE_EINSATZENDE']))
+	            'f3'           => (!empty($res['RESOURCE_EINSATZ_UEBERNOMMEN']))? $this->tools->mkTimeStamp(trim($res['RESOURCE_EINSATZ_UEBERNOMMEN'])):'0',
+	            'f4'           => (!empty($res['RESOURCE_ANKUNFT']))? $this->tools->mkTimeStamp(trim($res['RESOURCE_ANKUNFT'])):'0',
+	            'f1'           => (!empty($res['RESOURCE_FREI_UEBER_FUNK']))? $this->tools->mkTimeStamp(trim($res['RESOURCE_FREI_UEBER_FUNK'])):'0',
+	            'f2'           => (!empty($res['RESOURCE_EINSATZENDE']))? $this->tools->mkTimeStamp(trim($res['RESOURCE_EINSATZENDE'])):'0'
 	            
 	        );
 	        // ToDo Prüfung auf Dopplung einer Ressource in einem Einsatz (Fehleingabe Disponent)
 	        $this->mysqlDB->ImportQuery(TBL_EINSAETZE_RESSOURCEN, $arrImport);
-	        
+
 	        // Personal der Ressource
 	        $arrImport = array(
 	            
@@ -329,9 +330,11 @@ class Einsatz_Handler
 	            
 	        );
 	        $this->mysqlDB->ImportQuery(TBL_EINSAETZE_PERSONAL, $arrImport);
+	        
+	        
 
 	    }
-	    
+
 	    // Ressourcen Untereinsatz
 	    $arrImport = array();
 	    foreach ($this->eData['ressourcen_untereinsatz'] as $res)
@@ -346,10 +349,10 @@ class Einsatz_Handler
 	            'standort'     => $this->tools->q(trim($res['RESOURCE_HOME'])),
 	            'alarm_beginn' => $this->tools->mkTimeStamp(trim($res['RESOURCE_ALARM_BEGINN'])),
 	            'alarm'        => $this->tools->mkTimeStamp(trim($res['RESOURCE_ALARM'])),
-	            'f3'           => $this->tools->mkTimeStamp(trim($res['RESOURCE_EINSATZ_UEBERNOMMEN'])),
-	            'f4'           => $this->tools->mkTimeStamp(trim($res['RESOURCE_ANKUNFT'])),
-	            'f1'           => $this->tools->mkTimeStamp(trim($res['RESOURCE_FREI_UEBER_FUNK'])),
-	            'f2'           => $this->tools->mkTimeStamp(trim($res['RESOURCE_EINSATZENDE']))
+	            'f3'           => (!empty($res['RESOURCE_EINSATZ_UEBERNOMMEN']))? $this->tools->mkTimeStamp(trim($res['RESOURCE_EINSATZ_UEBERNOMMEN'])):'0',
+	            'f4'           => (!empty($res['RESOURCE_ANKUNFT']))? $this->tools->mkTimeStamp(trim($res['RESOURCE_ANKUNFT'])):'0',
+	            'f1'           => (!empty($res['RESOURCE_FREI_UEBER_FUNK']))? $this->tools->mkTimeStamp(trim($res['RESOURCE_FREI_UEBER_FUNK'])):'0',
+	            'f2'           => (!empty($res['RESOURCE_EINSATZENDE']))? $this->tools->mkTimeStamp(trim($res['RESOURCE_EINSATZENDE'])):'0'
 	            
 	        );
 	        // ToDo Prüfung auf Dopplung einer Ressource in einem Einsatz (Fehleingabe Disponent)
@@ -379,8 +382,10 @@ class Einsatz_Handler
 	    // Protokoll/ Lagefilm/ Rückmeldungen zur LST
 	    $arrImport = array(
 	        
-	        'eid'  => $this->tools->q(trim($this->eData['event']['EINSATZ_ID'])),
-	        'enr'  => $this->tools->q(trim($this->eData['event']['EINSATZ_NUMMER'])),
+	        'eid'          => $this->tools->q(trim($this->eData['event']['EINSATZ_ID'])),
+	        'enr'          => $this->tools->q(trim($this->eData['event']['EINSATZ_NUMMER'])),
+	        'zeit'         => $this->tools->mkTimeStamp(trim($this->eData['event']['EINSATZ_BEGINN'])),
+	        'ersteller'    => $this->userID
 	    );
 	    
 	    $strOut = '';
@@ -498,58 +503,85 @@ class Einsatz_Handler
 	 */
 	public function getPersType($strBesatzung, $strKenner, $strDienstGruppe = 'm')
 	{
-	    
-	    switch ($strKenner)
+        
+	    if(strpos($strKenner, '/')) $arrKenner = explode('/', $strKenner);
+
+	    /**
+	     * Alle Feuerwehren der Stadt Erfurt
+	     */
+	    if ($this->tools->isSizedArray($arrKenner))
 	    {
-	        
-	        case '01/11/01':
-	            if ($strDienstGruppe == 'h') return '0';
-	            if ($strDienstGruppe == 'g') return '1';
-	            if ($strDienstGruppe == 'm') return '1';
-	            if ($strDienstGruppe == 'ff') return '0';
-	            break;
+	        switch ($arrKenner[0])
+	        {
+	            // BF Wache1
+	            case '01':
+	                
+	                // ELW1
+	                if ($arrKenner[1] == '11')
+	                {
+	                    if ($strDienstGruppe == 'h') return '0';
+	                    if ($strDienstGruppe == 'g') return '1';
+	                    if ($strDienstGruppe == 'm') return '1';
+	                    if ($strDienstGruppe == 'ff') return '0';
+	                }
+	                
+	                // KdoW
+	                elseif ($arrKenner[1] == '10')
+	                {
+	                    if ($strDienstGruppe == 'h') return '1';
+	                    if ($strDienstGruppe == 'g') return '0';
+	                    if ($strDienstGruppe == 'm') return '0';
+	                    if ($strDienstGruppe == 'ff') return '0';
+	                }
+	                else 
+	                {
+	                    if ($strDienstGruppe == 'h') return '0';
+	                    if ($strDienstGruppe == 'g') return '0';
+	                    if ($strDienstGruppe == 'm') return $strBesatzung;
+	                    if ($strDienstGruppe == 'ff') return '0';
+	                }
+	                break;
+	                
+	            // BF Wache2
+	            case '02':
+	                
+	                // ELW1
+	                if ($arrKenner[1] == '11')
+	                {
+	                    if ($strDienstGruppe == 'h') return '0';
+	                    if ($strDienstGruppe == 'g') return '1';
+	                    if ($strDienstGruppe == 'm') return '1';
+	                    if ($strDienstGruppe == 'ff') return '0';
+	                }
+	                
+	                // KdoW
+	                elseif ($arrKenner[1] == '10')
+	                {
+	                    if ($strDienstGruppe == 'h') return '1';
+	                    if ($strDienstGruppe == 'g') return '0';
+	                    if ($strDienstGruppe == 'm') return '0';
+	                    if ($strDienstGruppe == 'ff') return '0';
+	                }
+	                else 
+	                {
+	                    if ($strDienstGruppe == 'h') return '0';
+	                    if ($strDienstGruppe == 'g') return '0';
+	                    if ($strDienstGruppe == 'm') return $strBesatzung;
+	                    if ($strDienstGruppe == 'ff') return '0';
+	                }
+	                break;
 	            
-	        case '01/11/02':
-	            if ($strDienstGruppe == 'h') return '0';
-	            if ($strDienstGruppe == 'g') return '1';
-	            if ($strDienstGruppe == 'm') return '1';
-	            if ($strDienstGruppe == 'ff') return '0';
-	            break;
-	            
-	        case '02/11/03':
-	            if ($strDienstGruppe == 'h') return '0';
-	            if ($strDienstGruppe == 'g') return '1';
-	            if ($strDienstGruppe == 'm') return '1';
-	            if ($strDienstGruppe == 'ff') return '0';
-	            break;
-	            
-	        case '01/10/02':
-	            if ($strDienstGruppe == 'h') return '1';
-	            if ($strDienstGruppe == 'g') return '0';
-	            if ($strDienstGruppe == 'm') return '0';
-	            if ($strDienstGruppe == 'ff') return '0';
-	            break;
-	            
-	        case '01/10/05':
-	            if ($strDienstGruppe == 'h') return '1';
-	            if ($strDienstGruppe == 'g') return '0';
-	            if ($strDienstGruppe == 'm') return '0';
-	            if ($strDienstGruppe == 'ff') return '0';
-	            break;
-	            
-	        case '01/10/06':
-	            if ($strDienstGruppe == 'h') return '1';
-	            if ($strDienstGruppe == 'g') return '0';
-	            if ($strDienstGruppe == 'm') return '0';
-	            if ($strDienstGruppe == 'ff') return '0';
-	            break;
-	            
-	        default:
-	            if ($strDienstGruppe == 'm') return $strBesatzung;
-	            else return '0';
-	            
-	    }
+	            // FF
+	            default:
+	                if ($strDienstGruppe == 'h') return '0';
+	                if ($strDienstGruppe == 'g') return '0';
+	                if ($strDienstGruppe == 'm') return '0';
+	                if ($strDienstGruppe == 'ff') return $strBesatzung;
+	                
+	        }
 	    
+	    } // Alle Feuerwehren der Stadt Erfurt
+
 	} // public function getPersType($strBesatzung, $strKenner, $strDienstGruppe = 'm')
 	
 }

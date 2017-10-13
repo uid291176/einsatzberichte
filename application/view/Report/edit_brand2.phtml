@@ -179,8 +179,8 @@
 								<table>
 									<tr>
 										<td><?php $html->drawFormInput('einsatzzeit_day', '', $arrEinsatzzeit[$index]['tag'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($arrEinsatzzeit[$index]['tag'] == '0')? 'einsatzzeit-day color-grey':'einsatzzeit-day')) ?></td>
-										<td><?php $html->drawFormInput('einsatzzeit_std', '', $arrEinsatzzeit[$index]['std'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($arrEinsatzzeit[$index]['std'] == '0')? 'einsatzzeit-day color-grey':'einsatzzeit-std')) ?></td>
-										<td><?php $html->drawFormInput('einsatzzeit_min', '', $arrEinsatzzeit[$index]['min'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($arrEinsatzzeit[$index]['min'] == '0')? 'einsatzzeit-day color-grey':'einsatzzeit-min')) ?></td>
+										<td><?php $html->drawFormInput('einsatzzeit_std', '', $arrEinsatzzeit[$index]['std'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($arrEinsatzzeit[$index]['std'] == '0')? 'einsatzzeit-std color-grey':'einsatzzeit-std')) ?></td>
+										<td><?php $html->drawFormInput('einsatzzeit_min', '', $arrEinsatzzeit[$index]['min'], strtolower($_REQUEST['k']).'[personal]['.$index.']', array('class' => ($arrEinsatzzeit[$index]['min'] == '0')? 'einsatzzeit-min color-grey':'einsatzzeit-min')) ?></td>
 									</tr>
 								</table>
 							</td>
@@ -210,9 +210,11 @@
 				</table>
 				<br />
 				
+				<!-- 
 				<div id="report-personal-add">
 					<span class="fa fa-plus"></span>&nbsp;<a id="add_index_<?php echo $index ?>" class="add-personal" href="#"><?php echo _('weiteres Personal hinzufügen') ?></a>
 				</div>
+				-->
 				
 				<!-- Start Formularfelder zum erfassen von weiterem Personal welches nicht aus dem ELS kommen -->	
 				<table class="table-add-report-personal" style="display:none;">

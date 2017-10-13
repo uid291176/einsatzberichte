@@ -12,7 +12,7 @@ $B = $this->view['data'];
 	<?php echo $this->drawMessages() ?>
 	
 	<div class="left">
-		<a class="button" style="margin-left:0;" href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="fa fa-angle-double-left"></span>&nbsp;<?php echo _('Zurück zur Auswahl') ?></a>
+		<a class="button" style="margin-left:0;" href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'index', array('order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>" onclick="return leavePage();"><span class="fa fa-angle-double-left"></span>&nbsp;<?php echo _('Zurück zur Auswahl') ?></a>
 	</div>
 	
 	<div class="left">
@@ -20,11 +20,11 @@ $B = $this->view['data'];
 	</div>
 	
 	<div class="left">
-		<a class="button" style="margin-left:20px;" href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('cmd' => 'to-pdf', 'eid' => $B->get('eid'), 'typ' => strtolower($this->getReportType($B->get('typ'))))) ?>"><span class="fa fa-print"></span>&nbsp;<?php echo _('Drucken (PDF)') ?></a>
+		<a class="button" style="margin-left:20px;" href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('cmd' => 'to-pdf', 'eid' => $B->get('eid'), 'typ' => strtolower($this->getReportType($B->get('typ'))))) ?>" onclick="return leavePage();"><span class="fa fa-print"></span>&nbsp;<?php echo _('Drucken (PDF)') ?></a>
 	</div>
 	
 	<div class="right">
-		<a class="button" href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('cmd' => 'to-pdf', 'status' => 'finish', 'eid' => $B->get('eid'), 'typ' => strtolower($this->getReportType($B->get('typ'))))) ?>"><span class="fa fa-file-pdf-o"></span>&nbsp;<?php echo _('Bericht abschließen (PDF)') ?></a>
+		<a class="button" href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('cmd' => 'to-pdf', 'status' => 'finish', 'eid' => $B->get('eid'), 'typ' => strtolower($this->getReportType($B->get('typ'))))) ?>" onclick="return leavePage();"><span class="fa fa-file-pdf-o"></span>&nbsp;<?php echo _('Bericht abschließen (PDF)') ?></a>
 	</div>
 	<div class="clear"></div>
 	<br />

@@ -702,9 +702,35 @@ class ReportController extends SystemController
 		$this->view['data'] = $B;
 		
 		// hier wird die Art des Berichtes (Hilfeleistung oder Brandbericht unterschieden)
-		$this->render(FULL, 'Report', $this->tools->q($_REQUEST['tmpl']));
+		if ($this->tools->q($_REQUEST['tmpl']) == 'edit_brand') $tmpl = $this->tools->q($_REQUEST['tmpl']);
+		else $tmpl = 'edit_hilfeleistung'; // standard ist hilfeleitungsbericht (Sonderlagen/ Ausnahmezustand/ Unwetter)
+		    
+        $this->render(FULL, 'Report', $tmpl);
 		
 	} // public function viewAction()
+	
+	
+	/**
+	 * löscht ("DELETE FROM ...") einen Bericht aus dem Bearbeitungsstatus eines Einsatzbearbeiters
+	 * Einsatz wird wieder zum offenen Einsatz
+	 */
+	public function resetAction()
+	{
+	  
+	   $eID = $this->tools->q($_REQUEST['eid']);
+	   
+	   // die Erfassten Daten werden aus der MySQL DB "hart" gelöscht
+	   $this->db->Query("DELETE FROM `".TBL_EINSAETZE_PROTOKOLL."` WHERE `eid` = '".$eID."'");
+	   $this->db->Query("DELETE FROM `".TBL_EINSAETZE_RESSOURCEN."` WHERE `eid` = '".$eID."'");
+	   $this->db->Query("DELETE FROM `".TBL_EINSAETZE_PERSONAL."` WHERE `eid` = '".$eID."'");
+	   $this->db->Query("DELETE FROM `".TBL_EINSAETZE_EAV."` WHERE `eid` = '".$eID."'");
+	   $this->db->Query("DELETE FROM `".TBL_EINSAETZE."` WHERE `eid` = '".$eID."'");
+	   
+	   $this->setPosMessage(_('Der Einsatz wurde wieder freigegeben!'));
+	   
+	   $this->redirect($this->tools->q($_REQUEST['k']), 'edit');
+	   
+	} // public function resetAction()
 	
 	
 	/**

@@ -119,6 +119,8 @@ h3 { font-size:16px; margin-bottom:20px; font-weight:600; }
 .content-list-table td { padding:5px; line-height:150%; font-size:13px; }
 .content-list-table td a { text-decoration:none; color:#0073aa; }
 .content-list-table td a:hover { color:#00a0d2; }
+.content-list-table td a span.red { color:#af2b1e; }
+.content-list-table td a:hover span.red { color:red; }
 .content-list-table .check-col { text-align:center; vertical-align:top; padding:10px 5px; width:30px; }
 .content-list-table .empty-data { padding:10px; line-height:150%; font-size:13px; color:#af2b1e; }
 
