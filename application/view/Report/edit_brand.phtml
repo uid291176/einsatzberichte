@@ -101,10 +101,10 @@ $B = $this->view['data'];
 
 				<p style="margin-top:7px;" class="left bold label content-grid-col3"><?php echo _('Alarmzeit') ?>:</p>
 				<div class="left content-grid-col4">
-					<?php $html->drawFormInput('alarmzeit_datum', _('Datum'), date('d.m.Y', $B->get('alarm')), '', array('class' => 'form-date-time right datepicker', 'font-ico' => 'fa-calendar')) ?>
+					<?php $html->drawFormInput('alarmzeit_datum', _('Datum'), date('d.m.Y', $B->get('alarm')), '', array('readonly' => true, 'class' => 'form-date-time right', 'font-ico' => 'fa-calendar')) ?>
 				</div>
 				<div class="right content-grid-col3">
-					<?php $html->drawFormInput('alarmzeit_uhrzeit', _('Uhrzeit'), date('H:i:s', $B->get('alarm')), '', array('class' => 'form-date-time right', 'type' => 'time', 'placeholder' => 'hh:mm')) ?>
+					<?php $html->drawFormInput('alarmzeit_uhrzeit', _('Uhrzeit'), date('H:i:s', $B->get('alarm')), '', array('readonly' => true, 'class' => 'form-date-time right', 'type' => 'time', 'placeholder' => 'hh:mm')) ?>
 				</div>
 				<div class="clear"></div>
 				<!-- uebergeben des Einsatzbeginns -->
@@ -239,10 +239,10 @@ $B = $this->view['data'];
 		<div class="content-grid-col2 report-content right">
 			
 			<div class="form-row">
-			 	<?php $html->drawFormInput('stichwort', _('Brandobjekt'), $B->get('stichwort'), '', array('class' => 'right', 'bold-label' => true, 'readonly' => true)) ?><div class="clear"></div>
-				<?php $html->drawFormInput('objektname', _('Einsatzstelle'), $B->get('objektname'), '', array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
-				<?php $html->drawFormInput('adresse1', _('Adresse'), $B->get('adresse1').' '.$B->get('hnr'), '', array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
-				<?php $html->drawFormInput('ort', _('Ort'), $B->get('ort').'/ '.$B->get('ortsteil'), '', array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
+			 	<?php $html->drawFormInput('stichwort', _('Brandobjekt'), $B->get('stichwort'), '', array('class' => 'right', 'bold-label' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('objektname', _('Einsatzstelle'), $B->get('objektname'), '', array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('adresse1', _('Adresse'), $B->get('adresse1').' '.$B->get('hnr'), '', array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('ort', _('Ort'), $B->get('ort').'/ '.$B->get('ortsteil'), '', array('class' => 'right')) ?><div class="clear"></div>
 			</div>
 			
 			<div class="form-row">

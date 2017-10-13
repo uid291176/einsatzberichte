@@ -200,6 +200,7 @@ class ReportController extends SystemController
 	 */
 	public function saveAction()
 	{
+	   
 	    
 	    $eid = $this->tools->q(trim($_REQUEST['eid']));
 	    
@@ -208,9 +209,23 @@ class ReportController extends SystemController
 	        
 	        'anrufer_name'             => $this->tools->q(trim($_REQUEST['anrufer_name'])),
 	        'anrufer_vorname'          => $this->tools->q(trim($_REQUEST['anrufer_vorname'])),
-	        'anrufer_telefonnummer'    => $this->tools->q(trim($_REQUEST['anrufer_telefonnummer']))
-	        
+	        'anrufer_telefonnummer'    => $this->tools->q(trim($_REQUEST['anrufer_telefonnummer'])),
+	        'stichwort' => $this->tools->q(trim($_REQUEST['stichwort'])),
+	        'objektname' => $this->tools->q(trim($_REQUEST['objektname']))
 	    );
+	    
+	    // Ortsnamen richtig zuordnen (mapping)
+	    $arrOrt = explode('/', $this->tools->q(trim($_REQUEST['ort'])));
+	    $arrUpdateStammdaten['ort'] = trim($arrOrt[0]);
+	    $arrUpdateStammdaten['ortsteil'] = trim($arrOrt[1]);
+	    
+	    // Adresse richtig auflösen
+	    $arrAdresse = explode(' ', $this->tools->q(trim($_REQUEST['adresse1'])));
+	    $arrUpdateStammdaten['adresse1'] = trim($arrAdresse[0]);
+	    $arrUpdateStammdaten['hnr'] = trim($arrAdresse[1]);
+	    
+	    // $this->tools->debug($arrUpdateStammdaten); die();
+	    
 	    $this->db->UpdateQuery(TBL_EINSAETZE, $arrUpdateStammdaten, "`eid` = '".$eid."'");
 	    
         // EAV TAB update
