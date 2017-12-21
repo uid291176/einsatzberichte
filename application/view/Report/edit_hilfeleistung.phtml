@@ -190,7 +190,7 @@ $B = $this->view['data'];
 				
 			<div class="form-row">
 				<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[gefahr_freisetzung_gef_stoffe]" value="0" />
-				<?php $html->drawFormCheckbox('gefahr_freisetzung_gef_stoffe', _('Gefärd. durch Freisetzung von gefährlichen Stoffen'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('gefahr_freisetzung_gef_stoffe') == '1')? true:false, 'class' => 'right', 'bold-label' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormCheckbox('gefahr_freisetzung_gef_stoffe', _('Gefährdung durch Freisetzung von gefährlichen Stoffen'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('gefahr_freisetzung_gef_stoffe') == '1')? true:false, 'class' => 'right', 'bold-label' => true)) ?><div class="clear"></div>
 			</div>
 			
 			<div class="form-row" style="height:89px">&nbsp;</div>
@@ -200,10 +200,10 @@ $B = $this->view['data'];
 		<div class="content-grid-col2 report-content right">
 			
 			<div class="form-row">
-			 	<?php $html->drawFormInput('stichwort', _('Einsatzobjekt'), $B->get('stichwort'), strtolower($_REQUEST['k']), array('class' => 'right', 'bold-label' => true, 'readonly' => true)) ?><div class="clear"></div>
-				<?php $html->drawFormInput('objektname', _('Einsatzstelle'), $B->get('objektname'), strtolower($_REQUEST['k']), array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
-				<?php $html->drawFormInput('adresse1', _('Adresse'), $B->get('adresse1').' '.$B->get('hnr'), strtolower($_REQUEST['k']), array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
-				<?php $html->drawFormInput('ort', _('Ort'), $B->get('ort').'/ '.$B->get('ortsteil'), strtolower($_REQUEST['k']), array('class' => 'right', 'readonly' => true)) ?><div class="clear"></div>
+			 	<?php $html->drawFormInput('stichwort', _('Einsatzstichwort'), $B->get('stichwort'), '', array('class' => 'right', 'bold-label' => true)) ?><div class="clear"></div>
+				<?php $html->drawFormInput('objektname', _('Einsatzstelle'), $B->get('objektname'), '', array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('adresse1', _('Adresse'), $B->get('adresse1').' '.$B->get('hnr'), '', array('class' => 'right')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('ort', _('Ort'), $B->get('ort').'/ '.$B->get('ortsteil'), '', array('class' => 'right')) ?><div class="clear"></div>
 			</div>
 			
 			<div class="form-row">
@@ -237,14 +237,14 @@ $B = $this->view['data'];
 			
 			<div class="form-row">
 				<?php $html->drawFormInput('personal_schaeden_anzahl_gesamt', _('Anzahl geschädigter Feuerwehrangehöriger'), $B->get('personal_schaeden_anzahl_gesamt'), strtolower($_REQUEST['k']), array('class' => 'right small-text readonly', 'bold-label' => true, 'readonly' => true)) ?><div class="clear"></div>
-				<?php $html->drawFormInput('personal_schaeden_anzahl_tod', _('tödlich verunglückte'), $B->get('personal_schaeden_anzahl_tod'), strtolower($_REQUEST['k']), array('class' => 'right small-text personal_schaeden')) ?><div class="clear"></div>
-				<?php $html->drawFormInput('personal_schaeden_anzahl_verletzt', _('verletzte/ verunglückte'), $B->get('personal_schaeden_anzahl_verletzt'), strtolower($_REQUEST['k']), array('class' => 'right small-text personal_schaeden')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('personal_schaeden_anzahl_tod', _('davon tödlich Verunglückte'), $B->get('personal_schaeden_anzahl_tod'), strtolower($_REQUEST['k']), array('class' => 'right small-text personal_schaeden')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('personal_schaeden_anzahl_verletzt', _('davon Verletzte/ Verunglückte'), $B->get('personal_schaeden_anzahl_verletzt'), strtolower($_REQUEST['k']), array('class' => 'right small-text personal_schaeden')) ?><div class="clear"></div>
 			</div>
 			
 			<div class="form-row">
 				<?php $html->drawFormInput('personen_schaeden_anzahl_gesamt', _('Anzahl geschädigter anderer Personen'), $B->get('personen_schaeden_anzahl_gesamt'), strtolower($_REQUEST['k']), array('class' => 'right small-text readonly', 'bold-label' => true, 'readonly' => true)) ?><div class="clear"></div>
-				<?php $html->drawFormInput('personen_schaeden_anzahl_tod', _('tödlich verunglückte'), $B->get('personen_schaeden_anzahl_tod'), strtolower($_REQUEST['k']), array('class' => 'right small-text personen_schaeden')) ?><div class="clear"></div>
-				<?php $html->drawFormInput('personen_schaeden_anzahl_verletzt', _('verletzte/ verunglückte'), $B->get('personen_schaeden_anzahl_verletzt'), strtolower($_REQUEST['k']), array('class' => 'right small-text personen_schaeden')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('personen_schaeden_anzahl_tod', _('davon tödlich Verunglückte'), $B->get('personen_schaeden_anzahl_tod'), strtolower($_REQUEST['k']), array('class' => 'right small-text personen_schaeden')) ?><div class="clear"></div>
+				<?php $html->drawFormInput('personen_schaeden_anzahl_verletzt', _('davon Verletzte/ Verunglückte'), $B->get('personen_schaeden_anzahl_verletzt'), strtolower($_REQUEST['k']), array('class' => 'right small-text personen_schaeden')) ?><div class="clear"></div>
 			</div>
 			
 		</div>
@@ -267,6 +267,9 @@ $B = $this->view['data'];
 					<?php $html->drawFormCheckbox('klassifikation_einsturz', _('Einsturz baulicher Anlagen'), 1, strtolower($_REQUEST['k']), array('class' => 'right klassifikation radiocheck', 'checked' => ($B->get('klassifikation_einsturz') == '1')? true:false)) ?><div class="clear"></div>
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[klassifikation_amtshilfe_polizei]" value="0" />
 					<?php $html->drawFormCheckbox('klassifikation_amtshilfe_polizei', _('Amtshilfe Polizei'), 1, strtolower($_REQUEST['k']), array('class' => 'right klassifikation radiocheck', 'checked' => ($B->get('klassifikation_amtshilfe_polizei') == '1')? true:false)) ?><div class="clear"></div>
+					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[klassifikation_sonstige]" value="0" />
+					<?php $html->drawFormCheckbox('klassifikation_sonstige', _('Sonstiger Einsatz'), 1, strtolower($_REQUEST['k']), array('class' => 'right klassifikation radiocheck', 'checked' => ($B->get('klassifikation_sonstige') == '1')? true:false)) ?><div class="clear"></div>
+				
 				</div>
 				<div class="right" style="width:45%">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[klassifikation_verkehrsunfall_stoerung]" value="0" />
@@ -279,17 +282,20 @@ $B = $this->view['data'];
 					<?php $html->drawFormCheckbox('klassifikation_gefaehrliche_stoffe', _('Einsatz mit gefährlichen Stoffen u. Gütern'), 1, strtolower($_REQUEST['k']), array('class' => 'right klassifikation radiocheck', 'checked' => ($B->get('klassifikation_gefaehrliche_stoffe') == '1')? true:false)) ?><div class="clear"></div>
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[klassifikation_oelspur]" value="0" />
 					<?php $html->drawFormCheckbox('klassifikation_oelspur', _('Ölunfall/ Ölspur'), 1, strtolower($_REQUEST['k']), array('class' => 'right klassifikation radiocheck', 'checked' => ($B->get('klassifikation_oelspur') == '1')? true:false)) ?>
+					<?php $html->drawFormInput('klassifikation_sonstige_name', _('Sonstige Einsatz (Text)'), $B->get('klassifikation_sonstige_name'), strtolower($_REQUEST['k']), array('class' => 'right')) ?>
 				</div>
 				<div class="clear"></div>
 			</div>
 			
 		</div>
 		
+		<!-- 
 		<div class="report-content">
 			<div class="form-row">
-				<?php $html->drawFormInput('klassifikation_sonstiger_einsatz', _('Sonstiger Einsatz'), $B->get('klassifikation_sonstiger_einsatz'), strtolower($_REQUEST['k']), array('class' => 'right', 'style' => 'width:77%', 'bold-label' => true)) ?><div class="clear"></div>
+				<?php //$html->drawFormInput('klassifikation_sonstiger_einsatz', _('Sonstiger Einsatz'), $B->get('klassifikation_sonstiger_einsatz'), strtolower($_REQUEST['k']), array('class' => 'right', 'style' => 'width:77%', 'bold-label' => true)) ?><div class="clear"></div>
 			</div>
 		</div>
+		-->
 		
 		<div class="report-content">
 			<div class="form-row">

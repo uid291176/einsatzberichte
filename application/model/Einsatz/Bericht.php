@@ -170,19 +170,28 @@ class Einsatz_Bericht
 			if ($index === '###index###') continue;
 			
 			$arrdbData = array(
-			        'eid' 		=> $this->_eid,
-			        'enr' 		=> $this->_data['enr'],
-					'f_kenner' 	=> $this->tools->q($r['funkkenner']),
-					'f3' 		=> ($this->tools->isSizedString($r['uebernommen_date']))? strtotime($this->tools->toDBtime($r['uebernommen_date']).' '.$this->tools->q($r['uebernommen_time'])):0,
-					'f4' 		=> ($this->tools->isSizedString($r['ankunft_date']))? strtotime($this->tools->toDBtime($r['ankunft_date']).' '.$this->tools->q($r['ankunft_time'])):0,
-					'f1' 		=> ($this->tools->isSizedString($r['frei_ueber_funk_date']))? strtotime($this->tools->toDBtime($r['frei_ueber_funk_date']).' '.$this->tools->q($r['frei_ueber_funk_time'])):0,
-					'f2' 		=> ($this->tools->isSizedString($r['rueckkehr_date']))? strtotime($this->tools->toDBtime($r['rueckkehr_date']).' '.$this->tools->q($r['rueckkehr_time'])):0
+                    'eid' 		    => $this->_eid,
+                    'enr' 		    => $this->_data['enr'],
+                    'organisation'  => '',
+                    'f_kenner'      => $this->tools->q($r['funkkenner']),
+					'standort'      => '',
+                    'alarm_beginn'  => 0,
+                    'alarm'         => 0,
+                    'f3' 		    => ($this->tools->isSizedString($r['uebernommen_date']))? strtotime($this->tools->toDBtime($r['uebernommen_date']).' '.$this->tools->q($r['uebernommen_time'])):0,
+					'f4' 		    => ($this->tools->isSizedString($r['ankunft_date']))? strtotime($this->tools->toDBtime($r['ankunft_date']).' '.$this->tools->q($r['ankunft_time'])):0,
+					'f1' 		    => ($this->tools->isSizedString($r['frei_ueber_funk_date']))? strtotime($this->tools->toDBtime($r['frei_ueber_funk_date']).' '.$this->tools->q($r['frei_ueber_funk_time'])):0,
+					'f2' 		    => ($this->tools->isSizedString($r['rueckkehr_date']))? strtotime($this->tools->toDBtime($r['rueckkehr_date']).' '.$this->tools->q($r['rueckkehr_time'])):0
 			);
 			
-			$arrSelect = $this->_db->fetchRow("SELECT `id`, `f_kenner`, `f3` FROM `".TBL_EINSAETZE_RESSOURCEN."` WHERE `eid` = '".$this->_eid."' AND `f_kenner` = '".$r['funkkenner']."'");
+			$arrSelect = $this->_db->fetchRow("SELECT `id`, `organisation`, `f_kenner`, `standort`, `alarm_beginn`, `alarm`, `f3` FROM `".TBL_EINSAETZE_RESSOURCEN."` WHERE `eid` = '".$this->_eid."' AND `f_kenner` = '".$r['funkkenner']."'");
 			
 			if ($arrSelect['f_kenner'] == $arrdbData['f_kenner'])
 			{
+			    // damit die Daten aus dem ELS für diese Fahrzeuge jedesmal mitgenommen werden
+			    if (!empty($arrSelect['organisation'])) $arrdbData['organisation'] = $arrSelect['organisation'];
+			    if (!empty($arrSelect['standort'])) $arrdbData['standort'] = $arrSelect['standort'];
+			    if (intval($arrSelect['alarm_beginn']) > 0) $arrdbData['alarm_beginn'] = $arrSelect['alarm_beginn'];
+			    if (intval($arrSelect['alarm']) > 0) $arrdbData['alarm'] = $arrSelect['alarm'];
 			    
 			    $this->_db->UpdateQuery(TBL_EINSAETZE_RESSOURCEN, $arrdbData, "`id` = '". $arrSelect['id']."'");
 			}
@@ -190,7 +199,7 @@ class Einsatz_Bericht
 			{
 			    // Fahrzeug neu anlegen
 				$arrImport = $arrdbData;
-				
+
 				$this->_db->ImportQuery(TBL_EINSAETZE_RESSOURCEN, $arrImport);
 				
 				// Peronaleintrag dazu erzeugen 
@@ -215,7 +224,7 @@ class Einsatz_Bericht
 			}
 				
 		}
-		
+
 		return;
 		
 	} // public function saveRessources($arrData)

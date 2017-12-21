@@ -1,0 +1,265 @@
+<?php 
+/**
+ * Tagesübersicht Template (index)
+ */
+//$this->tools->debug($this->view['data']);
+?>
+<div id="day-overview" class="overview-wrap">	
+
+	<h1><span class="fa fa-file-text-o"></span>&nbsp;<?php echo _('Einsatzübersicht') ?></h1>
+
+	<p class="left"><?php echo _('erzeugt die bekannten Darstellungen zur') ?> <span class="bold"><?php echo _('Tagesübersicht') ?></span> <?php echo _('und') ?> <span class="bold"><?php echo _('Zeitübersicht') ?></span>.<br />
+	<span class="bold"><?php echo _('Hinweis:') ?></span> <?php echo _('Gedruckt wird immer die gesamte Ergebnismenge!')?></p>
+	<div class="clear"></div>
+	<br />
+	
+	<?php echo $this->drawMessages() ?>
+			
+	<form id="form_day_overview" method="post" action="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'tagesuebersicht', array()) ?>">
+		
+		<input id="sql-cmd-select" type="hidden" name="cmd" value="<?php echo (!empty($_REQUEST['cmd']))? $_REQUEST['cmd']:'day_overview' ?>" />
+		<input id="create_pdf" type="hidden" name="pdf" value="<?php echo (!empty($_REQUEST['pdf']))? $_REQUEST['pdf']:'0' ?>" />
+		
+		<div class="form_row">
+			
+			<p class="bold"><?php echo _('Tagesübersicht') ?></p>
+			
+			<div id="dayoverview_date" class="left input_field input_text">
+				<input class="datepicker" type="text" name="dayoverview_date" value="<?php echo (!empty($_REQUEST['dayoverview_date']))? $_REQUEST['dayoverview_date']:date('d.m.Y') ?>" readonly="readonly" />
+				<span class="fa fa-calendar"></span>
+			</div>
+			
+			<div id="dayoverview_time_start" class="left input_field input_text">
+				<input type="text" name="dayoverview_time_start" value="<?php echo (!empty($_REQUEST['dayoverview_time_start']))? $_REQUEST['dayoverview_time_start']:_('00:00') ?>" />
+			</div>
+			
+			<div id="dayoverview_time_end" class="left input_field input_text">
+				<input type="text" name="dayoverview_time_end" value="<?php echo (!empty($_REQUEST['dayoverview_time_end']))? $_REQUEST['dayoverview_time_end']:_('23:59') ?>" />
+			</div>
+			
+			<div class="left">
+        		<a class="button day_overview" href="#" title="Ergebnisse Anzeigen"><?php echo _('weiter') ?></a>
+        	</div>
+			<div class="clear"></div>
+			
+		</div>	
+		
+		<a id="print_pdf_overview" class="button" href="#" title="PDF Ausgabe zum Drucken"><span class="fa fa-print fa-2x"></span><br /><?php echo _('Drucken') ?></a>
+		
+		<div class="form_row">
+			
+			<p class="bold"><?php echo _('Zeitübersicht') ?></p>
+			
+			<div id="overview_period_start" class="left input_field input_text">
+				<input class="datepicker" type="text" name="overview_period_start" value="<?php echo (!empty($_REQUEST['overview_period_start']))? $_REQUEST['overview_period_start']:date('d.m.Y') ?>" readonly="readonly" />
+				<span class="fa fa-calendar"></span>
+			</div>
+				
+			<div style="width:25%; margin-right:10px;" class="left bold"><div class="center" style="padding-top:25px;"><?php echo _('bis') ?></div></div>
+			
+			<div id="overview_period_end" class="left input_field input_text">
+				<input class="datepicker" type="text" name="overview_period_end" value="<?php echo (!empty($_REQUEST['overview_period_end']))? $_REQUEST['overview_period_end']:date('d.m.Y') ?>" readonly="readonly" />
+				<span class="fa fa-calendar"></span>
+			</div>
+			
+			<div class="left">
+        		<a class="button time_overview" href="#" title="Ergebnisse Anzeigen"><?php echo _('weiter') ?></a>
+        	</div>
+			<div class="clear"></div>
+			<!-- 
+			<input type="submit" name="los" value="test" />
+			-->
+			
+		</div>
+		
+		
+		<div class="clear"></div>
+		
+	</form>
+	
+	<div class="pager-wrap right">
+		<?php echo $this->view['pager'] ?>
+	</div>
+	<div class="clear"></div>
+	
+	<?php $direction = 'desc' ?>
+	<?php if (isset($_REQUEST['order_direction']) && $_REQUEST['order_direction'] == 'asc') $direction = 'desc' ?>
+	<?php if (isset($_REQUEST['order_direction']) && $_REQUEST['order_direction'] == 'desc') $direction = 'asc' ?>
+	
+	<!-- URL Parameter zur Sortierung der Ergebnismenge -->
+	<?php $arrParams = array() ?>
+	<?php $arrParams['cmd']                = $_REQUEST['cmd'] ?>
+	<?php $arrParams['pdf']                = $_REQUEST['pdf'] ?>
+	<?php $arrParams['pPage']              = $_REQUEST['pPage'] ?>
+	<?php $arrParams['order_direction']    = $direction ?>
+	
+	<?php ($_REQUEST['cmd'] == 'day_overview')? $arrParams['dayoverview_date']         = $_REQUEST['dayoverview_date']:'' ?>
+	<?php ($_REQUEST['cmd'] == 'day_overview')? $arrParams['dayoverview_time_start']   = $_REQUEST['dayoverview_time_start']:'' ?>
+	<?php ($_REQUEST['cmd'] == 'day_overview')? $arrParams['dayoverview_time_end']     = $_REQUEST['dayoverview_time_end']:'' ?>
+	<?php ($_REQUEST['cmd'] == 'time_overview')? $arrParams['overview_period_start']   = $_REQUEST['overview_period_start']:'' ?>
+	<?php ($_REQUEST['cmd'] == 'time_overview')? $arrParams['overview_period_end']     = $_REQUEST['overview_period_end']:'' ?>
+	
+	<table id="einsatz-list" class="content-list-table">
+			<thead>
+				<tr>
+					<th class="check-col"><span class="fa fa-eye"></span></th>
+					<th>
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array_merge($arrParams, array('order_by' => 'EVENTNUM'))) ?>">
+							<span class="sortierung"><?php echo _('Einsatznummer') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'EVENTNUM')? strtolower($_REQUEST['order_direction']):'' ?>"></span>
+						</a>
+					</th>
+					<th>
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array_merge($arrParams, array('order_by' => 'NAMEEVENTTYPE'))) ?>">
+							<span class="sortierung"><?php echo _('Stichwort') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'NAMEEVENTTYPE')? strtolower($_REQUEST['order_direction']):'' ?>"></span>
+						</a>
+					</th>
+					<th colspan="2"><?php echo _('Objekt') ?></th>
+					<th>
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array_merge($arrParams, array('order_by' => 'STREET1'))) ?>">
+							<span class="sortierung"><?php echo _('Straße') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'STREET1')? strtolower($_REQUEST['order_direction']):'' ?>"></span>
+						</a>
+					</th>
+					<th><?php echo _('HNR') ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php if ($this->tools->isSizedArray($this->view['data'])) { ?>
+				<?php $i = 1; foreach ($this->view['data'] as $einsatz) { $i++; ?>
+				
+				<tr <?php echo (($i % 2) == 0)? 'class="even"':'class="odd"' ?>>
+					<td class="check-col"><a id="show_<?php echo $einsatz['EID']?>" href="#"><span class="fa fa-plus"></span></a></td>
+					<td>
+						<span class="bold"><?php echo $einsatz['EVENTNUM'] ?></span>
+					</td>
+					<td><?php echo $einsatz['NAMEEVENTTYPE'] ?></td>
+					<td><?php echo $einsatz['ADDROBJNAME'] ?></td>
+					<td><?php echo $einsatz['ALARMTIME'] ?></td>
+					<td><?php echo $einsatz['CITY'] ?>/ <?php echo $einsatz['CITY_DISTRICT'] ?></td>
+					<td><?php echo $einsatz['STREET1'] ?> <?php echo $einsatz['HOUSENUMBER'] ?></td>
+				</tr>
+				<tr id="resource_list_<?php echo $einsatz['EID'] ?>" class="resource-list">
+					<td></td>		
+					<td colspan="6">
+						<table>
+							<tr>
+								<th><?php echo _('Fahrzeug') ?></th>
+								<th><?php echo _('Alarm') ?></th>
+								<th><?php echo _('Ausgerückt [3]') ?></th>
+								<th><?php echo _('E-Stelle [4]') ?></th>
+								<th><?php echo _('Frei über Funk [1]') ?></th>
+								<th><?php echo _('Standort [2]') ?></th>
+							</tr>
+							<?php if ($this->tools->isSizedArray($einsatz['resourcen'])) { ?>
+						 	<?php foreach ($einsatz['resourcen'] as $res) { ?>
+							<tr>
+								
+								<td><?php echo $res['RESOURCE_KENNER'] ?></td>
+    							<td><?php echo $res['RESOURCE_ALARM'] ?></td>
+    							<td><?php echo $res['RESOURCE_EINSATZ_UEBERNOMMEN'] ?></td>
+    							<td><?php echo $res['RESOURCE_ANKUNFT'] ?></td>
+    							<td><?php echo $res['RESOURCE_FREI_UEBER_FUNK'] ?></td>
+    							<td><?php echo $res['RESOURCE_EINSATZENDE'] ?></td>
+							</tr>
+							<?php } ?>
+							<?php } else { ?>
+							<tr><td colspan="6" class="empty-data"><?php echo _('Diesem Einsatz wurden keine Resourcen zugeteilt!') ?></td></tr>	
+							<?php } ?>
+					</table>
+					</td>
+				</tr>
+				<?php } ?>
+				<?php } else { ?>
+					<tr><td colspan="6" class="empty-data"><?php echo _('keine Einträge in dieser Ansicht verhanden') ?></td></tr>
+				<?php } ?>
+			</tbody>
+			
+			<tfoot>
+				<tr>
+					<th class="check-col"><span class="fa fa-eye"></span></th>
+					<th>
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array_merge($arrParams, array('order_by' => 'EVENTNUM'))) ?>">
+							<span class="sortierung"><?php echo _('Einsatznummer') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'EVENTNUM')? strtolower($_REQUEST['order_direction']):'' ?>"></span>
+						</a>
+					</th>
+					<th>
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array_merge($arrParams, array('order_by' => 'NAMEEVENTTYPE'))) ?>">
+							<span class="sortierung"><?php echo _('Stichwort') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'NAMEEVENTTYPE')? strtolower($_REQUEST['order_direction']):'' ?>"></span>
+						</a>
+					</th>
+					<th colspan="2"><?php echo _('Objekt') ?></th>
+					<th>
+						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array_merge($arrParams, array('order_by' => 'STREET1'))) ?>">
+							<span class="sortierung"><?php echo _('Straße') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'STREET1')? strtolower($_REQUEST['order_direction']):'' ?>"></span>
+						</a>
+					</th>
+					<th><?php echo _('HNR') ?></th>
+				</tr>
+			</tfoot>
+		</table>
+</div><br />
+
+<!-- bottom pager -->
+<div class="pager-wrap right">
+	<?php echo $this->view['pager'] ?>
+</div>
+<div class="clear"></div>
+
+<script type="text/javascript">
+//<![CDATA[
+
+	$(document).ready(function(){
+
+		// mit welchem Button wurde das Formular abgeschickt
+		$('.button').click(function(){
+
+			if($(this).hasClass('day_overview'))
+			{
+				$('#sql-cmd-select').val('day_overview');
+				$('#create_pdf').val('0'); // nur die Übersicht ändern, kein PDF ausgeben
+			}
+			
+			if($(this).hasClass('time_overview'))
+			{
+				$('#sql-cmd-select').val('time_overview');
+				$('#create_pdf').val('0'); // nur die Übersicht ändern, kein PDF ausgeben
+			}
+
+			if ($(this).attr('id') == 'print_pdf_overview') $('#create_pdf').val('1');
+			
+			$('#form_day_overview').submit();
+
+			return false;
+			
+		})
+
+		// blendet die Einsatzdetails (Resourcen) ein/ aus
+		$('.check-col a').click(function(oEL){
+
+			var strID = $(this).attr('id');
+			var strEID = strID.replace('show_', '');
+
+			if ($(this).children().hasClass('fa-minus'))
+			{
+				
+				$(this).children().removeClass('fa-minus').addClass('fa-plus');
+				
+				$('#resource_list_' + strEID).hide();
+				
+			}
+			else if ($(this).children().hasClass('fa-plus'))
+			{
+
+				$(this).children().removeClass('fa-plus').addClass('fa-minus');
+				
+				$('#resource_list_' + strEID).show( {'duration':700 } );
+				
+			}
+
+			return false;
+
+		})
+		
+	})
+
+//]]>
+</script>

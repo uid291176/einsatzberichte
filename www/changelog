@@ -87,7 +87,20 @@
 - fälschlich übernommene Berichte "zurückgeben"
 - Berichte KAT-S/ Sonderlage als HL- Bericht
 - richtiges Speichern zus. eingefügter Fahrzeuge u. Ressourcen
-- Angaben Barndobjekt/ Einsatzobjekt editierbar
+- Angaben Brandobjekt/ Einsatzobjekt editierbar
 - Alarmzeit readonly
 
+#1.3.2
+- Neue Funktion(en)
+    Tagesübersicht als druckbares PDF
+	Hilfeleistung sonstige Nutzung zusätzlich als Checkbox
+	3. Seite BMA Statistik auch bei Fehlalarm BMA mit ausdrucken
+- Bugfix(es)
+	Umbenennung Form Feld Einsatzobjekt -> Einsatzstichwort
+	Adressänderungen beim Einsatzobjekt werden richtig übernommen
+	Rechtschreibfehler im Brandbericht u. im Hilfeleistungsbericht behoben
+	Liste Abgeschlossene mit "Unterstichwort"
+
+#
+- Umstellung auf https:// Protokoll
 

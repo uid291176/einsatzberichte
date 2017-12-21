@@ -51,13 +51,11 @@ $arrMenu = array(
 					'title' => _('Abgeschlossen'),
 					'action' => 'finish'
 			)
-			/*
 			,
-			'archiv' => array(
-					'title' => _('Archiv'),
-					'action' => 'archiv'
+			'uebersicht' => array(
+					'title' => _('Tagesübersicht'),
+					'action' => 'tagesuebersicht'
 			)
-			*/
 		)
 	),
 

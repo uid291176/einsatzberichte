@@ -28,7 +28,7 @@ h3 { font-size:16px; margin-bottom:20px; font-weight:600; }
 .clear { clear:both; }
 .left { float:left; }
 .right { float:right; }
-.center	{ posaition:absolute; text-align:center; margin:0 auto; }
+.center	{ text-align:center; margin:0 auto; }
 .bold { font-weight:600; }
 .normal { font-weight:300; }
 .margin-left20 { margin-left:20px; }
@@ -226,6 +226,27 @@ table.personal-overview td table { width:100%; }
 table.personal-overview td table .form_field .color-grey { color:#999999; }
 table.personal-overview td table .input_field input { width:90%; }
 table.personal-overview td table td { padding-right:4px; }
+
+/** Tagesübersicht */
+#form_day_overview { background-color:#cccccc; padding:1%; position:relative; }
+#form_day_overview .form_row {  }
+#form_day_overview div.input_text { width:25%; margin-right:10px; margin-top:10px; margin-bottom:10px; position:relative; }
+#form_day_overview div.input_text input { width:96%; padding:2%; }
+#form_day_overview .button { background:#0085ba; border:1px solid #0073aa; padding:10px 20px; color:#ffffff; border-radius:3px; cursor:pointer; margin-top:10px; margin-left:10px; }
+#form_day_overview .button:hover { background:#008ec2; border-color:#006799; }
+#form_day_overview div.input_text .fa-calendar { position:absolute; top:8px; right:3px; font-size:2.0rem; }
+
+#print_pdf_overview { position:absolute; right:30px; top:30px; text-align:center; line-height:200%; }
+
+tr.resource-list { display:none; background:#d9d9d9; }
+tr.resource-list table { width:100%;  }
+tr.resource-list table th { text-align:left; border-bottom:1px dashed #666666; padding:5px; }
+tr.resource-list table td { border-bottom:1px dashed #666666; }
+
+#day-overview .pager { margin-top:10px; }
+#day-overview .content-list-table { margin-top:10px; }
+
+#day-overview p { line-height:150%; }
 
 /** jquery-ui */
 .ui-datepicker { font-size:1.4em; }

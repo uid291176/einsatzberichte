@@ -85,8 +85,8 @@ class ReportController extends SystemController
     	$countEntrys = $this->getCurrentPeriodDataCount($_REQUEST['action'], $arrPeriod);
     	
     	// Anzahl der Seiten für die gewünschte Ergebnismenge
-    	$pages = ceil($countEntrys / $this->pageEntrys);
-    	
+    	$pages = ceil($countEntrys / $this->pageEntrys) - 1;
+
     	// Offset ab welchen die Datensätze aus der DB geholt werden
     	if (isset($_REQUEST['pPage']) && intval($_REQUEST['pPage']) > 0) $offset = ($_REQUEST['pPage'] - 1) * $this->pageEntrys;
     	else $offset = 0;
@@ -220,9 +220,11 @@ class ReportController extends SystemController
 	    $arrUpdateStammdaten['ortsteil'] = trim($arrOrt[1]);
 	    
 	    // Adresse richtig auflösen
-	    $arrAdresse = explode(' ', $this->tools->q(trim($_REQUEST['adresse1'])));
-	    $arrUpdateStammdaten['adresse1'] = trim($arrAdresse[0]);
-	    $arrUpdateStammdaten['hnr'] = trim($arrAdresse[1]);
+	    $strAdresse1 = $this->tools->q(trim($_REQUEST['adresse1']));
+	    $intStrLaenge = strlen($strAdresse1);
+	    $intLastSpacer = strrpos($strAdresse1, ' ');
+	    $arrUpdateStammdaten['adresse1'] = trim(substr($strAdresse1, 0, $intLastSpacer));
+	    $arrUpdateStammdaten['hnr'] = trim(substr($strAdresse1, $intLastSpacer, ($intStrLaenge - $intLastSpacer)));
 	    
 	    // $this->tools->debug($arrUpdateStammdaten); die();
 	    
@@ -257,8 +259,6 @@ class ReportController extends SystemController
 	
 	public function editAction()
 	{
-		
-	    //$this->tools->debug($_REQUEST);
 	    
 	    // wurde ein Einsatz übergeben?
 	    if (isset($_REQUEST['eid']))
@@ -280,12 +280,6 @@ class ReportController extends SystemController
 	            $this->redirect($_REQUEST['k'], 'view', array('eid' => $eId, 'tmpl' => $this->tools->q(trim($_REQUEST['tmpl'])))); die();
 	            
 	        } // Umleitung zur Einzelansicht des neuen Berichts
-	        
-	        /**
-	         * todo der PDF Aufruf
-	         */
-	        
-	        // ENDE PDF
 	        
 	        // einen bereits übernommen Einsatz weiter bearbeiten Einsatz 
 	        $this->redirect($_REQUEST['k'], 'view', array('eid' => $eId, 'tmpl' => $this->tools->q(trim($_REQUEST['tmpl'])))); die();
@@ -747,6 +741,185 @@ class ReportController extends SystemController
 	   
 	} // public function resetAction()
 	
+	/**
+	 * erzeugt die "Tageszettel" Ansicht
+	 */
+	public function tagesuebersichtAction()
+	{
+	    
+	    // Oracle DB Verbindungs-Objekt erzeugen
+	    $this->oraDB = new Oci8_Database();
+	    
+	    // standard Zeitraum der im Tageszettel angezeigt wird
+	    $arrPeriod['start'] = date('d.m.Y'). ' 00:00:00';
+	    $arrPeriod['end'] = date('d.m.Y H:m:s');
+	   
+	    // Zeitraum der Einsatzliste für das PDF
+	    if ($_REQUEST['cmd'] == 'day_overview')
+	    {
+	        $arrPeriod['start'] = trim($this->tools->q($_REQUEST['dayoverview_date'])).' '.trim($this->tools->q($_REQUEST['dayoverview_time_start'])).':00';
+	        $arrPeriod['end'] = trim($this->tools->q($_REQUEST['dayoverview_date'])).' '.trim($this->tools->q($_REQUEST['dayoverview_time_end'])).':00';
+	        
+	        $this->view['zeitraum'] = trim($this->tools->q($_REQUEST['dayoverview_date']));
+	    }
+	    
+	    if ($_REQUEST['cmd'] == 'time_overview')
+	    {
+	        $arrPeriod['start'] = trim($this->tools->q($_REQUEST['overview_period_start'])).' 00:00:00';
+	        $arrPeriod['end'] = trim($this->tools->q($_REQUEST['overview_period_end'])).' 23:59:59';
+	        
+	        $this->view['zeitraum'] = trim($this->tools->q($_REQUEST['overview_period_start'])).' - '.trim($this->tools->q($_REQUEST['overview_period_end']));
+	    }
+
+	    // Sortierung nach...[Spalte]
+	    if (isset($_REQUEST['order_by']) && !empty($_REQUEST['order_by'])) $strOrderBy = $_REQUEST['order_by'];
+	    else $strOrderBy = 'EVENTNUM';
+	    
+	    // Aufsteigend / Absteigend
+	    if (isset($_REQUEST['order_direction'])) $strOrderDirection = $this->setSQLOrderDirection();
+	    else $strOrderDirection = 'ASC';
+	    
+	    // Anzahl des aktuell gewählten Tages
+	    $countEntrys = $this->getCurrentPeriodDataCount('index', $arrPeriod);
+
+	    // Anzahl der Seiten für die gewünschte Ergebnismenge
+	    $pages = ceil($countEntrys / $this->pageEntrys) - 1;
+	   
+	    // Offset ab welchen die Datensätze aus der DB geholt werden
+	    if (isset($_REQUEST['pPage']) && intval($_REQUEST['pPage']) > 0) $offset = ($_REQUEST['pPage'] - 1) * $this->pageEntrys;
+	    else $offset = 0;
+	    
+	    // bis zu diesem Eintrag der Ergebnismenge werden die Daten gesammelt
+	    if ($offset > 0) $limit = $_REQUEST['pPage'] * $this->pageEntrys;
+	    else $limit = $this->pageEntrys;
+	    
+	    
+	    
+	    if (isset($_REQUEST['pPage']) && intval($_REQUEST['pPage']) > 0) $currentPage = intval($_REQUEST['pPage']);
+	    else $currentPage = 1;
+	    
+	    // set Pager
+	    $PAGER = new MySQLi_Pager($pages, $this->pageEntrys, $this->pageRange);
+	    $PAGER->setActivePage($currentPage);
+	    $arrUrlParam = array(
+	        'k' 				       => $_REQUEST['k'], 					            // Controller
+	        'action' 			       => $_REQUEST['action'], 			                // Action
+	        'cmd'                      => $_REQUEST['cmd'],
+	        'pdf'                      => $_REQUEST['pdf'],
+	        'overview_period_start'    => $_REQUEST['overview_period_start'], 			// Zeitraum
+	        'overview_period_end' 	   => $_REQUEST['overview_period_end'], 			// Zeitraum
+	        'order_by' 			       => $strOrderBy, 			                       // Sortierung nach
+	        'order_direction' 	       => $strOrderDirection 	                        // Sortierrichtung
+	    );
+	    
+	    $PAGER->setUrl($arrUrlParam);
+	    
+	    // http://use-the-index-luke.com/de/sql/partielle-ergebnisse/blaettern
+	    $sql = "SELECT
+                	*
+                FROM
+                	( SELECT 	
+                  		EVENTNUM,
+                  		ROWNUM AS RN,
+                  		ALARMTIME,
+                  		STARTTIME,
+                  		STATUS,
+                  		NAME,
+                  		TELNUMBER,
+                  		EID,
+                  		CITY,
+                  		CITY_DISTRICT,
+                  		STREET1,
+                  		HOUSENUMBER,
+                  		SUPERIOREVENTTYPE,
+                  		ADDROBJNAME,
+                  		NAMEEVENTTYPE
+                	FROM
+                		( 	SELECT
+                				E.EVENTNUM,
+                				to_char(E.ALARMTIME, 'DD.MM.YYYY | hh24:Mi:SS') AS ALARMTIME,
+                				to_char(E.STARTTIME, 'DD.MM.YYYY | hh24:Mi:SS') AS STARTTIME,
+                				E.STATUS AS STATUS,
+                				E.NAME,
+                				E.TELNUMBER,
+                				E.ID AS EID,
+                				EP.CITY,
+                				EP.CITY_DISTRICT,
+                				EP.STREET1,
+                				EP.HOUSENUMBER,
+                				E.SUPERIOREVENTTYPE,
+                				EP.ADDROBJNAME,
+                				E.NAMEEVENTTYPE 
+                			FROM
+                        		EVENT E,
+                				EVENTPOS EP
+                        	WHERE
+                				E.ID = EP.IDEVENT AND
+                				EP.USE = 'place_of_action' AND
+                				(
+                					".$this->strStichwortFilter."
+                				)
+                				AND
+                                EP.CITY = 'Erfurt' AND 
+                				E.STARTTIME > to_date('".$arrPeriod['start']."', 'DD.MM.YYYY hh24:Mi:SS') AND
+                				E.STARTTIME < to_date('".$arrPeriod['end']."', 'DD.MM.YYYY hh24:Mi:SS') AND
+                                E.STATUS = 'finished'
+                			ORDER BY
+                				".$strOrderBy." ".$strOrderDirection."
+                    		) E
+                		WHERE
+                			ROWNUM <= '".$limit."'
+                		)
+                	WHERE RN > '".$offset."'";
+
+	    // DB Abfrage
+	    $arrEvents = $this->oraDB->fetchAssoc($sql);
+	    
+	    if ($this->tools->isSizedArray($arrEvents))
+	    {
+	        $index = 0; foreach ($arrEvents as $e)
+    	    {
+    	        $sql = "SELECT
+                            ER.REMARK                                                       AS resource_organisation,
+                            ER.NAME_AT_ALARMTIME                                            AS resource_kenner,
+                            ER.NAMESTATION_AT_ALARMTIME                                     AS resource_home,
+                            to_char(ER.TIME_ALARM,'DD.MM.YYYY | hh24:mi:ss')                AS resource_alarm,
+                            to_char(ER.TIME_BEGIN_ALARM,'DD.MM.YYYY | hh24:mi:ss')          AS resource_alarm_beginn,
+                            to_char(ER.TIME_ON_THE_WAY,'DD.MM.YYYY | hh24:mi:ss')           AS resource_einsatz_uebernommen,
+                            to_char(ER.TIME_ARRIVED,'DD.MM.YYYY | hh24:mi:ss')              AS resource_ankunft,
+                            to_char(ER.TIME_FINISHED,'DD.MM.YYYY | hh24:mi:ss')             AS resource_einsatzende,
+                            to_char(ER.TIME_FINISHED_VIA_RADIO,'DD.MM.YYYY | hh24:mi:ss')   AS resource_frei_ueber_funk,
+                            ET.CREW_MIN                                                     AS resource_besatzung_min,
+                            ET.CREW_STD                                                     AS resource_besatzung
+                        FROM
+                            EVENT E,
+                            EVENT_RESOURCE ER,
+                            RESOURCES R,
+                            RESOURCETYPE ET
+                        WHERE
+                            E.ID = ER.IDEVENT AND
+                            ER.IDRESOURCE = R.ID AND
+                            E.ID = '".$e['EID']."' AND
+                            ER.RESOURCETYPE_AT_ALARMTIME = ET.NAME
+                        ORDER BY
+                            R.CALL_SIGN";
+    	        
+    	        $this->view['data'][$index] = $e;
+    	        $this->view['data'][$index]['resourcen'] = $this->oraDB->fetchAssoc($sql);
+    	        
+    	        $index++;
+    	    }
+	    }
+	    
+	    // Pager Ausgabe über OUTPUT BUFFER -> Template pager.phtml
+	    if ($this->tools->isSizedArray($this->view['data'])) $this->view['pager'] = $PAGER->renderPager();
+	    
+	    // Ausgabe als PDF zum Drucken oder "ScreenView" 
+	    if ($_REQUEST['pdf'] == '1') $this->renderPdfTagesuebersicht($_REQUEST['cmd']);
+	    else $this->render();
+	    
+	} // public function tagesuebersichtAction()
+	
 	
 	/**
 	 * gibt den gewählten Filterzeitraum zurück
@@ -1126,7 +1299,7 @@ class ReportController extends SystemController
 		$pdf->writeHTML($html, true, false, true, false, '');
 		
 		// Statistik BMA anhängen
-        if ($B->get('brandobjekt_bma_vorhanden') == 'ja')
+		if (($B->get('brandobjekt_bma_vorhanden') == 'ja') || ($B->get('fehlalarm_fehler_bma') == '1'))
         {
             // Neue Seite
             $pdf->AddPage();
@@ -1260,6 +1433,82 @@ class ReportController extends SystemController
 
 		
 	} // public function pdfReViewAction()
+	
+	/**
+	 * Ausgabe des bekannten "Tageszettels" als PDF zum Drucken
+	 * @param string $strTemplate
+	 */
+	public function renderPdfTagesuebersicht($strTemplate = 'day_overview')
+	{
+	    $this->tools->debug($strTemplate);
+	    if ($this->tools->q($strTemplate) == 'day_overview') $tmpl = 'tageszettel';
+	    if ($this->tools->q($strTemplate) == 'time_overview') $tmpl = 'einsatzuebersicht';
+	    
+	    
+	    $desPath = $_SERVER['DOCUMENT_ROOT'].$this->getConf('upload_path');
+	    
+	    // TCPDF Library laden
+	    require_once(LIB_PATH.'/Tcpdf/tcpdf.php');
+	    
+	    // Erstellung des PDF Dokuments
+	    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+	    
+	    // Dokumenteninformationen
+	    $pdf->SetCreator(PDF_CREATOR);
+	    $pdf->SetAuthor($this->user->get('vorname').' '.$this->user->get('name'));
+	    $pdf->SetTitle(ucfirst($tmpl).' Thüringen');
+	    $pdf->SetSubject(ucfirst($tmpl).' Thüringen');
+	    
+	    // Header und Footer Informationen
+	    $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+	    $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+	    
+	    // remove default header/footer
+	    $pdf->setPrintHeader(false);
+	    //$pdf->setPrintFooter(false);
+	    
+	    // Auswahl des Font
+	    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+	    
+	    // Auswahl der MArgins
+	    $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+	    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+	    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+	    
+	    // Seitenrand unten
+	    $PDF_MARGIN_BOTTOM = '20';
+	    
+	    // Automatisches Autobreak der Seiten
+	    $pdf->SetAutoPageBreak(TRUE, $PDF_MARGIN_BOTTOM);
+	    
+	    // Image Scale
+	    $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+	    
+	    // Schriftart
+	    $pdf->SetFont('helvetica', '', 8);
+	    
+	    // Neue Seite
+	    $pdf->AddPage();
+	    
+	    ob_start();
+	    
+	    require_once VIEW_PATH.'/Report/'.$tmpl.'.phtml';
+	    
+	    $html = ob_get_contents();
+	    
+	    ob_clean();
+	    
+	    // Fügt den HTML Code in das PDF Dokument ein
+	    $pdf->writeHTML($html, true, false, true, false, '');
+
+	    $pdfName = date('Y-m-d').'_'.$templ.'.pdf';
+ 
+        //Variante 2: PDF direkt an den Benutzer senden:
+        $pdf->Output($pdfName, 'I');
+        
+        exit();
+
+	} // public function renderPdfTagesuebersicht($strTemplate)
 	
 }
 ?>

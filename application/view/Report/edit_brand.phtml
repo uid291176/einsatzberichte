@@ -239,7 +239,7 @@ $B = $this->view['data'];
 		<div class="content-grid-col2 report-content right">
 			
 			<div class="form-row">
-			 	<?php $html->drawFormInput('stichwort', _('Brandobjekt'), $B->get('stichwort'), '', array('class' => 'right', 'bold-label' => true)) ?><div class="clear"></div>
+			 	<?php $html->drawFormInput('stichwort', _('Einsatzstichwort'), $B->get('stichwort'), '', array('class' => 'right', 'bold-label' => true)) ?><div class="clear"></div>
 				<?php $html->drawFormInput('objektname', _('Einsatzstelle'), $B->get('objektname'), '', array('class' => 'right')) ?><div class="clear"></div>
 				<?php $html->drawFormInput('adresse1', _('Adresse'), $B->get('adresse1').' '.$B->get('hnr'), '', array('class' => 'right')) ?><div class="clear"></div>
 				<?php $html->drawFormInput('ort', _('Ort'), $B->get('ort').'/ '.$B->get('ortsteil'), '', array('class' => 'right')) ?><div class="clear"></div>
@@ -305,7 +305,7 @@ $B = $this->view['data'];
 				</div>
 				<div class="right content-grid-col3">
 					<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[brandobjekt_muellcontainer]" value="0" />
-					<?php $html->drawFormCheckbox('brandobjekt_muellcontainer', _('Müllbehälter/ Kontainer'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_muellcontainer') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
+					<?php $html->drawFormCheckbox('brandobjekt_muellcontainer', _('Müllbehälter/ Container'), 1, strtolower($_REQUEST['k']), array('checked' => ($B->get('brandobjekt_muellcontainer') == '1')? true:false, 'class' => 'right brandobjekt radiocheck')) ?>
 				</div>
 				<div class="clear"></div>
 				

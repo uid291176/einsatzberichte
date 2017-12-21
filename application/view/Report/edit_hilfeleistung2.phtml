@@ -448,7 +448,7 @@
 					</div>
 					
 					<div class="margin_checkbox_fieldset_top">
-						<label class="left" for="info_stromversorger"><?php echo _('Sromversorgung') ?></label>
+						<label class="left" for="info_stromversorger"><?php echo _('Stromversorgung') ?></label>
 						<input type="hidden" name="<?php echo strtolower($_REQUEST['k']) ?>[info_stromversorger]" value="0" />
 						<input class="info_stromversorger right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_stromversorger]" onclick="checked_value($(this)); return flase;" value="anwesend" <?php echo ($B->get('info_stromversorger') == 'anwesend')? 'checked="checked"':''?> />
 						<input class="info_stromversorger right" type="checkbox" name="<?php echo strtolower($_REQUEST['k']) ?>[info_stromversorger]" onclick="checked_value($(this)); return flase;" value="verstaendigt" <?php echo ($B->get('info_stromversorger') == 'verstaendigt')? 'checked="checked"':''?> />

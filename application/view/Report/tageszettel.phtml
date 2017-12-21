@@ -1,0 +1,75 @@
+<!-- 
+/**
+ * template "Tagesübersicht" erzeugt das PDF Dokument zum ausdrucken
+ */
+-->
+<table cellpadding="5" cellspacing="0" style="width:99%; border:1px solid #666666;">
+	<tr>
+		<td style="width:33%; text-align:left; font-size:16px;"><?php echo _('Tagesübersicht') ?></td>
+		<td style="width:33%; text-align:left; font-size:16px;"><?php echo $this->view['zeitraum'] ?></td>
+		<td style="width:34%; text-align:right;"><img height="24px" src="gfx/sverfurt.jpg" alt="Stadtverwaltung Erfurt" /></td>
+	</tr>
+</table>
+<br /><br />
+
+<?php foreach ($this->view['data'] as $index => $data) { ?>
+	<table cellpadding="5" cellspacing="0" style="width:99%; border:1px solid #666666;">
+		<tr>
+			<td style="border:1px solid #666666"><span style="font-weight:bold;"><?php echo _('Einsatznummer') ?></span><br /><?php echo _('Einsatzbeginn') ?></td>
+			<td style="border:1px solid #666666"><span style="font-weight:bold;"><?php echo _('Hauptstichwort') ?></span><br /><?php echo _('Unterstichwort') ?></td>
+			<td colspan="2" style="border:1px solid #666666"><span style="font-weight:bold;"><?php echo _('Objekt') ?></span></td>
+			<td style="border:1px solid #666666"><span style="font-weight:bold;"><?php echo _('Stadt') ?></span><br /><?php echo _('Stadtteil') ?></td>
+			<td style="border:1px solid #666666"><span style="font-weight:bold;"><?php echo _('Straße') ?></span><br /><?php echo _('Hausnummer') ?></td>
+		</tr>
+		<tr>
+			<td style="border:1px solid #666666"><span style="font-weight:bold;"><?php echo $data['EVENTNUM'] ?></span><br /><span style="font-size:8px;"><?php echo $data['ALARMTIME'] ?></span></td>
+			<td style="border:1px solid #666666"><?php echo $data['SUPERIOREVENTTYPE'] ?><br /><?php echo $data['NAMEEVENTTYPE'] ?></td>
+			<td colspan="2" style="border:1px solid #666666"><?php echo $data['ADDROBJNAME'] ?></td>
+			<td style="border:1px solid #666666"><?php echo $data['CITY'] ?><br /><?php echo $data['CITY_DISTRICT'] ?></td>
+			<td style="border:1px solid #666666"><?php echo $data['STREET1'] ?><br /><?php echo $data['HOUSENUMBER'] ?></td>
+		</tr>
+		
+		<tr>
+			<td style="border:1px solid #666666"><span style="font-weight:bold;"><?php echo _('Fahrzeug') ?></span></td>
+			<td style="border:1px solid #666666"><span style="font-weight:bold;"><?php echo _('Alarm') ?></span></td>
+			<td style="border:1px solid #666666"><span style="font-weight:bold;"><?php echo _('Ausgerückt') ?></span></td>
+			<td style="border:1px solid #666666"><span style="font-weight:bold;"><?php echo _('E-Stelle') ?></span></td>
+			<td style="border:1px solid #666666"><span style="font-weight:bold;"><?php echo _('Frei über Funk') ?></span></td>
+			<td style="border:1px solid #666666"><span style="font-weight:bold;"><?php echo _('Standort') ?></span></td>
+		</tr>
+		<?php if ($this->tools->isSizedArray($data['resourcen'])) { ?>
+		<?php $i = 0; foreach ($data['resourcen'] as $res) { ?>
+			<tr>
+				<td style="border:1px solid #666666; background-color:#cccccc;"><span style="font-size:8px;"><?php echo $res['RESOURCE_KENNER'] ?></span></td>
+				<td style="border:1px solid #666666; background-color:#cccccc;"><span style="font-size:8px;"><?php echo $res['RESOURCE_ALARM_BEGINN'] ?></span></td>
+				<td style="border:1px solid #666666; background-color:#cccccc;"><span style="font-size:8px;"><?php echo $res['RESOURCE_EINSATZ_UEBERNOMMEN'] ?></span></td>
+				<td style="border:1px solid #666666; background-color:#cccccc;"><span style="font-size:8px;"><?php echo $res['RESOURCE_ANKUNFT'] ?></span></td>
+				<td style="border:1px solid #666666; background-color:#cccccc;"><span style="font-size:8px;"><?php echo $res['RESOURCE_FREI_UEBER_FUNK'] ?></span></td>
+				<td style="border:1px solid #666666; background-color:#cccccc;"><span style="font-size:8px;"><?php echo $res['RESOURCE_EINSATZENDE'] ?></span></td>
+			</tr>
+		<?php $i++; } ?>
+		<?php } else { ?>
+			<tr>
+				<td colspan="6" style="border:1px solid #666666; background-color:#cccccc;"><span style="font-size:10px;"><?php echo _('Diesem Einsatz wurden keine Resourcen zugeteilt!') ?></span></td>
+			</tr>
+		<?php }?>
+		
+	</table><br /><br />
+<?php } ?>
+
+	<table cellpadding="5" cellspacing="0" style="width:99%; border:1px solid #666666;">
+		<tr><td colspan="6" style="border:1px solid #666666"><?php echo _('Vorkommnisse') ?>:</td></tr>
+		<tr><td colspan="6" style="border:1px solid #666666">&nbsp;</td></tr>
+			
+		<tr><td colspan="6"><?php echo _('Fahrzeugausfälle') ?>:</td></tr>
+		<tr><td colspan="6" style="border:1px solid #666666">&nbsp;</td></tr>
+			
+		<tr>
+			<td><?php echo _('Unterschrift ELD')?>:</td>
+			<td>&nbsp;</td>
+			<td><?php echo _('Name') ?>:</td>
+			<td>&nbsp;</td>
+			<td><?php echo _('Dienstgrad') ?>:</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table><br /><br />

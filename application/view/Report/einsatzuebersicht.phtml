@@ -1,0 +1,34 @@
+<!-- 
+/**
+ * template "Einsatzübersicht" erzeugt das PDF Dokument zum ausdrucken
+ */
+-->
+<table cellpadding="5" cellspacing="0" style="width:99%; border:1px solid #666666;">
+	<tr>
+		<td style="width:33%; text-align:left; font-size:16px;"><?php echo _('Einsatzübersicht') ?></td>
+		<td style="width:33%; text-align:left; font-size:16px;"><?php echo $this->view['zeitraum'] ?></td>
+		<td style="width:34%; text-align:right;"><img height="24px" src="gfx/sverfurt.jpg" alt="Stadtverwaltung Erfurt" /></td>
+	</tr>
+</table>
+<br /><br />
+
+<table cellpadding="5" cellspacing="0" style="width:99%; border:1px solid #666666;">
+	<tr>
+		<td style="border:1px solid #666666; font-weight:bold;"><?php echo _('Einsatznummer') ?><br /><?php echo _('Einsatzbeginn') ?></td>
+		<td style="border:1px solid #666666; font-weight:bold;"><?php echo _('Hauptstichwort') ?><br /><?php echo _('Unterstichwort') ?></td>
+		<td style="border:1px solid #666666; font-weight:bold;"><?php echo _('Objekt') ?></td>
+		<td style="border:1px solid #666666; font-weight:bold;"><?php echo _('Stadt') ?><br /><?php echo _('Stadtteil') ?></td>
+		<td style="border:1px solid #666666; font-weight:bold;"><?php echo _('Straße') ?><br /><?php echo _('Hausnummer') ?></td>
+	</tr>
+	<?php foreach ($this->view['data'] as $index => $data) { ?>
+	
+		<tr>
+			<td style="border:1px solid #666666; font-size:8px;"><span style="font-weight:bold;"><?php echo $data['EVENTNUM'] ?></span><br /><?php echo $data['ALARMTIME'] ?></td>
+			<td style="border:1px solid #666666; font-size:8px;"><?php echo $data['SUPERIOREVENTTYPE'] ?><br /><?php echo $data['NAMEEVENTTYPE'] ?></td>
+			<td style="border:1px solid #666666; font-size:8px;"><?php echo $data['ADDROBJNAME'] ?></td>
+			<td style="border:1px solid #666666; font-size:8px;"><?php echo $data['CITY'] ?><br /><?php echo $data['CITY_DISTRICT'] ?></td>
+			<td style="border:1px solid #666666; font-size:8px;"><?php echo $data['STREET1'] ?><br /><?php echo $data['HOUSENUMBER'] ?></td>
+		</tr>
+	
+	<?php } ?>
+</table>

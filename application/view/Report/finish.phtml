@@ -91,7 +91,7 @@
 						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('enr' => $einsatz['enr'], 'order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'], 'cmd' => 'pdfreview', 'date-folder' => date('Y-m-d', $einsatz['beginn']))) ?>"><strong><?php echo $einsatz['enr'] ?></strong></a><br />
 						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('enr' => $einsatz['enr'], 'order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'], 'cmd' => 'pdfreview', 'date-folder' => date('Y-m-d', $einsatz['beginn']))) ?>"><span class="view-details"><?php echo _('PDF Bericht ansehen') ?></span></a>
 					</td>
-					<td><?php echo $einsatz['haupt_stichwort'] ?></td>
+					<td><?php echo $einsatz['stichwort'] ?></td>
 					<td><?php echo date('d.m.Y H:i:s', $einsatz['beginn']) ?></td>
 					<td>
 						<?php $SACHBEARBEITER = new User_Handler($einsatz['uid'], $this->db) ?>
@@ -99,7 +99,7 @@
 						<?php echo $SACHBEARBEITER->get('name') ?>, <?php echo $SACHBEARBEITER->get('vorname') ?>
 					</td>
 					<td><?php echo $einsatz['ort'] ?></td>
-					<td><?php echo $einsatz['adresse'] ?></td>
+					<td><?php echo $einsatz['adresse1'] ?></td>
 				</tr>
 				<?php } ?>
 				<?php } else { ?>

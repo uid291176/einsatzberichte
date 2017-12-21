@@ -117,7 +117,7 @@
 			
 			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
 				<tr>
-					<td colspan="4" style="width:95%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Gefährd. durch Freisetzung von gefährlichen Stoffen') ?></td>
+					<td colspan="4" style="width:95%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Gefährdung durch Freisetzung von gefährlichen Stoffen') ?></td>
 					<td style="width:5%; border:1px solid #666666;"><?php echo ($B->get('gefahr_freisetzung_gef_stoffe') == '1')? 'X':''?></td>
 				</tr>
 			</table>
@@ -134,10 +134,10 @@
 		<!-- rechter Block -->
 		<td>
 			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
-				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Einsatzobjekt') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('haupt_stichwort') ?></td></tr>
-				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Einsatzstelle') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('einsatzobjekt_e-stelle') ?></td></tr>
-				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Adresse') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('einsatzobjekt_adresse') ?></td></tr>
-				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ort') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('einsatzobjekt_ort') ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Einsatzstichwort') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('stichwort') ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Einsatzstelle') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('objektname') ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Adresse') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('adresse1') ?><?php echo (!empty($B->get('hnr')))? ' '.$B->get('hnr'):'' ?></td></tr>
+				<tr><td colspan="2" style="background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ort') ?></td><td colspan="3" style="border:1px solid #666666;"><?php echo $B->get('ort') ?><?php echo (!empty($B->get('ortsteil')))? '/ '.$B->get('ortsteil'):'' ?></td></tr>
 			</table>
 			<br /><br />
 			<table cellpadding="3" style="width:98%; border:1px solid #666666; border-collapse:collapse;">
@@ -248,6 +248,12 @@
 		<td style="width:47%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Ölunfall/ Ölspur') ?></td>
 		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('klassifikation_oelspur') == '1')? 'X':'' ?></td>
 	</tr>
+	<tr>
+		<td style="width:47%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Sonstiger Einsatz') ?></td>
+		<td style="width:3%; border:1px solid #666666;"><?php echo ($B->get('klassifikation_sonstige') == '1')? 'X':'' ?></td>
+		<td style="width:20%; background-color:#cccccc; border:1px solid #666666;"><?php echo _('Sonstiger Einsatz (Text)') ?></td>
+		<td style="width:30%; border:1px solid #666666;"><?php echo $B->get('klassifikation_sonstige_name') ?></td>
+	</tr>
 </table>
 <br /><br />
 
@@ -288,7 +294,7 @@
 				<tr><td style="background-color:#cccccc;"><?php echo _('Datum') ?></td><td style="background-color:#cccccc;"><?php echo _('Uhrzeit') ?></td></tr>
 				<?php foreach ($B->getRessources() as $arrRes) { ?>
 					<tr>
-						<td style="border:1px solid #666666;"><?php echo date('d.m.Y', $arrRes['f3']) ?></td><td style="border:1px solid #666666;"><?php echo date('H:i:s', $arrRes['f3']) ?></td>
+						<td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f3']))? date('d.m.Y', $arrRes['f3']):'' ?></td><td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f3']))? date('H:i:s', $arrRes['f3']):'' ?></td>
 					</tr>
 				<?php } ?>
 			</table>
@@ -299,7 +305,7 @@
 				<tr><td style="background-color:#cccccc;"><?php echo _('Datum') ?></td><td style="background-color:#cccccc;"><?php echo _('Uhrzeit') ?></td></tr>
 				<?php foreach ($B->getRessources() as $arrRes) { ?>
 					<tr>
-						<td style="border:1px solid #666666;"><?php echo date('d.m.Y', $arrRes['f4']) ?></td><td style="border:1px solid #666666;"><?php echo date('H:i:s', $arrRes['f4']) ?></td>
+						<td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f4']))? date('d.m.Y', $arrRes['f4']):'' ?></td><td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f4']))? date('H:i:s', $arrRes['f4']):'' ?></td>
 					</tr>
 				<?php } ?>
 			</table>
@@ -310,7 +316,7 @@
 				<tr><td style="background-color:#cccccc;"><?php echo _('Datum') ?></td><td style="background-color:#cccccc;"><?php echo _('Uhrzeit') ?></td></tr>
 				<?php foreach ($B->getRessources() as $arrRes) { ?>
 					<tr>
-						<td style="border:1px solid #666666;"><?php echo date('d.m.Y', $arrRes['f1']) ?></td><td style="border:1px solid #666666;"><?php echo date('H:i:s', $arrRes['f1']) ?></td>
+						<td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f1']))? date('d.m.Y', $arrRes['f1']):'' ?></td><td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f1']))? date('H:i:s', $arrRes['f1']):'' ?></td>
 					</tr>
 				<?php } ?>
 			</table>
@@ -321,7 +327,7 @@
 				<tr><td style="background-color:#cccccc;"><?php echo _('Datum') ?></td><td style="background-color:#cccccc;"><?php echo _('Uhrzeit') ?></td></tr>
 				<?php foreach ($B->getRessources() as $arrRes) { ?>
 					<tr>
-						<td style="border:1px solid #666666;"><?php echo date('d.m.Y', $arrRes['f2']) ?></td><td style="border:1px solid #666666;"><?php echo date('H:i:s', $arrRes['f2']) ?></td>
+						<td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f2']))? date('d.m.Y', $arrRes['f2']):'' ?></td><td style="border:1px solid #666666;"><?php echo (!empty($arrRes['f2']))? date('H:i:s', $arrRes['f2']):'' ?></td>
 					</tr>
 				<?php } ?>
 			</table>
