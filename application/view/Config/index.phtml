@@ -14,38 +14,72 @@
 	<p><?php echo _('Konfigurationseinstellungen des System bearbeiten und speichern.') ?></p>
 	<br />
 	
-	<h3><?php echo _('Allgemein') ?></h3>
-	
-	<?php echo $this->drawMessages() ?>
 	<?php $html = Html_Factory::getHtml('forms') ?>
 	<?php echo $html->drawFormStart('post', $this->tools->buildUrl('Config', 'save'), '', array()) ?>
-	<?php $html->drawFormInput('system_title', _('System Bezeichnung'), $this->getConf('system_title'), '', array()) ?>
-	<?php $html->drawFormInput('logo_img', _('Logo'), $this->getConf('logo_img'), '', array()) ?>
-	<?php $html->drawFormInput('upload_path', _('Upload Pfad'), $this->getConf('upload_path'), '', array()) ?>
-	<?php $html->drawFormInput('page_entrys', _('Einträge pro Seite'), $this->getConf('page_entrys'), '', array()) ?>
-	<?php $html->drawFormInput('page_range', _('Pager Seiten-Links'), $this->getConf('page_range'), '', array()) ?>
-	<br />
-	<br />
 	
-	<h3><?php echo _('Einheiten') ?></h3>
+	<div id="config-content-tabs">
+		<p class="switch-tab active"><span class="tab_1"><?php echo _('Allgemein') ?></span></p>
+		<p class="switch-tab"><span class="tab_2"><?php echo _('Einheiten') ?></span></p>
+		<p class="switch-tab"><span class="tab_3"><?php echo _('Gebietskörperschaft') ?></span></p>
+		<p class="switch-tab"><span class="tab_4"><?php echo _('LDAP') ?></span></p>
+		<div class="clear"></div>
+	</div>
 	
-	<?php $html->drawFormInput('laenge', _('Längen in'), $this->getConf('laenge'), '', array()) ?>
-	<?php $html->drawFormInput('gewicht', _('Gewicht in'), $this->getConf('gewicht'), '', array()) ?>
-	<?php $html->drawFormInput('waehrung', _('Währung'), $this->getConf('waehrung'), '', array()) ?>
-	<br />
-	<br />
+	<div class="config-content-wrap" id="tab_1">
+		<?php $html->drawFormInput('system_title', _('System Bezeichnung'), $this->getConf('system_title'), '', array()) ?>
+		<?php $html->drawFormInput('logo_img', _('Logo'), $this->getConf('logo_img'), '', array()) ?>
+		<?php $html->drawFormInput('upload_path', _('Upload Pfad'), $this->getConf('upload_path'), '', array()) ?>
+		<?php $html->drawFormInput('page_entrys', _('Einträge pro Seite'), $this->getConf('page_entrys'), '', array()) ?>
+		<?php $html->drawFormInput('page_range', _('Pager Seiten-Links'), $this->getConf('page_range'), '', array()) ?>
+	</div>
 	
-	<h3><?php echo _('Gebietskörperschaft') ?></h3>
+	<div class="config-content-wrap" id="tab_2">
+		<?php $html->drawFormInput('laenge', _('Längen in'), $this->getConf('laenge'), '', array()) ?>
+		<?php $html->drawFormInput('gewicht', _('Gewicht in'), $this->getConf('gewicht'), '', array()) ?>
+		<?php $html->drawFormInput('waehrung', _('Währung'), $this->getConf('waehrung'), '', array()) ?>
+	</div>
 	
-	<?php $html->drawFormInput('landkreis_kreisfreie_stadt', _('Landkreis/ kreisfr. Stadt'), $this->getConf('landkreis_kreisfreie_stadt'), '', array()) ?>
-	<?php $html->drawFormInput('gemeinde', _('Gemeinde'), $this->getConf('gemeinde'), '', array()) ?>
-	<?php $html->drawFormInput('gemeinde_ident_nr', _('Ident.- Nr. Gemeinde'), $this->getConf('gemeinde_ident_nr'), '', array()) ?>
-	<br />
-	<br />
+	<div class="config-content-wrap" id="tab_3">
+		<?php $html->drawFormInput('landkreis_kreisfreie_stadt', _('Landkreis/<br />kreisfr. Stadt'), $this->getConf('landkreis_kreisfreie_stadt'), '', array()) ?>
+		<?php $html->drawFormInput('gemeinde', _('Gemeinde'), $this->getConf('gemeinde'), '', array()) ?>
+		<?php $html->drawFormInput('gemeinde_ident_nr', _('Ident.- Nr. Gemeinde'), $this->getConf('gemeinde_ident_nr'), '', array()) ?>
+	</div>
+	
+	<div class="config-content-wrap" id="tab_4">
+		<?php $html->drawFormCheckbox('use_ldap', _('AD Anbindung'), 1, '', array('checked' => ($this->getConf('use_ldap') == '1')? true:false)) ?>
+		<?php $html->drawFormInput('ldap_address', _('LDAP SERVER'), $this->getConf('ldap_address'), '', array()) ?>
+		<?php $html->drawFormInput('ldap_port', _('LDAP Port<br />(Standard: 389)'), $this->getConf('ldap_port'), '', array()) ?>
+		<?php $html->drawFormInput('ldap_domain', _('Domain'), $this->getConf('ldap_domain'), '', array()) ?>
+	</div>
 	
 	<div class="left"><?php $html->drawFormSubmit('save_config', _('Konfiguration Speichern'), '', array('class' => 'submit button')) ?></div>
+	<div class="clear"></div>
 	
 	<?php echo $html->drawFormEnde() ?>
 	
-</div>	
+	
+	
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+	
+	$(document).ready(function(){
+
+		// aktiver Tab beim ersten laden der Seite
+		$('#' + $('#config-content-tabs .active').children().attr('class')).css('display', 'block');
+
+		// umschalten der Tabs 
+		$('.switch-tab').bind('click', function(){
+
+			$('.config-content-wrap').css('display', 'none');
+
+			$('#' + $(this).children().attr('class')).css('display', 'block');
+			
+		})
+		
+	})	
+	
+//]]>
+</script>	
 

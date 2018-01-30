@@ -306,7 +306,6 @@ function remPersonal(oEL)
 	
 } // function remPersonal(oEL)
 
-console.log('1234');
 /**
  * berechnet die Gesamteinsatzzeit
  * 

@@ -7,9 +7,10 @@ global $arrMenu;
 $arrMenu = array(
 
 	// Index Menue -> Einsatzberichte
-	/*'index' => array(
+	'index' => array(
 		'title' 	=> _('Rettungsdienst'),
 		'class'		=> 'fa-ambulance',
+		'acl'		=> 'rd:1',	
 		'submenu' => array(
 			'general' => array(
 					'title' => _('Alle anzeigen'),
@@ -32,12 +33,13 @@ $arrMenu = array(
 					'action' => 'alarm'
 			)
 		)
-	),*/
+	),
 	
 	// Index Menue -> Einsatzberichte
 	'report' => array(
 		'title' 	=> _('Feuerwehr'),
 		'class'		=> 'fa-file-text-o',
+		'acl'		=> 'eb:1',
 		'submenu' => array(
 			'open' => array(
 					'title' => _('Offene Einsätze'),
@@ -84,7 +86,7 @@ $arrMenu = array(
 		'admin_only'	=> true, // nur für admins sichtbar
 		'submenu' => array(
 			'general' => array(
-					'title' => _('Allgemein'),
+					'title' => _('System'),
 					'action' => 'index',
 			)
 		)

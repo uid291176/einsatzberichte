@@ -186,6 +186,7 @@ a.button:hover { background:#008ec2; border-color:#006799; }
 #tab_page1 { position:absolute; left:0; top:0; }
 #tab_page2 { position:absolute; left:90px; top:0; }
 #tab_page3 { position:absolute; left:180px; top:0; }
+#tab_page4 { position:absolute; left:270px; top:0; }
 
 #report-view-title-hilfe { background-color:#00a0d2; }
 #report-view-title-brand { background-color:#af2b1e; }
@@ -245,8 +246,15 @@ tr.resource-list table td { border-bottom:1px dashed #666666; }
 
 #day-overview .pager { margin-top:10px; }
 #day-overview .content-list-table { margin-top:10px; }
-
 #day-overview p { line-height:150%; }
+
+/** config content */
+.content-form .form_field { margin-left:0; }
+#config-content-tabs { position:relative; margin-top:5px; height:34px; }
+#config-content-tabs .switch-tab { padding:10px 20px; margin-right:5px; display:inline-block; float:left; text-decoration:none; background-color:#e1e1e1; color:#666666; font-weight:600; cursor:pointer;  }
+#config-content-tabs .switch-tab:hover { background-color:#cccccc;  color:#333333; }
+#config-content-tabs .active { background-color:#cccccc; border:none; color:#333333; }
+.config-content-wrap { display:none; background-color:#cccccc; padding:10px 20px 20px 20px; min-height:260px; }
 
 /** jquery-ui */
 .ui-datepicker { font-size:1.4em; }

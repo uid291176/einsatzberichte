@@ -90,14 +90,15 @@
 					<td>
 						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('enr' => $einsatz['enr'], 'order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'], 'cmd' => 'pdfreview', 'date-folder' => date('Y-m-d', $einsatz['beginn']))) ?>"><strong><?php echo $einsatz['enr'] ?></strong></a><br />
 						<a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('enr' => $einsatz['enr'], 'order_by' => $_REQUEST['order_by'], 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'], 'cmd' => 'pdfreview', 'date-folder' => date('Y-m-d', $einsatz['beginn']))) ?>"><span class="view-details"><?php echo _('PDF Bericht ansehen') ?></span></a>
+						
+						<?php if (in_array('ebadm:1', $this->user->getArrACL())) { ?>
+						&nbsp;|&nbsp;<a id="<?php echo $einsatz['eid'] ?>" href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), 'finish', array('eid' => $einsatz['eid'], 'enr' => $einsatz['enr'])) ?>" onclick="viewDialog(this, '<?php echo $einsatz['bericht_sachbearbeiter_email'] ?>'); return false;"><span class="red"><?php echo _('zur Nachbearbeitung') ?></span></a>
+						<?php } ?>
+						
 					</td>
 					<td><?php echo $einsatz['stichwort'] ?></td>
 					<td><?php echo date('d.m.Y H:i:s', $einsatz['beginn']) ?></td>
-					<td>
-						<?php $SACHBEARBEITER = new User_Handler($einsatz['uid'], $this->db) ?>
-						<?php $SACHBEARBEITER->init() ?>
-						<?php echo $SACHBEARBEITER->get('name') ?>, <?php echo $SACHBEARBEITER->get('vorname') ?>
-					</td>
+					<td><?php echo $einsatz['bericht_sachbearbeiter_name'] ?>, <?php echo $einsatz['bericht_sachbearbeiter_vname'] ?></td>
 					<td><?php echo $einsatz['ort'] ?></td>
 					<td><?php echo $einsatz['adresse1'] ?></td>
 				</tr>
@@ -177,8 +178,83 @@
 			})
 			
 		})
+		
+		/**
+		 * übernimmt die Rückggabe (AJAX) zum Sachbearbeiter
+		 * gibt die Möglichkeit eine Mail dorthin zu versenden
+		 * @ToDo AjaxUrl dynamisieren durch Funktion 
+		 */
+		function viewDialog(oEL, strEmail)
+		{
+			
+			var url 		= $(oEL).attr('href');
+			var eID 		= $(oEL).attr('id');
+			var email 		= strEmail;
+			var strBetreff 	= '<?php echo _('Bericht zur Nachbearbeitung') ?>';
+			var strBody;
+			var strAjaxUrl 	= '/index.php?k=Report&action=ajaxReview';
+			
+			$('#review_dialog').dialog({
+				height: 350,
+				width: 450,
+				buttons:[{
+					text: 'Zurückgeben',
+					click: function() {
+
+						// Inhalt des Kommentarfeldes holen
+						strBody = $('#review-msg-box').val();
+						
+						// AJAX Update für den review Kommentar
+						jQuery.ajax({
+							type: "POST",
+				            url: strAjaxUrl,
+				            data: {
+				                eid: eID,
+					            comment: strBody
+				            },
+				            success: function(content) {
+
+					            //alert(content);
+					            
+				            	if($('#check-send-email').prop('checked'))
+								{
+									// Outlook (MailClient) starten
+									window.location.href = "mailto:" + email + "?Subject=" + strBetreff + "&body=" + strBody;
+								}
+				            	location.reload();
+				            }
+				            
+						});
+						$(this).dialog( "close" );
+					}
+				
+				}]
+				
+
+			});
+			
+
+		} // function viewDialog(oEL, strEmail)
 	
 	//]]>
 	</script>
+	
+</div>
+
+<?php 
+/**
+ * Dialog für den Review- Sachbearbeiter
+ */
+?>
+<div id="review_dialog" title="Kommentar an den Sachbearbeiter" style="display:none; font-size:1.4rem; ">
+	
+	<br />
+	<form >
+		<label><?php echo _('Kommentar des Sachbearbeiters') ?></label>
+		<textarea id="review-msg-box" rows="10" cols="52"></textarea>
+		<br />
+		<input id="check-send-email" type="checkbox" name="send-email" value="1" /><span><?php echo _('Email an Bearbeiter senden') ?></span>
+		<br />
+	</form>
 	
 </div>

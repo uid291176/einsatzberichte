@@ -79,7 +79,7 @@
 		 * Benutzer eingeloggt, Controller & action setzen
 		 */
 		if (isset($_REQUEST['k'])) $controller = $_REQUEST['k'];
-		else $controller = 'Index';
+		else $controller = 'Report';
 		
 		if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
 		else $action = 'index';

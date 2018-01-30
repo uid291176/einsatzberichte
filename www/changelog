@@ -101,6 +101,13 @@
 	Rechtschreibfehler im Brandbericht u. im Hilfeleistungsbericht behoben
 	Liste Abgeschlossene mit "Unterstichwort"
 
+#1.3.3
+- Neue Funktion(en)
+	LDAP AD Anbindung (Benutzerverwaltung) möglich
+	Benutzerrollen je Modul 
+	spezielle Benutzerrollen für administrative Zwecke im Feuerwehrmodul
+	"review" Funktion mit Rückgabe an den Sachbearbeiter
+
 #
 - Umstellung auf https:// Protokoll
 

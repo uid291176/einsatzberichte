@@ -8,11 +8,20 @@
 class UserController extends SystemController
 {
 	
+	public function init()
+	{
+		parent::init();
+		
+		$this->title = _('Benutzerverwaltung');
+	}
+	
+	
 	/**
 	 * zeigt die Benutzerübersicht an
 	 */
 	public function indexAction()
 	{
+		
 		
 		// dyn. "WEHRE" Erzeugung
 		$where = 'WHERE 1 ';
@@ -49,28 +58,6 @@ class UserController extends SystemController
 			$this->view['data'][$uid] = new User_Handler($uid, $this->db);
 			$this->view['data'][$uid]->init();
 		}
-
-		/**
-		 * 
-		 * Enter description here ...
-		 * @var unknown_type
-		 *
-			$PAGER = new MySQLi_Pager($this->view['data']);
-			$PAGER->setRecordsPerPage(20);
-			$PAGER->setUrl(array('k' => $_REQUEST['k'], 'action' => $_REQUEST['action']));
-			
-			if (is_int(intval($_REQUEST['pPage']))) $this->view['data'] = $PAGER->getPage(intval($_REQUEST['pPage']));
-			else $this->view['data'] = $PAGER->getPage(0);
-				
-			$this->view['pager'] = $PAGER->getMarkup();		
-			
-			// Anzahl User gesamt
-			$arCount = $this->db->fetchAssocField("SELECT COUNT(*) FROM `".TBL_USER."` WHERE 1 AND `deleted` = '0'");
-			$this->view['count']['all'] = $arCount[0];
-			
-		**
-		 * 
-		 */
 		
 		// set Pager
     	$PAGER = new MySQLi_Pager($pages, $this->pageEntrys, $this->pageRange);
@@ -94,6 +81,8 @@ class UserController extends SystemController
 		$arCount = $this->db->fetchAssocField("SELECT COUNT(*) FROM `".TBL_USER."` WHERE 1 AND `status` = '0' AND `deleted` = '0'");
 		$this->view['count']['user'] = $arCount[0];
 		
+		$this->title = _('Benutzerverwaltung');
+		
 		$this->render();
 		
 	}// public function indexAction()
@@ -110,6 +99,7 @@ class UserController extends SystemController
 			$this->view['data'] = new User_Handler($uid, $this->db);
 			$this->view['data']->init();
 		}
+		
 		$this->render();
 		
 	}//public function editAction()
@@ -148,7 +138,7 @@ class UserController extends SystemController
 	 */
 	public function deleteAction()
 	{
-		
+
 		$uid = $this->tools->q($_REQUEST['uid']);
 		$USER = new User_Handler($uid, $this->db);
 		$USER->init();
@@ -163,16 +153,33 @@ class UserController extends SystemController
 	 */
 	public function saveAction()
 	{
+		
 		$updateID = $this->tools->q($_REQUEST['uid']);
 		
+		// Zugriffsrechte der Module sichern
+		$arrACL = array();
+		
+		if ($this->tools->isSizedString($_REQUEST['rettungsdienst'])) $arrACL[] = 'rd:1';
+		else $arrACL[] = '0';
+		
+		if ($this->tools->isSizedString($_REQUEST['einsatzberichte'])) $arrACL[] = 'eb:1';
+		else $arrACL[] = '0';
+		
+		if ($this->tools->isSizedString($_REQUEST['einsatzberichte_admin'])) $arrACL[] = 'ebadm:1';
+		else $arrACL[] = '0';
+		
+		$strACL = implode('|', $arrACL);
+		
+		// Benutzerdaten für "add/ update" Methoden
 		$arDataRequest = array(
-			'name' 		=> $this->tools->q($_REQUEST['name']),
-			'vorname' 	=> $this->tools->q($_REQUEST['vorname']),
-			'email' 	=> $this->tools->q($_REQUEST['email']),
-			'username' 	=> $this->tools->q($_REQUEST['username']),
-			'status' 	=> ($this->tools->isSizedString($_REQUEST['status']))? intval($this->tools->q($_REQUEST['status'])):0,
-			'passwd1' 	=> $this->tools->q($_REQUEST['passwd1']),
-			'passwd2' 	=> $this->tools->q($_REQUEST['passwd2'])
+			'name' 			=> $this->tools->q($_REQUEST['name']),
+			'vorname' 		=> $this->tools->q($_REQUEST['vorname']),
+			'email' 		=> $this->tools->q($_REQUEST['email']),
+			'username' 		=> $this->tools->q($_REQUEST['username']),
+			'status' 		=> ($this->tools->isSizedString($_REQUEST['status']))? intval($this->tools->q($_REQUEST['status'])):0,
+			'passwd1' 		=> $this->tools->q($_REQUEST['passwd1']),
+			'passwd2' 		=> $this->tools->q($_REQUEST['passwd2']),
+			'acl_module' 	=> $strACL
 		);
 		
 		if (isset($_REQUEST['submit_save']) || isset($_REQUEST['submit_save_return']))
@@ -195,7 +202,9 @@ class UserController extends SystemController
 			// Profildaten update als der jeweils angemeldete Benutzer
 			if ($_REQUEST['cmd'] == 'profil')
 			{
-				$arDataRequest['status'] = $this->user->get('status');
+				$arDataRequest['status'] = $this->user->get('status'); // Admin Status zurücksichern
+				$arDataRequest['acl_module'] = $this->user->get('acl_module'); // ACLs zurücksichern
+				
 				$uid = $this->userUpdateAction($updateID, $arDataRequest);
 				
 				$this->redirect('User', 'profil', array('uid' => $uid)); die();
@@ -210,16 +219,20 @@ class UserController extends SystemController
 	 * führt Aktionen der Übersicht- Tabelle aus
 	 */
 	public function tableAction()
-	{		
+	{	
+		
 		if (isset($_REQUEST['submit_table_action']) &&
 			$_REQUEST['submit_table_action'] == 'übernehmen')
 		{
+			
 			/**
 			 * construct für spätere multi- action Aufrufe
 			 */
-			switch ($_REQUEST['content_action'])
+			switch ($_REQUEST['table-action'])
 			{
+				
 				case 'del':
+					
 					if ($this->tools->issizedArray($_REQUEST['check']))
 					{
 						foreach ($_REQUEST['check'] as $uid)
@@ -245,13 +258,15 @@ class UserController extends SystemController
 	 */
 	protected function userUpdateAction($uid, $data)
 	{
+		
 		$USER = new User_Handler($uid, $this->db);
 		$USER->init();
 		$USER->set('name', $data['name']);
 		$USER->set('vorname', $data['vorname']);
 		$USER->set('email', $data['email']);
 		$USER->set('status', $data['status']);
-		
+		$USER->set('acl_module', $data['acl_module']);
+
 		$passwd = $data['passwd1'];
 		
 		if ($data['passwd2'] != '' && $data['passwd2'] == $passwd)
@@ -305,12 +320,13 @@ class UserController extends SystemController
 			$this->setNegMessage(_('Die angegebene E-Mail Adresse ist ungültig.'));
 		}
 		
-		$arImport = array(	'name'		=> $data['name'],
-							'vorname'	=> $data['vorname'],
-							'username' 	=> $data['username'],
-							'email'		=> $importEmail,
-							'status'	=> $data['status'],
-							'deleted'	=> '0'
+		$arImport = array(	'name'			=> $data['name'],
+							'vorname'		=> $data['vorname'],
+							'username' 		=> $data['username'],
+							'email'			=> $importEmail,
+							'status'		=> $data['status'],
+							'acl_module' 	=> $data['acl_module'],
+							'deleted'		=> '0'
 					);
 		
 		if (strlen($arImport['username']) < 5)

@@ -25,6 +25,12 @@
 		
 		<?php $html->drawFormPasswd('passwd1', _('Passwort * '), '', array()) ?>
 		<?php $html->drawFormPasswd('passwd2', _('wiederholen * '), '', array()) ?>
+		
+		<span class="field-info"><?php echo _('Zugriffsrechte zu den Programm - Modulen') ?></span>
+		
+		<?php $html->drawFormCheckbox('rettungsdienst', _('Rettungsdienst'), 1, '', array()) ?>
+		<?php $html->drawFormCheckbox('einsatzberichte', _('Feuerwehr'), 1, '', array()) ?>
+		<?php $html->drawFormCheckbox('einsatzberichte_admin', _('Einsatzb. Admin'), 1, '', array()) ?>
 		<br />
 		<?php $html->drawFormSubmit('submit_save', _('Neuen Benutzer anlegen'), '', array('class' => 'submit button')) ?>
 	

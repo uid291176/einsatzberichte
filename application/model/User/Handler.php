@@ -9,16 +9,16 @@ class User_Handler
 {
 	
 	/**
-	 * bekommt das DB Objekt übergeben
+	 * MySQL DB Objekt
 	 * @var object
 	 */
 	protected $db = null;
 	
 	/**
 	 * bekommt die id des Users übergeben
-	 * @var int
+	 * @var mixed
 	 */
-	protected $uid = null;
+	protected $uid = '';
 	
 	/**
 	 * enthällt die Daten des angemeldeten Benutzers
@@ -37,8 +37,10 @@ class User_Handler
 	 */
 	public function __construct($uid, $db)
 	{
-		$this->db = $db;
 		$this->uid = $uid;
+		$this->db = $db;
+		
+		$this->tools = Helper_Functions::getInstance();
 	}
 	
 	private function __clone() {}
@@ -63,15 +65,28 @@ class User_Handler
 	 */
 	public function init()
 	{
+		
 		$this->userData = $this->db->fetchRow("SELECT 
-													* 
+													`id`, `username`, `name`, `vorname`, `email`, `status`, `deleted`, acl_module 
 												FROM 
 													`".TBL_USER."` 
 												WHERE
-												 `id` = '".$this->uid."' AND
+												 `id` = '".intval($this->uid)."' AND
 												 `deleted` != '1'
 											");
-	}
+		
+		$arrACLs = explode('|', $this->userData['acl_module']);
+		
+		if (in_array('rd:1', $arrACLs)) $this->userData['rettungsdienst'] = '1';
+		else $this->userData['rettungsdienst'] = false;
+		
+		if (in_array('eb:1', $arrACLs)) $this->userData['einsatzberichte'] = '1';
+		else $this->userData['einsatzberichte'] = false;
+		
+		if (in_array('ebadm:1', $arrACLs)) $this->userData['einsatzberichte_admin'] = '1';
+		else $this->userData['einsatzberichte_admin'] = false;
+		
+	} // public function init()
 	
 	/**
 	 * liefert den Inhalt von $key des Benutzers
@@ -81,7 +96,8 @@ class User_Handler
 	{
 		if (array_key_exists($key, $this->userData)) return $this->userData[$key];
 		else return 'key '.$key.' does not exists!';
-	}
+		
+	} // public function get($key)
 	
 	/**
 	 * speichert einen neuen Wert für den aktuellen Benutzer
@@ -90,21 +106,38 @@ class User_Handler
 	 */
 	public function set($key, $val)
 	{
+		
 		if (array_key_exists($key, $this->userData))
 		{
 			$arUpdtae = array(
 				$key => $val
 			);
-			
 			$this->db->UpdateQuery(TBL_USER, $arUpdtae, "`id` = '".$this->uid."'");
 		}
-	}
+		
+	} // public function set($key, $val)
 	
+	/**
+	 * gibt das Admin Flag zurück
+	 * @return boolean
+	 */
 	public function isAdmin()
 	{
 		if ($this->userData['status'] == 1) return true;
 		else return false;
-	}
+		
+	} // public function isAdmin()
+	
+	/**
+	 * gibt ein array der Benutzerrechte für die Module zurück
+	 * @return array
+	 */
+	public function getArrACL()
+	{
+		return explode('|', $this->userData['acl_module']);
+		
+	} // public function getArrACL()
+	
 	
 }
 ?>

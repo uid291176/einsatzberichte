@@ -48,7 +48,14 @@
 	
 	<?php foreach ($this->menu as $k => $menu) { ?>
 	
+		<!-- nicht Anzeigen wenn kein Sys Admin -->
 		<?php if($menu['admin_only'] === true && $this->user->isAdmin() === false) continue ?>
+		
+		<!-- Module nicht anzeigen wenn keine Modulberechtigung -->
+		<?php if (!in_array($menu['acl'], $this->user->getArrACL()) && !isset($menu['admin_only'])) continue ?>
+		
+		<!-- Benutzermenü nicht anzeigen wenn LDAP aktiv -->
+		<?php if ($k == 'user' && $this->getConf('use_ldap') == '1') continue ?>
 	
 		<li <?php echo (strtolower($_REQUEST['k']) == $k)? 'class="active"':'' ?>>
 			<a href="<?php echo $this->tools->buildUrl(ucfirst($k), 'index') ?>">

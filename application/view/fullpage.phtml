@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-	<title><?php echo $this->getConf('system_title') ?></title>
+	<title><?php echo $this->getConf('system_title') ?> :: <?php echo $this->title ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	
 	<!-- start css dateien einbinden -->
@@ -55,7 +55,10 @@
 	   			
 	   			<!-- user-dialog -->
 		   		<div id="user-dialog">
-		   			<a href="<?php echo $this->tools->buildUrl('User', 'profil', array('uid' => $this->user->get('id'))) ?>"><?php echo _('Profil bearbeiten') ?></a>&nbsp;|&nbsp;<a href="<?php echo $this->tools->buildUrl('Login', 'logout', array()) ?>"><?php echo _('Abmelden') ?></a>
+		   		<?php if ($this->getConf('use_ldap') != '1') { ?>
+		   			<a href="<?php echo $this->tools->buildUrl('User', 'profil', array('uid' => $this->user->get('id'))) ?>"><?php echo _('Profil bearbeiten') ?></a>&nbsp;|&nbsp;
+		   		<?php } ?>
+		   			<a href="<?php echo $this->tools->buildUrl('Login', 'logout', array()) ?>"><?php echo _('Abmelden') ?></a>
 		   		</div><!-- user-dialog -->
 		   		
 	   		</div><!-- header -->

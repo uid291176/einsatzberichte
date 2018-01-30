@@ -8,6 +8,11 @@ class ReportController extends SystemController
 {
 	
 	/**
+	 * Modul ID für die Berechtigungsvergabe
+	 */
+	public $aclID = 'eb:1';
+	
+	/**
 	 * Oracle Datenbank Verbindungsklasse
 	 * @var object
 	 */
@@ -42,11 +47,32 @@ class ReportController extends SystemController
 	);
 	
 	/**
+	 * eigene init() Methode
+	 * {@inheritDoc}
+	 * @see SystemController::init()
+	 */
+	public function init()
+	{
+		parent::init();
+	
+		$this->title = _('Einsatzberichte');
+	
+		if (!in_array($this->aclID, $this->user->getArrACL()))
+		{
+			unset($_SESSION['user_id']);
+			unset($_SESSION['current_user']);
+				
+			die(_('FEHLER::Sie verfügen nicht über die notwendige Berechtigung für dieses Modul!'));
+		}
+	
+	} // public function init()
+	
+	/**
 	 * Erzeugt die Liste der aktuellen einsätze für die Index Ansicht
 	 */
 	public function indexAction()
 	{
-		
+
 		if ($_REQUEST['cmd'] == 'detailview')
 		{
 			$this->viewAction();
@@ -369,7 +395,20 @@ class ReportController extends SystemController
 						OFFSET ".$offset."
 					";
 	    
-	    $this->view['data'] = $this->db->FetchAssoc($sql);
+	    $this->view['data']['edit'] = $this->db->FetchAssoc($sql);
+	    
+	    $sql = "SELECT
+							*
+						FROM
+							`".TBL_EINSAETZE."`
+						WHERE 1 AND
+							`uid` = '".$this->user_id."' AND
+							`status` = 'review'
+                        ORDER BY
+	      			        `eid` ASC
+					";
+	    
+	    $this->view['data']['review'] = $this->db->FetchAssoc($sql);
 	    
 	    // Pager Ausgabe über OUTPUT BUFFER -> Template pager.phtml
 	    if ($this->tools->isSizedArray($this->view['data'])) $this->view['pager'] = $PAGER->renderPager();
@@ -694,7 +733,16 @@ class ReportController extends SystemController
 		        if ($_REQUEST['typ'] == 'brandbericht') $this->createPDF($eID, 'brandbericht');
 		        if ($_REQUEST['typ'] == 'hilfeleistungsbericht') $this->createPDF($eID, 'hilfeleistungsbericht');
 		        
-		        $this->db->UpdateQuery(TBL_EINSAETZE, array('status' => 'finish', 'bericht_abgeschlossen' => time()), "`eid` = '".$eID."'");
+		        $arrBerichtUpdate = array(
+		        		'status' => 'finish',
+		        		'bericht_abgeschlossen' => time(),
+		        		'bericht_sachbearbeiter_name' => $this->user->get('name'),
+		        		'bericht_sachbearbeiter_vname' => $this->user->get('vorname'),
+		        		'bericht_sachbearbeiter_kuerzel' => $this->user->get('vorname'),
+		        		'bericht_sachbearbeiter_email' => $this->user->get('email')
+		        );
+		        
+		        $this->db->UpdateQuery(TBL_EINSAETZE, $arrBerichtUpdate, "`eid` = '".$eID."'");
 		        
 		        // Sprung zu allen abgeschlossenen Einsätze mit Beginn am übergebenen Datum
 		        $this->redirect($_REQUEST['k'], 'finish', array('date-select' => $B->get('beginn')));
@@ -740,6 +788,27 @@ class ReportController extends SystemController
 	   $this->redirect($this->tools->q($_REQUEST['k']), 'edit');
 	   
 	} // public function resetAction()
+	
+	/**
+	 * leitet einen unvollständigen Bericht an den Sachbearbeiter zurück
+	 */
+	public function ajaxReviewAction()
+	{
+		
+		$this->tools->debug($_REQUEST);
+		
+		$eid = $this->tools->q($_REQUEST['eid']);
+		
+		$strReViewComment = $this->db->FetchOne("SELECT `review_comment` FROM `".TBL_EINSAETZE."` WHERE `eid` = '".$eid."'");
+		
+		if ($this->tools->isSizedString($strReViewComment)) $strReViewComment = $strReViewComment."\n --- \n".htmlentities($_REQUEST['comment']);
+		else $strReViewComment = htmlentities($_REQUEST['comment']);
+		
+		$rev = $this->db->UpdateQuery(TBL_EINSAETZE, array('status' => 'review', 'review_comment' => $strReViewComment), "`eid` = '".$eid."'");
+		
+		die('1');
+		
+	} // public function reviewAction()
 	
 	/**
 	 * erzeugt die "Tageszettel" Ansicht

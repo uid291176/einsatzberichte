@@ -2,7 +2,7 @@
 /**
  * Template Einsatzübersicht
  */
-//$this->tools->debug($_REQUEST)
+//$this->tools->debug($this->view['data']); 
 ?>
 
 <div id="user-overview" class="overview-wrap">
@@ -10,7 +10,6 @@
 	<h1><span class="fa fa-file-text-o"></span>&nbsp;<?php echo _('Tagesübersicht Rettungsdienst') ?></h1>
 
 	<?php echo $this->drawMessages() ?>
-	
 	
 	<div id="zeitraum-filter">
 		
@@ -63,7 +62,7 @@
 					</th>
 					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('order_by' => 'stichwort', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="sortierung"><?php echo _('Stichwort') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'stichwort')? $_REQUEST['order_direction']:'' ?>"></span></a></th>
 					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('order_by' => 'start', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="sortierung"><?php echo _('Beginn') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'start')? $_REQUEST['order_direction']:'' ?>"></span></a></th>
-					<th><?php echo _('Alarmierung') ?></th>
+					<!-- <th><?php //echo _('Alarmierung') ?></th>-->
 					<th><?php echo _('Anrufer-Info') ?></th>
 					<th><?php echo _('Stadt') ?></th>
 					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('order_by' => 'city_district', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="sortierung"><?php echo _('Stadtteil') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'city_district')? $_REQUEST['order_direction']:'' ?>"></span></a></th>
@@ -86,7 +85,7 @@
 					</td>
 					<td><?php echo $einsatz['NAMEEVENTTYPE'] ?></td>
 					<td><?php echo $einsatz['STARTTIME'] ?></td>
-					<td><?php echo $einsatz['ALARMTIME'] ?></td>
+					<!-- <td><?php echo $einsatz['ALARMTIME'] ?></td>-->
 					<td><?php echo $einsatz['ADDROBJNAME'] ?></td>
 					<td><?php echo $einsatz['CITY'] ?></td>
 					<td><?php echo $einsatz['CITY_DISTRICT'] ?></td>
@@ -109,7 +108,7 @@
 					</th>
 					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('order_by' => 'stichwort', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="sortierung"><?php echo _('Stichwort') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'stichwort')? $_REQUEST['order_direction']:'' ?>"></span></a></th>
 					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('order_by' => 'start', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="sortierung"><?php echo _('Beginn') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'start')? $_REQUEST['order_direction']:'' ?>"></span></a></th>
-					<th><?php echo _('Alarmierung') ?></th>
+					<!-- <th><?php // echo _('Alarmierung') ?></th>-->
 					<th><?php echo _('Anrufer-Info') ?></th>
 					<th><?php echo _('Stadt') ?></th>
 					<th><a href="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), $_REQUEST['action'], array('order_by' => 'city_district', 'period' => $_REQUEST['period'], 'pPage' => $_REQUEST['pPage'], 'order_direction' => $direction, 'date-select' => $_REQUEST['date-select'], 'search' => $_REQUEST['search'])) ?>"><span class="sortierung"><?php echo _('Stadtteil') ?></span>&nbsp;<span class="fa fa-sort-<?php echo (isset($_REQUEST['order_direction']) && $_REQUEST['order_by'] == 'city_district')? $_REQUEST['order_direction']:'' ?>"></span></a></th>

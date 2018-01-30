@@ -90,12 +90,19 @@ abstract class SystemController
 	public $menu;
 	
 	/**
+	 * Titel im Browserfenster
+	 * @var string
+	 */
+	public $title;
+	
+	/**
 	 * 
 	 * Enter description here ...
 	 */
 	public function __construct($controller, $action)
 	{
-		if (intval($_SESSION['user_id'] > 0)) $this->user_id = intval($_SESSION['user_id']);
+		
+		if (isset($_SESSION['user_id'])) $this->user_id = $_SESSION['user_id'];
 
 		$this->controller = $controller;
 		$this->action = $action;
@@ -126,16 +133,30 @@ abstract class SystemController
 		require_once LIB_PATH.'/menuconf.php';
 		
 		$this->db = MySQLi_Database::getInstance($this->conf);	
-		$this->db->set_charset('utf8');
-		
-		$this->user = User_Handler::geInstance($this->user_id, $this->db);
-		$this->user->init();
+		$this->db->set_charset('utf8');		
 		
 		$arConf = $this->db->fetchAssoc("SELECT * FROM `".TBL_CONFIG."` WHERE 1");
 		foreach ($arConf as $config)
 		{
 			$this->conf['options'][$config['key']] = $config['value'];
 		}
+		
+		if($this->tools->isSizedString($_SESSION['user_id']))
+		{
+			
+			if ($this->getConf('use_ldap') == '1')
+			{
+				$this->user = User_LDAP::geInstance($_SESSION['user_id']);
+				$this->user->init();
+			}
+			else
+			{
+				$this->user = User_Handler::geInstance($_SESSION['user_id'], $this->db);
+				$this->user->init();
+			}
+			
+		}
+		
 		
 		/**
 		 * zentrale Pager Einstellungen sofern in Verwendung
@@ -164,7 +185,7 @@ abstract class SystemController
 	 */
 	public function render($layout = NULL, $controller = NULL, $action = NULL)
 	{
-		
+
 		if ($controller === NULL) $controller = $this->controller;
 		if ($action === NULL) $action = $this->action;
 			

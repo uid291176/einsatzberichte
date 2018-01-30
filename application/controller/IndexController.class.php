@@ -8,6 +8,11 @@ class IndexController extends SystemController
 {
 	
 	/**
+	 * Modul ID für die Berechtigungsvergabe
+	 */
+	public $aclID = 'rd:1';
+	
+	/**
 	 * Oracle Datenbank Verbindungsklasse
 	 * @var object
 	 */
@@ -39,6 +44,29 @@ class IndexController extends SystemController
 		'archiv' 	=> 'ad_acta',
 		'alarm' 	=> 'alarmed'
 	);
+	
+	/**
+	 * eigene init() Methode
+	 * {@inheritDoc}
+	 * @see SystemController::init()
+	 */
+	public function init()
+	{
+		
+		parent::init();
+	
+		$this->title = _('Rettungesdienst');
+		
+		if (!in_array($this->aclID, $this->user->getArrACL()))
+		{
+			unset($_SESSION['user_id']);
+			unset($_SESSION['current_user']);
+			
+			die(_('FEHLER::Sie verfügen nicht über die notwendige Berechtigung für dieses Modul!'));
+		}
+
+	} // public function init()
+	
 	
 	/**
 	 * Erzeugt die Liste der aktuellen einsätze für die Index Ansicht

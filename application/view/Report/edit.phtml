@@ -29,6 +29,18 @@
 	
 	<?php echo $this->drawMessages() ?>
 	
+	<h3><span class="fa fa-refresh"></span>&nbsp;<?php echo _('Wiedervorlagen') ?></h3>
+	<p><?php echo _('Diese Einsätze wurden auf Grund unvollständiger oder fehlerhafter Angaben zur Überarbeitung zurückgegeben.') ?></p>
+	<br />
+	
+	<!-- Wiedervorlagen als eigenes Template einbinden -->
+		<?php include VIEW_PATH.'/Report/edit_review.phtml' ?>
+	<!-- Seite 2 als eigenes Template einbinden -->
+	<br /><br />
+	
+	<h3><span class="fa fa-cog"></span>&nbsp;<?php echo _('in Bearbeitung') ?></h3>
+	<p><?php echo _('Diese Einsätze wurden noch nicht abschließend bearbeitet.') ?></p>
+	
 	<form id="einsatz-list-form" method="post" action="<?php echo $this->tools->buildUrl(ucfirst($_REQUEST['k']), ($_REQUEST['action'] == 'search')? 'index':$_REQUEST['action']) ?>">
 		
 		<!--
@@ -68,8 +80,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				<?php if ($this->tools->isSizedArray($this->view['data'])) { ?>
-				<?php $i = 1; foreach ($this->view['data'] as $einsatz) { $i++; ?>
+				<?php if ($this->tools->isSizedArray($this->view['data']['edit'])) { ?>
+				<?php $i = 1; foreach ($this->view['data']['edit'] as $einsatz) { $i++; ?>
+				
+				
 				
 				<tr <?php echo (($i % 2) == 0)? 'class="even"':'class="odd"' ?>>
 					<td class="check-col" title="<?php echo $einsatz['typ'] ?>"><span class="fa <?php echo $this->getEventIcon($einsatz['typ']) ?> <?php echo $this->getIconColor($einsatz['typ']) ?>"></span></td>
